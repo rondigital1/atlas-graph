@@ -1,0 +1,20 @@
+{
+  "name": "@atlas-graph/agent",
+  "private": true,
+  "type": "module",
+  "version": "0.0.0",
+  "exports": {
+    ".": "./src/index.ts",
+    "./planner": "./src/planner/index.ts",
+    "./prompts": "./src/prompts/index.ts",
+    "./services": "./src/services/index.ts",
+    "./tools": "./src/tools/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@atlas-graph/core": "workspace:*"
+  }
+}

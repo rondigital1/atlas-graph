@@ -1,0 +1,13 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../packages/db/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model SystemPlaceholder {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+}

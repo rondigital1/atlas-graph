@@ -1,0 +1,24 @@
+{
+  "name": "@atlas-graph/db",
+  "private": true,
+  "type": "module",
+  "version": "0.0.0",
+  "exports": {
+    ".": "./src/index.ts",
+    "./client": "./src/client/index.ts",
+    "./repositories": "./src/repositories/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prisma:generate": "prisma generate --config ../../prisma.config.ts",
+    "prisma:validate": "prisma validate --config ../../prisma.config.ts"
+  },
+  "dependencies": {
+    "@atlas-graph/config": "workspace:*",
+    "@prisma/adapter-pg": "^7.4.2",
+    "@prisma/client": "^7.4.2",
+    "dotenv": "^17.3.1",
+    "pg": "^8.20.0"
+  }
+}
