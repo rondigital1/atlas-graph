@@ -821,6 +821,15 @@ export const PlannerRunScalarFieldEnum = {
   id: 'id',
   status: 'status',
   requestId: 'requestId',
+  destination: 'destination',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  budget: 'budget',
+  travelStyle: 'travelStyle',
+  groupType: 'groupType',
+  modelName: 'modelName',
+  promptVersion: 'promptVersion',
+  orchestratorVersion: 'orchestratorVersion',
   startedAt: 'startedAt',
   completedAt: 'completedAt',
   createdAt: 'createdAt',
@@ -844,6 +853,11 @@ export const PlannerRunToolResultScalarFieldEnum = {
   id: 'id',
   plannerRunId: 'plannerRunId',
   toolName: 'toolName',
+  toolCategory: 'toolCategory',
+  sequence: 'sequence',
+  status: 'status',
+  provider: 'provider',
+  latencyMs: 'latencyMs',
   payload: 'payload',
   createdAt: 'createdAt'
 } as const
@@ -854,6 +868,7 @@ export type PlannerRunToolResultScalarFieldEnum = (typeof PlannerRunToolResultSc
 export const PlannerRunOutputScalarFieldEnum = {
   id: 'id',
   plannerRunId: 'plannerRunId',
+  outputFormat: 'outputFormat',
   payload: 'payload',
   createdAt: 'createdAt'
 } as const
@@ -864,6 +879,8 @@ export type PlannerRunOutputScalarFieldEnum = (typeof PlannerRunOutputScalarFiel
 export const PlannerRunErrorScalarFieldEnum = {
   id: 'id',
   plannerRunId: 'plannerRunId',
+  errorType: 'errorType',
+  stepName: 'stepName',
   message: 'message',
   details: 'details',
   createdAt: 'createdAt'
@@ -993,6 +1010,34 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ToolExecutionStatus'
+ */
+export type EnumToolExecutionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ToolExecutionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ToolExecutionStatus[]'
+ */
+export type ListEnumToolExecutionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ToolExecutionStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**

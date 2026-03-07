@@ -12,7 +12,7 @@ export interface DatabaseHealthResult {
 export async function assertDatabaseConnection(
   client: PrismaClient = prisma,
 ): Promise<void> {
-  await client.$queryRawUnsafe("SELECT 1");
+  await client.plannerRun.count();
 }
 
 export async function getDatabaseHealth(

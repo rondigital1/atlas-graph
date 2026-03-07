@@ -28,6 +28,15 @@ export type PlannerRunMinAggregateOutputType = {
   id: string | null
   status: $Enums.PlannerRunStatus | null
   requestId: string | null
+  destination: string | null
+  startDate: Date | null
+  endDate: Date | null
+  budget: string | null
+  travelStyle: string | null
+  groupType: string | null
+  modelName: string | null
+  promptVersion: string | null
+  orchestratorVersion: string | null
   startedAt: Date | null
   completedAt: Date | null
   createdAt: Date | null
@@ -38,6 +47,15 @@ export type PlannerRunMaxAggregateOutputType = {
   id: string | null
   status: $Enums.PlannerRunStatus | null
   requestId: string | null
+  destination: string | null
+  startDate: Date | null
+  endDate: Date | null
+  budget: string | null
+  travelStyle: string | null
+  groupType: string | null
+  modelName: string | null
+  promptVersion: string | null
+  orchestratorVersion: string | null
   startedAt: Date | null
   completedAt: Date | null
   createdAt: Date | null
@@ -48,6 +66,15 @@ export type PlannerRunCountAggregateOutputType = {
   id: number
   status: number
   requestId: number
+  destination: number
+  startDate: number
+  endDate: number
+  budget: number
+  travelStyle: number
+  groupType: number
+  modelName: number
+  promptVersion: number
+  orchestratorVersion: number
   startedAt: number
   completedAt: number
   createdAt: number
@@ -60,6 +87,15 @@ export type PlannerRunMinAggregateInputType = {
   id?: true
   status?: true
   requestId?: true
+  destination?: true
+  startDate?: true
+  endDate?: true
+  budget?: true
+  travelStyle?: true
+  groupType?: true
+  modelName?: true
+  promptVersion?: true
+  orchestratorVersion?: true
   startedAt?: true
   completedAt?: true
   createdAt?: true
@@ -70,6 +106,15 @@ export type PlannerRunMaxAggregateInputType = {
   id?: true
   status?: true
   requestId?: true
+  destination?: true
+  startDate?: true
+  endDate?: true
+  budget?: true
+  travelStyle?: true
+  groupType?: true
+  modelName?: true
+  promptVersion?: true
+  orchestratorVersion?: true
   startedAt?: true
   completedAt?: true
   createdAt?: true
@@ -80,6 +125,15 @@ export type PlannerRunCountAggregateInputType = {
   id?: true
   status?: true
   requestId?: true
+  destination?: true
+  startDate?: true
+  endDate?: true
+  budget?: true
+  travelStyle?: true
+  groupType?: true
+  modelName?: true
+  promptVersion?: true
+  orchestratorVersion?: true
   startedAt?: true
   completedAt?: true
   createdAt?: true
@@ -163,7 +217,16 @@ export type PlannerRunGroupByOutputType = {
   id: string
   status: $Enums.PlannerRunStatus
   requestId: string | null
-  startedAt: Date
+  destination: string | null
+  startDate: Date | null
+  endDate: Date | null
+  budget: string | null
+  travelStyle: string | null
+  groupType: string | null
+  modelName: string | null
+  promptVersion: string | null
+  orchestratorVersion: string | null
+  startedAt: Date | null
   completedAt: Date | null
   createdAt: Date
   updatedAt: Date
@@ -194,7 +257,16 @@ export type PlannerRunWhereInput = {
   id?: Prisma.UuidFilter<"PlannerRun"> | string
   status?: Prisma.EnumPlannerRunStatusFilter<"PlannerRun"> | $Enums.PlannerRunStatus
   requestId?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
-  startedAt?: Prisma.DateTimeFilter<"PlannerRun"> | Date | string
+  destination?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  startDate?: Prisma.DateTimeNullableFilter<"PlannerRun"> | Date | string | null
+  endDate?: Prisma.DateTimeNullableFilter<"PlannerRun"> | Date | string | null
+  budget?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  travelStyle?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  groupType?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  modelName?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  promptVersion?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  orchestratorVersion?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  startedAt?: Prisma.DateTimeNullableFilter<"PlannerRun"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableFilter<"PlannerRun"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"PlannerRun"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PlannerRun"> | Date | string
@@ -208,7 +280,16 @@ export type PlannerRunOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
   requestId?: Prisma.SortOrderInput | Prisma.SortOrder
-  startedAt?: Prisma.SortOrder
+  destination?: Prisma.SortOrderInput | Prisma.SortOrder
+  startDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  endDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  budget?: Prisma.SortOrderInput | Prisma.SortOrder
+  travelStyle?: Prisma.SortOrderInput | Prisma.SortOrder
+  groupType?: Prisma.SortOrderInput | Prisma.SortOrder
+  modelName?: Prisma.SortOrderInput | Prisma.SortOrder
+  promptVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  orchestratorVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -225,7 +306,16 @@ export type PlannerRunWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.PlannerRunWhereInput[]
   NOT?: Prisma.PlannerRunWhereInput | Prisma.PlannerRunWhereInput[]
   status?: Prisma.EnumPlannerRunStatusFilter<"PlannerRun"> | $Enums.PlannerRunStatus
-  startedAt?: Prisma.DateTimeFilter<"PlannerRun"> | Date | string
+  destination?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  startDate?: Prisma.DateTimeNullableFilter<"PlannerRun"> | Date | string | null
+  endDate?: Prisma.DateTimeNullableFilter<"PlannerRun"> | Date | string | null
+  budget?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  travelStyle?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  groupType?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  modelName?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  promptVersion?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  orchestratorVersion?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  startedAt?: Prisma.DateTimeNullableFilter<"PlannerRun"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableFilter<"PlannerRun"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"PlannerRun"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PlannerRun"> | Date | string
@@ -239,7 +329,16 @@ export type PlannerRunOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
   requestId?: Prisma.SortOrderInput | Prisma.SortOrder
-  startedAt?: Prisma.SortOrder
+  destination?: Prisma.SortOrderInput | Prisma.SortOrder
+  startDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  endDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  budget?: Prisma.SortOrderInput | Prisma.SortOrder
+  travelStyle?: Prisma.SortOrderInput | Prisma.SortOrder
+  groupType?: Prisma.SortOrderInput | Prisma.SortOrder
+  modelName?: Prisma.SortOrderInput | Prisma.SortOrder
+  promptVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  orchestratorVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -255,7 +354,16 @@ export type PlannerRunScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"PlannerRun"> | string
   status?: Prisma.EnumPlannerRunStatusWithAggregatesFilter<"PlannerRun"> | $Enums.PlannerRunStatus
   requestId?: Prisma.StringNullableWithAggregatesFilter<"PlannerRun"> | string | null
-  startedAt?: Prisma.DateTimeWithAggregatesFilter<"PlannerRun"> | Date | string
+  destination?: Prisma.StringNullableWithAggregatesFilter<"PlannerRun"> | string | null
+  startDate?: Prisma.DateTimeNullableWithAggregatesFilter<"PlannerRun"> | Date | string | null
+  endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"PlannerRun"> | Date | string | null
+  budget?: Prisma.StringNullableWithAggregatesFilter<"PlannerRun"> | string | null
+  travelStyle?: Prisma.StringNullableWithAggregatesFilter<"PlannerRun"> | string | null
+  groupType?: Prisma.StringNullableWithAggregatesFilter<"PlannerRun"> | string | null
+  modelName?: Prisma.StringNullableWithAggregatesFilter<"PlannerRun"> | string | null
+  promptVersion?: Prisma.StringNullableWithAggregatesFilter<"PlannerRun"> | string | null
+  orchestratorVersion?: Prisma.StringNullableWithAggregatesFilter<"PlannerRun"> | string | null
+  startedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PlannerRun"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PlannerRun"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PlannerRun"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PlannerRun"> | Date | string
@@ -265,7 +373,16 @@ export type PlannerRunCreateInput = {
   id?: string
   status?: $Enums.PlannerRunStatus
   requestId?: string | null
-  startedAt?: Date | string
+  destination?: string | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  budget?: string | null
+  travelStyle?: string | null
+  groupType?: string | null
+  modelName?: string | null
+  promptVersion?: string | null
+  orchestratorVersion?: string | null
+  startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -279,7 +396,16 @@ export type PlannerRunUncheckedCreateInput = {
   id?: string
   status?: $Enums.PlannerRunStatus
   requestId?: string | null
-  startedAt?: Date | string
+  destination?: string | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  budget?: string | null
+  travelStyle?: string | null
+  groupType?: string | null
+  modelName?: string | null
+  promptVersion?: string | null
+  orchestratorVersion?: string | null
+  startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -293,7 +419,16 @@ export type PlannerRunUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPlannerRunStatusFieldUpdateOperationsInput | $Enums.PlannerRunStatus
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  destination?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelStyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -307,7 +442,16 @@ export type PlannerRunUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPlannerRunStatusFieldUpdateOperationsInput | $Enums.PlannerRunStatus
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  destination?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelStyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -321,7 +465,16 @@ export type PlannerRunCreateManyInput = {
   id?: string
   status?: $Enums.PlannerRunStatus
   requestId?: string | null
-  startedAt?: Date | string
+  destination?: string | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  budget?: string | null
+  travelStyle?: string | null
+  groupType?: string | null
+  modelName?: string | null
+  promptVersion?: string | null
+  orchestratorVersion?: string | null
+  startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -331,7 +484,16 @@ export type PlannerRunUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPlannerRunStatusFieldUpdateOperationsInput | $Enums.PlannerRunStatus
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  destination?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelStyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -341,7 +503,16 @@ export type PlannerRunUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPlannerRunStatusFieldUpdateOperationsInput | $Enums.PlannerRunStatus
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  destination?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelStyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -351,6 +522,15 @@ export type PlannerRunCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
   requestId?: Prisma.SortOrder
+  destination?: Prisma.SortOrder
+  startDate?: Prisma.SortOrder
+  endDate?: Prisma.SortOrder
+  budget?: Prisma.SortOrder
+  travelStyle?: Prisma.SortOrder
+  groupType?: Prisma.SortOrder
+  modelName?: Prisma.SortOrder
+  promptVersion?: Prisma.SortOrder
+  orchestratorVersion?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -361,6 +541,15 @@ export type PlannerRunMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
   requestId?: Prisma.SortOrder
+  destination?: Prisma.SortOrder
+  startDate?: Prisma.SortOrder
+  endDate?: Prisma.SortOrder
+  budget?: Prisma.SortOrder
+  travelStyle?: Prisma.SortOrder
+  groupType?: Prisma.SortOrder
+  modelName?: Prisma.SortOrder
+  promptVersion?: Prisma.SortOrder
+  orchestratorVersion?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -371,6 +560,15 @@ export type PlannerRunMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
   requestId?: Prisma.SortOrder
+  destination?: Prisma.SortOrder
+  startDate?: Prisma.SortOrder
+  endDate?: Prisma.SortOrder
+  budget?: Prisma.SortOrder
+  travelStyle?: Prisma.SortOrder
+  groupType?: Prisma.SortOrder
+  modelName?: Prisma.SortOrder
+  promptVersion?: Prisma.SortOrder
+  orchestratorVersion?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -394,12 +592,12 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
 }
 
 export type PlannerRunCreateNestedOneWithoutInputInput = {
@@ -462,7 +660,16 @@ export type PlannerRunCreateWithoutInputInput = {
   id?: string
   status?: $Enums.PlannerRunStatus
   requestId?: string | null
-  startedAt?: Date | string
+  destination?: string | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  budget?: string | null
+  travelStyle?: string | null
+  groupType?: string | null
+  modelName?: string | null
+  promptVersion?: string | null
+  orchestratorVersion?: string | null
+  startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -475,7 +682,16 @@ export type PlannerRunUncheckedCreateWithoutInputInput = {
   id?: string
   status?: $Enums.PlannerRunStatus
   requestId?: string | null
-  startedAt?: Date | string
+  destination?: string | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  budget?: string | null
+  travelStyle?: string | null
+  groupType?: string | null
+  modelName?: string | null
+  promptVersion?: string | null
+  orchestratorVersion?: string | null
+  startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -504,7 +720,16 @@ export type PlannerRunUpdateWithoutInputInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPlannerRunStatusFieldUpdateOperationsInput | $Enums.PlannerRunStatus
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  destination?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelStyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -517,7 +742,16 @@ export type PlannerRunUncheckedUpdateWithoutInputInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPlannerRunStatusFieldUpdateOperationsInput | $Enums.PlannerRunStatus
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  destination?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelStyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -530,7 +764,16 @@ export type PlannerRunCreateWithoutToolResultsInput = {
   id?: string
   status?: $Enums.PlannerRunStatus
   requestId?: string | null
-  startedAt?: Date | string
+  destination?: string | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  budget?: string | null
+  travelStyle?: string | null
+  groupType?: string | null
+  modelName?: string | null
+  promptVersion?: string | null
+  orchestratorVersion?: string | null
+  startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -543,7 +786,16 @@ export type PlannerRunUncheckedCreateWithoutToolResultsInput = {
   id?: string
   status?: $Enums.PlannerRunStatus
   requestId?: string | null
-  startedAt?: Date | string
+  destination?: string | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  budget?: string | null
+  travelStyle?: string | null
+  groupType?: string | null
+  modelName?: string | null
+  promptVersion?: string | null
+  orchestratorVersion?: string | null
+  startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -572,7 +824,16 @@ export type PlannerRunUpdateWithoutToolResultsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPlannerRunStatusFieldUpdateOperationsInput | $Enums.PlannerRunStatus
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  destination?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelStyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -585,7 +846,16 @@ export type PlannerRunUncheckedUpdateWithoutToolResultsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPlannerRunStatusFieldUpdateOperationsInput | $Enums.PlannerRunStatus
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  destination?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelStyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -598,7 +868,16 @@ export type PlannerRunCreateWithoutOutputInput = {
   id?: string
   status?: $Enums.PlannerRunStatus
   requestId?: string | null
-  startedAt?: Date | string
+  destination?: string | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  budget?: string | null
+  travelStyle?: string | null
+  groupType?: string | null
+  modelName?: string | null
+  promptVersion?: string | null
+  orchestratorVersion?: string | null
+  startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -611,7 +890,16 @@ export type PlannerRunUncheckedCreateWithoutOutputInput = {
   id?: string
   status?: $Enums.PlannerRunStatus
   requestId?: string | null
-  startedAt?: Date | string
+  destination?: string | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  budget?: string | null
+  travelStyle?: string | null
+  groupType?: string | null
+  modelName?: string | null
+  promptVersion?: string | null
+  orchestratorVersion?: string | null
+  startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -640,7 +928,16 @@ export type PlannerRunUpdateWithoutOutputInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPlannerRunStatusFieldUpdateOperationsInput | $Enums.PlannerRunStatus
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  destination?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelStyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -653,7 +950,16 @@ export type PlannerRunUncheckedUpdateWithoutOutputInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPlannerRunStatusFieldUpdateOperationsInput | $Enums.PlannerRunStatus
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  destination?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelStyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -666,7 +972,16 @@ export type PlannerRunCreateWithoutErrorsInput = {
   id?: string
   status?: $Enums.PlannerRunStatus
   requestId?: string | null
-  startedAt?: Date | string
+  destination?: string | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  budget?: string | null
+  travelStyle?: string | null
+  groupType?: string | null
+  modelName?: string | null
+  promptVersion?: string | null
+  orchestratorVersion?: string | null
+  startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -679,7 +994,16 @@ export type PlannerRunUncheckedCreateWithoutErrorsInput = {
   id?: string
   status?: $Enums.PlannerRunStatus
   requestId?: string | null
-  startedAt?: Date | string
+  destination?: string | null
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  budget?: string | null
+  travelStyle?: string | null
+  groupType?: string | null
+  modelName?: string | null
+  promptVersion?: string | null
+  orchestratorVersion?: string | null
+  startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -708,7 +1032,16 @@ export type PlannerRunUpdateWithoutErrorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPlannerRunStatusFieldUpdateOperationsInput | $Enums.PlannerRunStatus
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  destination?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelStyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -721,7 +1054,16 @@ export type PlannerRunUncheckedUpdateWithoutErrorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPlannerRunStatusFieldUpdateOperationsInput | $Enums.PlannerRunStatus
   requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  destination?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelStyle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -774,6 +1116,15 @@ export type PlannerRunSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   id?: boolean
   status?: boolean
   requestId?: boolean
+  destination?: boolean
+  startDate?: boolean
+  endDate?: boolean
+  budget?: boolean
+  travelStyle?: boolean
+  groupType?: boolean
+  modelName?: boolean
+  promptVersion?: boolean
+  orchestratorVersion?: boolean
   startedAt?: boolean
   completedAt?: boolean
   createdAt?: boolean
@@ -789,6 +1140,15 @@ export type PlannerRunSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   id?: boolean
   status?: boolean
   requestId?: boolean
+  destination?: boolean
+  startDate?: boolean
+  endDate?: boolean
+  budget?: boolean
+  travelStyle?: boolean
+  groupType?: boolean
+  modelName?: boolean
+  promptVersion?: boolean
+  orchestratorVersion?: boolean
   startedAt?: boolean
   completedAt?: boolean
   createdAt?: boolean
@@ -799,6 +1159,15 @@ export type PlannerRunSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   id?: boolean
   status?: boolean
   requestId?: boolean
+  destination?: boolean
+  startDate?: boolean
+  endDate?: boolean
+  budget?: boolean
+  travelStyle?: boolean
+  groupType?: boolean
+  modelName?: boolean
+  promptVersion?: boolean
+  orchestratorVersion?: boolean
   startedAt?: boolean
   completedAt?: boolean
   createdAt?: boolean
@@ -809,13 +1178,22 @@ export type PlannerRunSelectScalar = {
   id?: boolean
   status?: boolean
   requestId?: boolean
+  destination?: boolean
+  startDate?: boolean
+  endDate?: boolean
+  budget?: boolean
+  travelStyle?: boolean
+  groupType?: boolean
+  modelName?: boolean
+  promptVersion?: boolean
+  orchestratorVersion?: boolean
   startedAt?: boolean
   completedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PlannerRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "requestId" | "startedAt" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["plannerRun"]>
+export type PlannerRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "requestId" | "destination" | "startDate" | "endDate" | "budget" | "travelStyle" | "groupType" | "modelName" | "promptVersion" | "orchestratorVersion" | "startedAt" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["plannerRun"]>
 export type PlannerRunInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   input?: boolean | Prisma.PlannerRun$inputArgs<ExtArgs>
   toolResults?: boolean | Prisma.PlannerRun$toolResultsArgs<ExtArgs>
@@ -838,7 +1216,16 @@ export type $PlannerRunPayload<ExtArgs extends runtime.Types.Extensions.Internal
     id: string
     status: $Enums.PlannerRunStatus
     requestId: string | null
-    startedAt: Date
+    destination: string | null
+    startDate: Date | null
+    endDate: Date | null
+    budget: string | null
+    travelStyle: string | null
+    groupType: string | null
+    modelName: string | null
+    promptVersion: string | null
+    orchestratorVersion: string | null
+    startedAt: Date | null
     completedAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -1272,6 +1659,15 @@ export interface PlannerRunFieldRefs {
   readonly id: Prisma.FieldRef<"PlannerRun", 'String'>
   readonly status: Prisma.FieldRef<"PlannerRun", 'PlannerRunStatus'>
   readonly requestId: Prisma.FieldRef<"PlannerRun", 'String'>
+  readonly destination: Prisma.FieldRef<"PlannerRun", 'String'>
+  readonly startDate: Prisma.FieldRef<"PlannerRun", 'DateTime'>
+  readonly endDate: Prisma.FieldRef<"PlannerRun", 'DateTime'>
+  readonly budget: Prisma.FieldRef<"PlannerRun", 'String'>
+  readonly travelStyle: Prisma.FieldRef<"PlannerRun", 'String'>
+  readonly groupType: Prisma.FieldRef<"PlannerRun", 'String'>
+  readonly modelName: Prisma.FieldRef<"PlannerRun", 'String'>
+  readonly promptVersion: Prisma.FieldRef<"PlannerRun", 'String'>
+  readonly orchestratorVersion: Prisma.FieldRef<"PlannerRun", 'String'>
   readonly startedAt: Prisma.FieldRef<"PlannerRun", 'DateTime'>
   readonly completedAt: Prisma.FieldRef<"PlannerRun", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"PlannerRun", 'DateTime'>

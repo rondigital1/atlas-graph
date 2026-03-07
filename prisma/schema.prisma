@@ -17,21 +17,38 @@ enum PlannerRunStatus {
   FAILED
 }
 
-model PlannerRun {
-  id          String           @id @default(uuid()) @db.Uuid
-  status      PlannerRunStatus @default(PENDING)
-  requestId   String?          @unique
-  startedAt   DateTime         @default(now())
-  completedAt DateTime?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-  input       PlannerRunInput?
-  toolResults PlannerRunToolResult[]
-  output      PlannerRunOutput?
-  errors      PlannerRunError[]
+enum ToolExecutionStatus {
+  SUCCEEDED
+  FAILED
+  PARTIAL
+}
 
-  @@index([status, createdAt])
-  @@index([startedAt])
+model PlannerRun {
+  id                  String           @id @default(uuid()) @db.Uuid
+  status              PlannerRunStatus @default(PENDING)
+  requestId           String?          @unique
+  destination         String?
+  startDate           DateTime?
+  endDate             DateTime?
+  budget              String?
+  travelStyle         String?
+  groupType           String?
+  modelName           String?
+  promptVersion       String?
+  orchestratorVersion String?
+  startedAt           DateTime?
+  completedAt         DateTime?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  input               PlannerRunInput?
+  toolResults         PlannerRunToolResult[]
+  output              PlannerRunOutput?
+  errors              PlannerRunError[]
+
+  @@index([status])
+  @@index([destination])
+  @@index([createdAt])
+  @@index([promptVersion])
 }
 
 model PlannerRunInput {
@@ -43,20 +60,28 @@ model PlannerRunInput {
 }
 
 model PlannerRunToolResult {
-  id           String     @id @default(uuid()) @db.Uuid
-  plannerRunId String     @db.Uuid
+  id           String              @id @default(uuid()) @db.Uuid
+  plannerRunId String              @db.Uuid
   toolName     String
+  toolCategory String?
+  sequence     Int
+  status       ToolExecutionStatus @default(SUCCEEDED)
+  provider     String?
+  latencyMs    Int?
   payload      Json
-  createdAt    DateTime   @default(now())
-  plannerRun   PlannerRun @relation(fields: [plannerRunId], references: [id], onDelete: Cascade)
+  createdAt    DateTime            @default(now())
+  plannerRun   PlannerRun          @relation(fields: [plannerRunId], references: [id], onDelete: Cascade)
 
-  @@index([plannerRunId, createdAt])
-  @@index([plannerRunId, toolName])
+  @@index([plannerRunId])
+  @@index([toolName])
+  @@index([toolCategory])
+  @@index([sequence])
 }
 
 model PlannerRunOutput {
   id           String     @id @default(uuid()) @db.Uuid
   plannerRunId String     @unique @db.Uuid
+  outputFormat String?
   payload      Json
   createdAt    DateTime   @default(now())
   plannerRun   PlannerRun @relation(fields: [plannerRunId], references: [id], onDelete: Cascade)
@@ -65,10 +90,14 @@ model PlannerRunOutput {
 model PlannerRunError {
   id           String     @id @default(uuid()) @db.Uuid
   plannerRunId String     @db.Uuid
+  errorType    String?
+  stepName     String?
   message      String     @db.Text
   details      Json?
   createdAt    DateTime   @default(now())
   plannerRun   PlannerRun @relation(fields: [plannerRunId], references: [id], onDelete: Cascade)
 
-  @@index([plannerRunId, createdAt])
+  @@index([plannerRunId])
+  @@index([errorType])
+  @@index([stepName])
 }

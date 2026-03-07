@@ -20,14 +20,31 @@ export type PlannerRunToolResultModel = runtime.Types.Result.DefaultSelection<Pr
 
 export type AggregatePlannerRunToolResult = {
   _count: PlannerRunToolResultCountAggregateOutputType | null
+  _avg: PlannerRunToolResultAvgAggregateOutputType | null
+  _sum: PlannerRunToolResultSumAggregateOutputType | null
   _min: PlannerRunToolResultMinAggregateOutputType | null
   _max: PlannerRunToolResultMaxAggregateOutputType | null
+}
+
+export type PlannerRunToolResultAvgAggregateOutputType = {
+  sequence: number | null
+  latencyMs: number | null
+}
+
+export type PlannerRunToolResultSumAggregateOutputType = {
+  sequence: number | null
+  latencyMs: number | null
 }
 
 export type PlannerRunToolResultMinAggregateOutputType = {
   id: string | null
   plannerRunId: string | null
   toolName: string | null
+  toolCategory: string | null
+  sequence: number | null
+  status: $Enums.ToolExecutionStatus | null
+  provider: string | null
+  latencyMs: number | null
   createdAt: Date | null
 }
 
@@ -35,6 +52,11 @@ export type PlannerRunToolResultMaxAggregateOutputType = {
   id: string | null
   plannerRunId: string | null
   toolName: string | null
+  toolCategory: string | null
+  sequence: number | null
+  status: $Enums.ToolExecutionStatus | null
+  provider: string | null
+  latencyMs: number | null
   createdAt: Date | null
 }
 
@@ -42,16 +64,36 @@ export type PlannerRunToolResultCountAggregateOutputType = {
   id: number
   plannerRunId: number
   toolName: number
+  toolCategory: number
+  sequence: number
+  status: number
+  provider: number
+  latencyMs: number
   payload: number
   createdAt: number
   _all: number
 }
 
 
+export type PlannerRunToolResultAvgAggregateInputType = {
+  sequence?: true
+  latencyMs?: true
+}
+
+export type PlannerRunToolResultSumAggregateInputType = {
+  sequence?: true
+  latencyMs?: true
+}
+
 export type PlannerRunToolResultMinAggregateInputType = {
   id?: true
   plannerRunId?: true
   toolName?: true
+  toolCategory?: true
+  sequence?: true
+  status?: true
+  provider?: true
+  latencyMs?: true
   createdAt?: true
 }
 
@@ -59,6 +101,11 @@ export type PlannerRunToolResultMaxAggregateInputType = {
   id?: true
   plannerRunId?: true
   toolName?: true
+  toolCategory?: true
+  sequence?: true
+  status?: true
+  provider?: true
+  latencyMs?: true
   createdAt?: true
 }
 
@@ -66,6 +113,11 @@ export type PlannerRunToolResultCountAggregateInputType = {
   id?: true
   plannerRunId?: true
   toolName?: true
+  toolCategory?: true
+  sequence?: true
+  status?: true
+  provider?: true
+  latencyMs?: true
   payload?: true
   createdAt?: true
   _all?: true
@@ -109,6 +161,18 @@ export type PlannerRunToolResultAggregateArgs<ExtArgs extends runtime.Types.Exte
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: PlannerRunToolResultAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: PlannerRunToolResultSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: PlannerRunToolResultMinAggregateInputType
@@ -139,6 +203,8 @@ export type PlannerRunToolResultGroupByArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   _count?: PlannerRunToolResultCountAggregateInputType | true
+  _avg?: PlannerRunToolResultAvgAggregateInputType
+  _sum?: PlannerRunToolResultSumAggregateInputType
   _min?: PlannerRunToolResultMinAggregateInputType
   _max?: PlannerRunToolResultMaxAggregateInputType
 }
@@ -147,9 +213,16 @@ export type PlannerRunToolResultGroupByOutputType = {
   id: string
   plannerRunId: string
   toolName: string
+  toolCategory: string | null
+  sequence: number
+  status: $Enums.ToolExecutionStatus
+  provider: string | null
+  latencyMs: number | null
   payload: runtime.JsonValue
   createdAt: Date
   _count: PlannerRunToolResultCountAggregateOutputType | null
+  _avg: PlannerRunToolResultAvgAggregateOutputType | null
+  _sum: PlannerRunToolResultSumAggregateOutputType | null
   _min: PlannerRunToolResultMinAggregateOutputType | null
   _max: PlannerRunToolResultMaxAggregateOutputType | null
 }
@@ -176,6 +249,11 @@ export type PlannerRunToolResultWhereInput = {
   id?: Prisma.UuidFilter<"PlannerRunToolResult"> | string
   plannerRunId?: Prisma.UuidFilter<"PlannerRunToolResult"> | string
   toolName?: Prisma.StringFilter<"PlannerRunToolResult"> | string
+  toolCategory?: Prisma.StringNullableFilter<"PlannerRunToolResult"> | string | null
+  sequence?: Prisma.IntFilter<"PlannerRunToolResult"> | number
+  status?: Prisma.EnumToolExecutionStatusFilter<"PlannerRunToolResult"> | $Enums.ToolExecutionStatus
+  provider?: Prisma.StringNullableFilter<"PlannerRunToolResult"> | string | null
+  latencyMs?: Prisma.IntNullableFilter<"PlannerRunToolResult"> | number | null
   payload?: Prisma.JsonFilter<"PlannerRunToolResult">
   createdAt?: Prisma.DateTimeFilter<"PlannerRunToolResult"> | Date | string
   plannerRun?: Prisma.XOR<Prisma.PlannerRunScalarRelationFilter, Prisma.PlannerRunWhereInput>
@@ -185,6 +263,11 @@ export type PlannerRunToolResultOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
   toolName?: Prisma.SortOrder
+  toolCategory?: Prisma.SortOrderInput | Prisma.SortOrder
+  sequence?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  provider?: Prisma.SortOrderInput | Prisma.SortOrder
+  latencyMs?: Prisma.SortOrderInput | Prisma.SortOrder
   payload?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   plannerRun?: Prisma.PlannerRunOrderByWithRelationInput
@@ -197,6 +280,11 @@ export type PlannerRunToolResultWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PlannerRunToolResultWhereInput | Prisma.PlannerRunToolResultWhereInput[]
   plannerRunId?: Prisma.UuidFilter<"PlannerRunToolResult"> | string
   toolName?: Prisma.StringFilter<"PlannerRunToolResult"> | string
+  toolCategory?: Prisma.StringNullableFilter<"PlannerRunToolResult"> | string | null
+  sequence?: Prisma.IntFilter<"PlannerRunToolResult"> | number
+  status?: Prisma.EnumToolExecutionStatusFilter<"PlannerRunToolResult"> | $Enums.ToolExecutionStatus
+  provider?: Prisma.StringNullableFilter<"PlannerRunToolResult"> | string | null
+  latencyMs?: Prisma.IntNullableFilter<"PlannerRunToolResult"> | number | null
   payload?: Prisma.JsonFilter<"PlannerRunToolResult">
   createdAt?: Prisma.DateTimeFilter<"PlannerRunToolResult"> | Date | string
   plannerRun?: Prisma.XOR<Prisma.PlannerRunScalarRelationFilter, Prisma.PlannerRunWhereInput>
@@ -206,11 +294,18 @@ export type PlannerRunToolResultOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
   toolName?: Prisma.SortOrder
+  toolCategory?: Prisma.SortOrderInput | Prisma.SortOrder
+  sequence?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  provider?: Prisma.SortOrderInput | Prisma.SortOrder
+  latencyMs?: Prisma.SortOrderInput | Prisma.SortOrder
   payload?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.PlannerRunToolResultCountOrderByAggregateInput
+  _avg?: Prisma.PlannerRunToolResultAvgOrderByAggregateInput
   _max?: Prisma.PlannerRunToolResultMaxOrderByAggregateInput
   _min?: Prisma.PlannerRunToolResultMinOrderByAggregateInput
+  _sum?: Prisma.PlannerRunToolResultSumOrderByAggregateInput
 }
 
 export type PlannerRunToolResultScalarWhereWithAggregatesInput = {
@@ -220,6 +315,11 @@ export type PlannerRunToolResultScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"PlannerRunToolResult"> | string
   plannerRunId?: Prisma.UuidWithAggregatesFilter<"PlannerRunToolResult"> | string
   toolName?: Prisma.StringWithAggregatesFilter<"PlannerRunToolResult"> | string
+  toolCategory?: Prisma.StringNullableWithAggregatesFilter<"PlannerRunToolResult"> | string | null
+  sequence?: Prisma.IntWithAggregatesFilter<"PlannerRunToolResult"> | number
+  status?: Prisma.EnumToolExecutionStatusWithAggregatesFilter<"PlannerRunToolResult"> | $Enums.ToolExecutionStatus
+  provider?: Prisma.StringNullableWithAggregatesFilter<"PlannerRunToolResult"> | string | null
+  latencyMs?: Prisma.IntNullableWithAggregatesFilter<"PlannerRunToolResult"> | number | null
   payload?: Prisma.JsonWithAggregatesFilter<"PlannerRunToolResult">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PlannerRunToolResult"> | Date | string
 }
@@ -227,6 +327,11 @@ export type PlannerRunToolResultScalarWhereWithAggregatesInput = {
 export type PlannerRunToolResultCreateInput = {
   id?: string
   toolName: string
+  toolCategory?: string | null
+  sequence: number
+  status?: $Enums.ToolExecutionStatus
+  provider?: string | null
+  latencyMs?: number | null
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   plannerRun: Prisma.PlannerRunCreateNestedOneWithoutToolResultsInput
@@ -236,6 +341,11 @@ export type PlannerRunToolResultUncheckedCreateInput = {
   id?: string
   plannerRunId: string
   toolName: string
+  toolCategory?: string | null
+  sequence: number
+  status?: $Enums.ToolExecutionStatus
+  provider?: string | null
+  latencyMs?: number | null
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
@@ -243,6 +353,11 @@ export type PlannerRunToolResultUncheckedCreateInput = {
 export type PlannerRunToolResultUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   toolName?: Prisma.StringFieldUpdateOperationsInput | string
+  toolCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sequence?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumToolExecutionStatusFieldUpdateOperationsInput | $Enums.ToolExecutionStatus
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   plannerRun?: Prisma.PlannerRunUpdateOneRequiredWithoutToolResultsNestedInput
@@ -252,6 +367,11 @@ export type PlannerRunToolResultUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   plannerRunId?: Prisma.StringFieldUpdateOperationsInput | string
   toolName?: Prisma.StringFieldUpdateOperationsInput | string
+  toolCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sequence?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumToolExecutionStatusFieldUpdateOperationsInput | $Enums.ToolExecutionStatus
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -260,6 +380,11 @@ export type PlannerRunToolResultCreateManyInput = {
   id?: string
   plannerRunId: string
   toolName: string
+  toolCategory?: string | null
+  sequence: number
+  status?: $Enums.ToolExecutionStatus
+  provider?: string | null
+  latencyMs?: number | null
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
@@ -267,6 +392,11 @@ export type PlannerRunToolResultCreateManyInput = {
 export type PlannerRunToolResultUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   toolName?: Prisma.StringFieldUpdateOperationsInput | string
+  toolCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sequence?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumToolExecutionStatusFieldUpdateOperationsInput | $Enums.ToolExecutionStatus
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -275,6 +405,11 @@ export type PlannerRunToolResultUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   plannerRunId?: Prisma.StringFieldUpdateOperationsInput | string
   toolName?: Prisma.StringFieldUpdateOperationsInput | string
+  toolCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sequence?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumToolExecutionStatusFieldUpdateOperationsInput | $Enums.ToolExecutionStatus
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -293,14 +428,29 @@ export type PlannerRunToolResultCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
   toolName?: Prisma.SortOrder
+  toolCategory?: Prisma.SortOrder
+  sequence?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
+  latencyMs?: Prisma.SortOrder
   payload?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type PlannerRunToolResultAvgOrderByAggregateInput = {
+  sequence?: Prisma.SortOrder
+  latencyMs?: Prisma.SortOrder
 }
 
 export type PlannerRunToolResultMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
   toolName?: Prisma.SortOrder
+  toolCategory?: Prisma.SortOrder
+  sequence?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
+  latencyMs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -308,7 +458,17 @@ export type PlannerRunToolResultMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
   toolName?: Prisma.SortOrder
+  toolCategory?: Prisma.SortOrder
+  sequence?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
+  latencyMs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type PlannerRunToolResultSumOrderByAggregateInput = {
+  sequence?: Prisma.SortOrder
+  latencyMs?: Prisma.SortOrder
 }
 
 export type PlannerRunToolResultCreateNestedManyWithoutPlannerRunInput = {
@@ -353,9 +513,34 @@ export type PlannerRunToolResultUncheckedUpdateManyWithoutPlannerRunNestedInput 
   deleteMany?: Prisma.PlannerRunToolResultScalarWhereInput | Prisma.PlannerRunToolResultScalarWhereInput[]
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type EnumToolExecutionStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ToolExecutionStatus
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type PlannerRunToolResultCreateWithoutPlannerRunInput = {
   id?: string
   toolName: string
+  toolCategory?: string | null
+  sequence: number
+  status?: $Enums.ToolExecutionStatus
+  provider?: string | null
+  latencyMs?: number | null
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
@@ -363,6 +548,11 @@ export type PlannerRunToolResultCreateWithoutPlannerRunInput = {
 export type PlannerRunToolResultUncheckedCreateWithoutPlannerRunInput = {
   id?: string
   toolName: string
+  toolCategory?: string | null
+  sequence: number
+  status?: $Enums.ToolExecutionStatus
+  provider?: string | null
+  latencyMs?: number | null
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
@@ -400,6 +590,11 @@ export type PlannerRunToolResultScalarWhereInput = {
   id?: Prisma.UuidFilter<"PlannerRunToolResult"> | string
   plannerRunId?: Prisma.UuidFilter<"PlannerRunToolResult"> | string
   toolName?: Prisma.StringFilter<"PlannerRunToolResult"> | string
+  toolCategory?: Prisma.StringNullableFilter<"PlannerRunToolResult"> | string | null
+  sequence?: Prisma.IntFilter<"PlannerRunToolResult"> | number
+  status?: Prisma.EnumToolExecutionStatusFilter<"PlannerRunToolResult"> | $Enums.ToolExecutionStatus
+  provider?: Prisma.StringNullableFilter<"PlannerRunToolResult"> | string | null
+  latencyMs?: Prisma.IntNullableFilter<"PlannerRunToolResult"> | number | null
   payload?: Prisma.JsonFilter<"PlannerRunToolResult">
   createdAt?: Prisma.DateTimeFilter<"PlannerRunToolResult"> | Date | string
 }
@@ -407,6 +602,11 @@ export type PlannerRunToolResultScalarWhereInput = {
 export type PlannerRunToolResultCreateManyPlannerRunInput = {
   id?: string
   toolName: string
+  toolCategory?: string | null
+  sequence: number
+  status?: $Enums.ToolExecutionStatus
+  provider?: string | null
+  latencyMs?: number | null
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
@@ -414,6 +614,11 @@ export type PlannerRunToolResultCreateManyPlannerRunInput = {
 export type PlannerRunToolResultUpdateWithoutPlannerRunInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   toolName?: Prisma.StringFieldUpdateOperationsInput | string
+  toolCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sequence?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumToolExecutionStatusFieldUpdateOperationsInput | $Enums.ToolExecutionStatus
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -421,6 +626,11 @@ export type PlannerRunToolResultUpdateWithoutPlannerRunInput = {
 export type PlannerRunToolResultUncheckedUpdateWithoutPlannerRunInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   toolName?: Prisma.StringFieldUpdateOperationsInput | string
+  toolCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sequence?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumToolExecutionStatusFieldUpdateOperationsInput | $Enums.ToolExecutionStatus
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -428,6 +638,11 @@ export type PlannerRunToolResultUncheckedUpdateWithoutPlannerRunInput = {
 export type PlannerRunToolResultUncheckedUpdateManyWithoutPlannerRunInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   toolName?: Prisma.StringFieldUpdateOperationsInput | string
+  toolCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sequence?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumToolExecutionStatusFieldUpdateOperationsInput | $Enums.ToolExecutionStatus
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latencyMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -438,6 +653,11 @@ export type PlannerRunToolResultSelect<ExtArgs extends runtime.Types.Extensions.
   id?: boolean
   plannerRunId?: boolean
   toolName?: boolean
+  toolCategory?: boolean
+  sequence?: boolean
+  status?: boolean
+  provider?: boolean
+  latencyMs?: boolean
   payload?: boolean
   createdAt?: boolean
   plannerRun?: boolean | Prisma.PlannerRunDefaultArgs<ExtArgs>
@@ -447,6 +667,11 @@ export type PlannerRunToolResultSelectCreateManyAndReturn<ExtArgs extends runtim
   id?: boolean
   plannerRunId?: boolean
   toolName?: boolean
+  toolCategory?: boolean
+  sequence?: boolean
+  status?: boolean
+  provider?: boolean
+  latencyMs?: boolean
   payload?: boolean
   createdAt?: boolean
   plannerRun?: boolean | Prisma.PlannerRunDefaultArgs<ExtArgs>
@@ -456,6 +681,11 @@ export type PlannerRunToolResultSelectUpdateManyAndReturn<ExtArgs extends runtim
   id?: boolean
   plannerRunId?: boolean
   toolName?: boolean
+  toolCategory?: boolean
+  sequence?: boolean
+  status?: boolean
+  provider?: boolean
+  latencyMs?: boolean
   payload?: boolean
   createdAt?: boolean
   plannerRun?: boolean | Prisma.PlannerRunDefaultArgs<ExtArgs>
@@ -465,11 +695,16 @@ export type PlannerRunToolResultSelectScalar = {
   id?: boolean
   plannerRunId?: boolean
   toolName?: boolean
+  toolCategory?: boolean
+  sequence?: boolean
+  status?: boolean
+  provider?: boolean
+  latencyMs?: boolean
   payload?: boolean
   createdAt?: boolean
 }
 
-export type PlannerRunToolResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "plannerRunId" | "toolName" | "payload" | "createdAt", ExtArgs["result"]["plannerRunToolResult"]>
+export type PlannerRunToolResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "plannerRunId" | "toolName" | "toolCategory" | "sequence" | "status" | "provider" | "latencyMs" | "payload" | "createdAt", ExtArgs["result"]["plannerRunToolResult"]>
 export type PlannerRunToolResultInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   plannerRun?: boolean | Prisma.PlannerRunDefaultArgs<ExtArgs>
 }
@@ -489,6 +724,11 @@ export type $PlannerRunToolResultPayload<ExtArgs extends runtime.Types.Extension
     id: string
     plannerRunId: string
     toolName: string
+    toolCategory: string | null
+    sequence: number
+    status: $Enums.ToolExecutionStatus
+    provider: string | null
+    latencyMs: number | null
     payload: runtime.JsonValue
     createdAt: Date
   }, ExtArgs["result"]["plannerRunToolResult"]>
@@ -918,6 +1158,11 @@ export interface PlannerRunToolResultFieldRefs {
   readonly id: Prisma.FieldRef<"PlannerRunToolResult", 'String'>
   readonly plannerRunId: Prisma.FieldRef<"PlannerRunToolResult", 'String'>
   readonly toolName: Prisma.FieldRef<"PlannerRunToolResult", 'String'>
+  readonly toolCategory: Prisma.FieldRef<"PlannerRunToolResult", 'String'>
+  readonly sequence: Prisma.FieldRef<"PlannerRunToolResult", 'Int'>
+  readonly status: Prisma.FieldRef<"PlannerRunToolResult", 'ToolExecutionStatus'>
+  readonly provider: Prisma.FieldRef<"PlannerRunToolResult", 'String'>
+  readonly latencyMs: Prisma.FieldRef<"PlannerRunToolResult", 'Int'>
   readonly payload: Prisma.FieldRef<"PlannerRunToolResult", 'Json'>
   readonly createdAt: Prisma.FieldRef<"PlannerRunToolResult", 'DateTime'>
 }

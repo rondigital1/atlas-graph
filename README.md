@@ -10,6 +10,7 @@ AtlasGraph is a production-oriented TypeScript monorepo for a future travel-plan
 - Prisma 7 configured for PostgreSQL with migrations under `prisma/migrations`
 - Generated Prisma client wiring owned by `packages/db`
 - Local PostgreSQL development setup via Docker Compose
+- Execution-focused planner-run persistence schema with JSON payload storage
 - ESLint, Prettier, and Vitest wired for repo-wide use
 
 ## What is intentionally not implemented yet
@@ -66,6 +67,7 @@ Owns database concerns:
 - Prisma singleton wiring for Node/dev
 - DB health helper
 - minimal planner-run repository helpers
+- execution-focused planner run tables for inputs, tool results, outputs, and errors
 
 ## Getting started
 
@@ -114,8 +116,10 @@ The generated client is written to `packages/db/generated/prisma`.
 For the initial local setup:
 
 ```bash
-pnpm prisma:migrate:dev -- --name your_migration_name
+pnpm prisma:migrate:dev
 ```
+
+Prisma will prompt for a migration name.
 
 For applying committed migrations:
 
@@ -123,7 +127,7 @@ For applying committed migrations:
 pnpm prisma:migrate:deploy
 ```
 
-### Check database connectivity
+### Check database connectivity and schema availability
 
 ```bash
 pnpm db:check
@@ -147,6 +151,7 @@ pnpm format
 
 ## Notes for future tickets
 
-- Planner inputs and outputs are stored as JSON payloads for now to avoid premature over-modeling.
+- Planner inputs, tool results, outputs, and error details are stored as JSON payloads for now to avoid premature over-modeling.
+- `PlannerRun` includes top-level searchable execution metadata such as destination, prompt version, and orchestrator version.
 - `packages/db` intentionally stops at infrastructure, health checks, and minimal repository helpers.
 - Travel-planning behavior, agent logic, and provider integrations should land in later tickets.

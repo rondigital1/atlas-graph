@@ -27,18 +27,21 @@ export type AggregatePlannerRunOutput = {
 export type PlannerRunOutputMinAggregateOutputType = {
   id: string | null
   plannerRunId: string | null
+  outputFormat: string | null
   createdAt: Date | null
 }
 
 export type PlannerRunOutputMaxAggregateOutputType = {
   id: string | null
   plannerRunId: string | null
+  outputFormat: string | null
   createdAt: Date | null
 }
 
 export type PlannerRunOutputCountAggregateOutputType = {
   id: number
   plannerRunId: number
+  outputFormat: number
   payload: number
   createdAt: number
   _all: number
@@ -48,18 +51,21 @@ export type PlannerRunOutputCountAggregateOutputType = {
 export type PlannerRunOutputMinAggregateInputType = {
   id?: true
   plannerRunId?: true
+  outputFormat?: true
   createdAt?: true
 }
 
 export type PlannerRunOutputMaxAggregateInputType = {
   id?: true
   plannerRunId?: true
+  outputFormat?: true
   createdAt?: true
 }
 
 export type PlannerRunOutputCountAggregateInputType = {
   id?: true
   plannerRunId?: true
+  outputFormat?: true
   payload?: true
   createdAt?: true
   _all?: true
@@ -140,6 +146,7 @@ export type PlannerRunOutputGroupByArgs<ExtArgs extends runtime.Types.Extensions
 export type PlannerRunOutputGroupByOutputType = {
   id: string
   plannerRunId: string
+  outputFormat: string | null
   payload: runtime.JsonValue
   createdAt: Date
   _count: PlannerRunOutputCountAggregateOutputType | null
@@ -168,6 +175,7 @@ export type PlannerRunOutputWhereInput = {
   NOT?: Prisma.PlannerRunOutputWhereInput | Prisma.PlannerRunOutputWhereInput[]
   id?: Prisma.UuidFilter<"PlannerRunOutput"> | string
   plannerRunId?: Prisma.UuidFilter<"PlannerRunOutput"> | string
+  outputFormat?: Prisma.StringNullableFilter<"PlannerRunOutput"> | string | null
   payload?: Prisma.JsonFilter<"PlannerRunOutput">
   createdAt?: Prisma.DateTimeFilter<"PlannerRunOutput"> | Date | string
   plannerRun?: Prisma.XOR<Prisma.PlannerRunScalarRelationFilter, Prisma.PlannerRunWhereInput>
@@ -176,6 +184,7 @@ export type PlannerRunOutputWhereInput = {
 export type PlannerRunOutputOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
+  outputFormat?: Prisma.SortOrderInput | Prisma.SortOrder
   payload?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   plannerRun?: Prisma.PlannerRunOrderByWithRelationInput
@@ -187,6 +196,7 @@ export type PlannerRunOutputWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.PlannerRunOutputWhereInput | Prisma.PlannerRunOutputWhereInput[]
   OR?: Prisma.PlannerRunOutputWhereInput[]
   NOT?: Prisma.PlannerRunOutputWhereInput | Prisma.PlannerRunOutputWhereInput[]
+  outputFormat?: Prisma.StringNullableFilter<"PlannerRunOutput"> | string | null
   payload?: Prisma.JsonFilter<"PlannerRunOutput">
   createdAt?: Prisma.DateTimeFilter<"PlannerRunOutput"> | Date | string
   plannerRun?: Prisma.XOR<Prisma.PlannerRunScalarRelationFilter, Prisma.PlannerRunWhereInput>
@@ -195,6 +205,7 @@ export type PlannerRunOutputWhereUniqueInput = Prisma.AtLeast<{
 export type PlannerRunOutputOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
+  outputFormat?: Prisma.SortOrderInput | Prisma.SortOrder
   payload?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.PlannerRunOutputCountOrderByAggregateInput
@@ -208,12 +219,14 @@ export type PlannerRunOutputScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PlannerRunOutputScalarWhereWithAggregatesInput | Prisma.PlannerRunOutputScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"PlannerRunOutput"> | string
   plannerRunId?: Prisma.UuidWithAggregatesFilter<"PlannerRunOutput"> | string
+  outputFormat?: Prisma.StringNullableWithAggregatesFilter<"PlannerRunOutput"> | string | null
   payload?: Prisma.JsonWithAggregatesFilter<"PlannerRunOutput">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PlannerRunOutput"> | Date | string
 }
 
 export type PlannerRunOutputCreateInput = {
   id?: string
+  outputFormat?: string | null
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   plannerRun: Prisma.PlannerRunCreateNestedOneWithoutOutputInput
@@ -222,12 +235,14 @@ export type PlannerRunOutputCreateInput = {
 export type PlannerRunOutputUncheckedCreateInput = {
   id?: string
   plannerRunId: string
+  outputFormat?: string | null
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
 export type PlannerRunOutputUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   plannerRun?: Prisma.PlannerRunUpdateOneRequiredWithoutOutputNestedInput
@@ -236,6 +251,7 @@ export type PlannerRunOutputUpdateInput = {
 export type PlannerRunOutputUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   plannerRunId?: Prisma.StringFieldUpdateOperationsInput | string
+  outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -243,12 +259,14 @@ export type PlannerRunOutputUncheckedUpdateInput = {
 export type PlannerRunOutputCreateManyInput = {
   id?: string
   plannerRunId: string
+  outputFormat?: string | null
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
 export type PlannerRunOutputUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -256,6 +274,7 @@ export type PlannerRunOutputUpdateManyMutationInput = {
 export type PlannerRunOutputUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   plannerRunId?: Prisma.StringFieldUpdateOperationsInput | string
+  outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -268,6 +287,7 @@ export type PlannerRunOutputNullableScalarRelationFilter = {
 export type PlannerRunOutputCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
+  outputFormat?: Prisma.SortOrder
   payload?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -275,12 +295,14 @@ export type PlannerRunOutputCountOrderByAggregateInput = {
 export type PlannerRunOutputMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
+  outputFormat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type PlannerRunOutputMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
+  outputFormat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -318,12 +340,14 @@ export type PlannerRunOutputUncheckedUpdateOneWithoutPlannerRunNestedInput = {
 
 export type PlannerRunOutputCreateWithoutPlannerRunInput = {
   id?: string
+  outputFormat?: string | null
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
 export type PlannerRunOutputUncheckedCreateWithoutPlannerRunInput = {
   id?: string
+  outputFormat?: string | null
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
@@ -346,12 +370,14 @@ export type PlannerRunOutputUpdateToOneWithWhereWithoutPlannerRunInput = {
 
 export type PlannerRunOutputUpdateWithoutPlannerRunInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type PlannerRunOutputUncheckedUpdateWithoutPlannerRunInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  outputFormat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -361,6 +387,7 @@ export type PlannerRunOutputUncheckedUpdateWithoutPlannerRunInput = {
 export type PlannerRunOutputSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   plannerRunId?: boolean
+  outputFormat?: boolean
   payload?: boolean
   createdAt?: boolean
   plannerRun?: boolean | Prisma.PlannerRunDefaultArgs<ExtArgs>
@@ -369,6 +396,7 @@ export type PlannerRunOutputSelect<ExtArgs extends runtime.Types.Extensions.Inte
 export type PlannerRunOutputSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   plannerRunId?: boolean
+  outputFormat?: boolean
   payload?: boolean
   createdAt?: boolean
   plannerRun?: boolean | Prisma.PlannerRunDefaultArgs<ExtArgs>
@@ -377,6 +405,7 @@ export type PlannerRunOutputSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
 export type PlannerRunOutputSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   plannerRunId?: boolean
+  outputFormat?: boolean
   payload?: boolean
   createdAt?: boolean
   plannerRun?: boolean | Prisma.PlannerRunDefaultArgs<ExtArgs>
@@ -385,11 +414,12 @@ export type PlannerRunOutputSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
 export type PlannerRunOutputSelectScalar = {
   id?: boolean
   plannerRunId?: boolean
+  outputFormat?: boolean
   payload?: boolean
   createdAt?: boolean
 }
 
-export type PlannerRunOutputOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "plannerRunId" | "payload" | "createdAt", ExtArgs["result"]["plannerRunOutput"]>
+export type PlannerRunOutputOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "plannerRunId" | "outputFormat" | "payload" | "createdAt", ExtArgs["result"]["plannerRunOutput"]>
 export type PlannerRunOutputInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   plannerRun?: boolean | Prisma.PlannerRunDefaultArgs<ExtArgs>
 }
@@ -408,6 +438,7 @@ export type $PlannerRunOutputPayload<ExtArgs extends runtime.Types.Extensions.In
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     plannerRunId: string
+    outputFormat: string | null
     payload: runtime.JsonValue
     createdAt: Date
   }, ExtArgs["result"]["plannerRunOutput"]>
@@ -836,6 +867,7 @@ export interface Prisma__PlannerRunOutputClient<T, Null = never, ExtArgs extends
 export interface PlannerRunOutputFieldRefs {
   readonly id: Prisma.FieldRef<"PlannerRunOutput", 'String'>
   readonly plannerRunId: Prisma.FieldRef<"PlannerRunOutput", 'String'>
+  readonly outputFormat: Prisma.FieldRef<"PlannerRunOutput", 'String'>
   readonly payload: Prisma.FieldRef<"PlannerRunOutput", 'Json'>
   readonly createdAt: Prisma.FieldRef<"PlannerRunOutput", 'DateTime'>
 }

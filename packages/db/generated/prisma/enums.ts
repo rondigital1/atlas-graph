@@ -17,3 +17,12 @@ export const PlannerRunStatus = {
 } as const
 
 export type PlannerRunStatus = (typeof PlannerRunStatus)[keyof typeof PlannerRunStatus]
+
+
+export const ToolExecutionStatus = {
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED',
+  PARTIAL: 'PARTIAL'
+} as const
+
+export type ToolExecutionStatus = (typeof ToolExecutionStatus)[keyof typeof ToolExecutionStatus]

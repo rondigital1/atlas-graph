@@ -1,4 +1,7 @@
-export { PlannerRunStatus } from "../generated/prisma/client";
+export {
+  PlannerRunStatus,
+  ToolExecutionStatus,
+} from "../generated/prisma/client";
 export type {
   PlannerRun,
   PlannerRunError,

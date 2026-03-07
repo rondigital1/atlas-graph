@@ -27,6 +27,8 @@ export type AggregatePlannerRunError = {
 export type PlannerRunErrorMinAggregateOutputType = {
   id: string | null
   plannerRunId: string | null
+  errorType: string | null
+  stepName: string | null
   message: string | null
   createdAt: Date | null
 }
@@ -34,6 +36,8 @@ export type PlannerRunErrorMinAggregateOutputType = {
 export type PlannerRunErrorMaxAggregateOutputType = {
   id: string | null
   plannerRunId: string | null
+  errorType: string | null
+  stepName: string | null
   message: string | null
   createdAt: Date | null
 }
@@ -41,6 +45,8 @@ export type PlannerRunErrorMaxAggregateOutputType = {
 export type PlannerRunErrorCountAggregateOutputType = {
   id: number
   plannerRunId: number
+  errorType: number
+  stepName: number
   message: number
   details: number
   createdAt: number
@@ -51,6 +57,8 @@ export type PlannerRunErrorCountAggregateOutputType = {
 export type PlannerRunErrorMinAggregateInputType = {
   id?: true
   plannerRunId?: true
+  errorType?: true
+  stepName?: true
   message?: true
   createdAt?: true
 }
@@ -58,6 +66,8 @@ export type PlannerRunErrorMinAggregateInputType = {
 export type PlannerRunErrorMaxAggregateInputType = {
   id?: true
   plannerRunId?: true
+  errorType?: true
+  stepName?: true
   message?: true
   createdAt?: true
 }
@@ -65,6 +75,8 @@ export type PlannerRunErrorMaxAggregateInputType = {
 export type PlannerRunErrorCountAggregateInputType = {
   id?: true
   plannerRunId?: true
+  errorType?: true
+  stepName?: true
   message?: true
   details?: true
   createdAt?: true
@@ -146,6 +158,8 @@ export type PlannerRunErrorGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 export type PlannerRunErrorGroupByOutputType = {
   id: string
   plannerRunId: string
+  errorType: string | null
+  stepName: string | null
   message: string
   details: runtime.JsonValue | null
   createdAt: Date
@@ -175,6 +189,8 @@ export type PlannerRunErrorWhereInput = {
   NOT?: Prisma.PlannerRunErrorWhereInput | Prisma.PlannerRunErrorWhereInput[]
   id?: Prisma.UuidFilter<"PlannerRunError"> | string
   plannerRunId?: Prisma.UuidFilter<"PlannerRunError"> | string
+  errorType?: Prisma.StringNullableFilter<"PlannerRunError"> | string | null
+  stepName?: Prisma.StringNullableFilter<"PlannerRunError"> | string | null
   message?: Prisma.StringFilter<"PlannerRunError"> | string
   details?: Prisma.JsonNullableFilter<"PlannerRunError">
   createdAt?: Prisma.DateTimeFilter<"PlannerRunError"> | Date | string
@@ -184,6 +200,8 @@ export type PlannerRunErrorWhereInput = {
 export type PlannerRunErrorOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
+  errorType?: Prisma.SortOrderInput | Prisma.SortOrder
+  stepName?: Prisma.SortOrderInput | Prisma.SortOrder
   message?: Prisma.SortOrder
   details?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -196,6 +214,8 @@ export type PlannerRunErrorWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.PlannerRunErrorWhereInput[]
   NOT?: Prisma.PlannerRunErrorWhereInput | Prisma.PlannerRunErrorWhereInput[]
   plannerRunId?: Prisma.UuidFilter<"PlannerRunError"> | string
+  errorType?: Prisma.StringNullableFilter<"PlannerRunError"> | string | null
+  stepName?: Prisma.StringNullableFilter<"PlannerRunError"> | string | null
   message?: Prisma.StringFilter<"PlannerRunError"> | string
   details?: Prisma.JsonNullableFilter<"PlannerRunError">
   createdAt?: Prisma.DateTimeFilter<"PlannerRunError"> | Date | string
@@ -205,6 +225,8 @@ export type PlannerRunErrorWhereUniqueInput = Prisma.AtLeast<{
 export type PlannerRunErrorOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
+  errorType?: Prisma.SortOrderInput | Prisma.SortOrder
+  stepName?: Prisma.SortOrderInput | Prisma.SortOrder
   message?: Prisma.SortOrder
   details?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -219,6 +241,8 @@ export type PlannerRunErrorScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PlannerRunErrorScalarWhereWithAggregatesInput | Prisma.PlannerRunErrorScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"PlannerRunError"> | string
   plannerRunId?: Prisma.UuidWithAggregatesFilter<"PlannerRunError"> | string
+  errorType?: Prisma.StringNullableWithAggregatesFilter<"PlannerRunError"> | string | null
+  stepName?: Prisma.StringNullableWithAggregatesFilter<"PlannerRunError"> | string | null
   message?: Prisma.StringWithAggregatesFilter<"PlannerRunError"> | string
   details?: Prisma.JsonNullableWithAggregatesFilter<"PlannerRunError">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PlannerRunError"> | Date | string
@@ -226,6 +250,8 @@ export type PlannerRunErrorScalarWhereWithAggregatesInput = {
 
 export type PlannerRunErrorCreateInput = {
   id?: string
+  errorType?: string | null
+  stepName?: string | null
   message: string
   details?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -235,6 +261,8 @@ export type PlannerRunErrorCreateInput = {
 export type PlannerRunErrorUncheckedCreateInput = {
   id?: string
   plannerRunId: string
+  errorType?: string | null
+  stepName?: string | null
   message: string
   details?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -242,6 +270,8 @@ export type PlannerRunErrorUncheckedCreateInput = {
 
 export type PlannerRunErrorUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  errorType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stepName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
   details?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -251,6 +281,8 @@ export type PlannerRunErrorUpdateInput = {
 export type PlannerRunErrorUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   plannerRunId?: Prisma.StringFieldUpdateOperationsInput | string
+  errorType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stepName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
   details?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -259,6 +291,8 @@ export type PlannerRunErrorUncheckedUpdateInput = {
 export type PlannerRunErrorCreateManyInput = {
   id?: string
   plannerRunId: string
+  errorType?: string | null
+  stepName?: string | null
   message: string
   details?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -266,6 +300,8 @@ export type PlannerRunErrorCreateManyInput = {
 
 export type PlannerRunErrorUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  errorType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stepName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
   details?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -274,6 +310,8 @@ export type PlannerRunErrorUpdateManyMutationInput = {
 export type PlannerRunErrorUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   plannerRunId?: Prisma.StringFieldUpdateOperationsInput | string
+  errorType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stepName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
   details?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -292,6 +330,8 @@ export type PlannerRunErrorOrderByRelationAggregateInput = {
 export type PlannerRunErrorCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
+  errorType?: Prisma.SortOrder
+  stepName?: Prisma.SortOrder
   message?: Prisma.SortOrder
   details?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -300,6 +340,8 @@ export type PlannerRunErrorCountOrderByAggregateInput = {
 export type PlannerRunErrorMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
+  errorType?: Prisma.SortOrder
+  stepName?: Prisma.SortOrder
   message?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -307,6 +349,8 @@ export type PlannerRunErrorMaxOrderByAggregateInput = {
 export type PlannerRunErrorMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   plannerRunId?: Prisma.SortOrder
+  errorType?: Prisma.SortOrder
+  stepName?: Prisma.SortOrder
   message?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -355,6 +399,8 @@ export type PlannerRunErrorUncheckedUpdateManyWithoutPlannerRunNestedInput = {
 
 export type PlannerRunErrorCreateWithoutPlannerRunInput = {
   id?: string
+  errorType?: string | null
+  stepName?: string | null
   message: string
   details?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -362,6 +408,8 @@ export type PlannerRunErrorCreateWithoutPlannerRunInput = {
 
 export type PlannerRunErrorUncheckedCreateWithoutPlannerRunInput = {
   id?: string
+  errorType?: string | null
+  stepName?: string | null
   message: string
   details?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -399,6 +447,8 @@ export type PlannerRunErrorScalarWhereInput = {
   NOT?: Prisma.PlannerRunErrorScalarWhereInput | Prisma.PlannerRunErrorScalarWhereInput[]
   id?: Prisma.UuidFilter<"PlannerRunError"> | string
   plannerRunId?: Prisma.UuidFilter<"PlannerRunError"> | string
+  errorType?: Prisma.StringNullableFilter<"PlannerRunError"> | string | null
+  stepName?: Prisma.StringNullableFilter<"PlannerRunError"> | string | null
   message?: Prisma.StringFilter<"PlannerRunError"> | string
   details?: Prisma.JsonNullableFilter<"PlannerRunError">
   createdAt?: Prisma.DateTimeFilter<"PlannerRunError"> | Date | string
@@ -406,6 +456,8 @@ export type PlannerRunErrorScalarWhereInput = {
 
 export type PlannerRunErrorCreateManyPlannerRunInput = {
   id?: string
+  errorType?: string | null
+  stepName?: string | null
   message: string
   details?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -413,6 +465,8 @@ export type PlannerRunErrorCreateManyPlannerRunInput = {
 
 export type PlannerRunErrorUpdateWithoutPlannerRunInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  errorType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stepName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
   details?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -420,6 +474,8 @@ export type PlannerRunErrorUpdateWithoutPlannerRunInput = {
 
 export type PlannerRunErrorUncheckedUpdateWithoutPlannerRunInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  errorType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stepName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
   details?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -427,6 +483,8 @@ export type PlannerRunErrorUncheckedUpdateWithoutPlannerRunInput = {
 
 export type PlannerRunErrorUncheckedUpdateManyWithoutPlannerRunInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  errorType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stepName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
   details?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -437,6 +495,8 @@ export type PlannerRunErrorUncheckedUpdateManyWithoutPlannerRunInput = {
 export type PlannerRunErrorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   plannerRunId?: boolean
+  errorType?: boolean
+  stepName?: boolean
   message?: boolean
   details?: boolean
   createdAt?: boolean
@@ -446,6 +506,8 @@ export type PlannerRunErrorSelect<ExtArgs extends runtime.Types.Extensions.Inter
 export type PlannerRunErrorSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   plannerRunId?: boolean
+  errorType?: boolean
+  stepName?: boolean
   message?: boolean
   details?: boolean
   createdAt?: boolean
@@ -455,6 +517,8 @@ export type PlannerRunErrorSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
 export type PlannerRunErrorSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   plannerRunId?: boolean
+  errorType?: boolean
+  stepName?: boolean
   message?: boolean
   details?: boolean
   createdAt?: boolean
@@ -464,12 +528,14 @@ export type PlannerRunErrorSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
 export type PlannerRunErrorSelectScalar = {
   id?: boolean
   plannerRunId?: boolean
+  errorType?: boolean
+  stepName?: boolean
   message?: boolean
   details?: boolean
   createdAt?: boolean
 }
 
-export type PlannerRunErrorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "plannerRunId" | "message" | "details" | "createdAt", ExtArgs["result"]["plannerRunError"]>
+export type PlannerRunErrorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "plannerRunId" | "errorType" | "stepName" | "message" | "details" | "createdAt", ExtArgs["result"]["plannerRunError"]>
 export type PlannerRunErrorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   plannerRun?: boolean | Prisma.PlannerRunDefaultArgs<ExtArgs>
 }
@@ -488,6 +554,8 @@ export type $PlannerRunErrorPayload<ExtArgs extends runtime.Types.Extensions.Int
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     plannerRunId: string
+    errorType: string | null
+    stepName: string | null
     message: string
     details: runtime.JsonValue | null
     createdAt: Date
@@ -917,6 +985,8 @@ export interface Prisma__PlannerRunErrorClient<T, Null = never, ExtArgs extends 
 export interface PlannerRunErrorFieldRefs {
   readonly id: Prisma.FieldRef<"PlannerRunError", 'String'>
   readonly plannerRunId: Prisma.FieldRef<"PlannerRunError", 'String'>
+  readonly errorType: Prisma.FieldRef<"PlannerRunError", 'String'>
+  readonly stepName: Prisma.FieldRef<"PlannerRunError", 'String'>
   readonly message: Prisma.FieldRef<"PlannerRunError", 'String'>
   readonly details: Prisma.FieldRef<"PlannerRunError", 'Json'>
   readonly createdAt: Prisma.FieldRef<"PlannerRunError", 'DateTime'>
