@@ -1,13 +1,74 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../packages/db/generated/prisma"
+  provider     = "prisma-client"
+  output       = "../packages/db/generated/prisma"
+  moduleFormat = "esm"
+  runtime      = "nodejs"
+  engineType   = "client"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-model SystemPlaceholder {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
+enum PlannerRunStatus {
+  PENDING
+  RUNNING
+  SUCCEEDED
+  FAILED
+}
+
+model PlannerRun {
+  id          String           @id @default(uuid()) @db.Uuid
+  status      PlannerRunStatus @default(PENDING)
+  requestId   String?          @unique
+  startedAt   DateTime         @default(now())
+  completedAt DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  input       PlannerRunInput?
+  toolResults PlannerRunToolResult[]
+  output      PlannerRunOutput?
+  errors      PlannerRunError[]
+
+  @@index([status, createdAt])
+  @@index([startedAt])
+}
+
+model PlannerRunInput {
+  id           String     @id @default(uuid()) @db.Uuid
+  plannerRunId String     @unique @db.Uuid
+  payload      Json
+  createdAt    DateTime   @default(now())
+  plannerRun   PlannerRun @relation(fields: [plannerRunId], references: [id], onDelete: Cascade)
+}
+
+model PlannerRunToolResult {
+  id           String     @id @default(uuid()) @db.Uuid
+  plannerRunId String     @db.Uuid
+  toolName     String
+  payload      Json
+  createdAt    DateTime   @default(now())
+  plannerRun   PlannerRun @relation(fields: [plannerRunId], references: [id], onDelete: Cascade)
+
+  @@index([plannerRunId, createdAt])
+  @@index([plannerRunId, toolName])
+}
+
+model PlannerRunOutput {
+  id           String     @id @default(uuid()) @db.Uuid
+  plannerRunId String     @unique @db.Uuid
+  payload      Json
+  createdAt    DateTime   @default(now())
+  plannerRun   PlannerRun @relation(fields: [plannerRunId], references: [id], onDelete: Cascade)
+}
+
+model PlannerRunError {
+  id           String     @id @default(uuid()) @db.Uuid
+  plannerRunId String     @db.Uuid
+  message      String     @db.Text
+  details      Json?
+  createdAt    DateTime   @default(now())
+  plannerRun   PlannerRun @relation(fields: [plannerRunId], references: [id], onDelete: Cascade)
+
+  @@index([plannerRunId, createdAt])
 }

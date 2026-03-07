@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-// TODO: Tighten these to required values when runtime integrations are added.
+// DATABASE_URL is required because Prisma and packages/db depend on it.
 export const atlasEnvSchema = z
   .object({
-    DATABASE_URL: z.string().min(1).optional(),
+    DATABASE_URL: z.string().min(1),
     GOOGLE_MAPS_API_KEY: z.string().min(1).optional(),
     LANGSMITH_API_KEY: z.string().min(1).optional(),
     OPENAI_API_KEY: z.string().min(1).optional(),

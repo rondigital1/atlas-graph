@@ -12,6 +12,7 @@ export default [
       "**/dist/**",
       "**/node_modules/**",
       "**/*.d.ts",
+      "packages/db/generated/prisma/**",
       "pnpm-lock.yaml",
     ],
   },

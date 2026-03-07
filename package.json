@@ -14,8 +14,16 @@
     "test": "vitest run",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prisma:generate": "corepack pnpm --filter @atlas-graph/db prisma:generate",
-    "prisma:validate": "corepack pnpm --filter @atlas-graph/db prisma:validate"
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres",
+    "db:check": "corepack pnpm --filter @atlas-graph/db db:check",
+    "prisma:generate": "prisma generate --config prisma.config.ts",
+    "prisma:validate": "prisma validate --config prisma.config.ts",
+    "prisma:migrate:dev": "prisma migrate dev --config prisma.config.ts",
+    "prisma:migrate:deploy": "prisma migrate deploy --config prisma.config.ts",
+    "prisma:migrate:status": "prisma migrate status --config prisma.config.ts",
+    "prisma:studio": "prisma studio --config prisma.config.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
@@ -25,6 +33,7 @@
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
+    "dotenv": "^17.3.1",
     "globals": "^17.4.0",
     "prettier": "^3.8.1",
     "prisma": "^7.4.2",

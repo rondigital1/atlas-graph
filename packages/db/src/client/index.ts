@@ -1,44 +1,76 @@
-export interface PrismaClientLike {
-  $connect(): Promise<void>;
-  $disconnect(): Promise<void>;
-}
+import { PrismaPg } from "@prisma/adapter-pg";
+import { parseAtlasEnv } from "@atlas-graph/config";
 
-class PlaceholderPrismaClient implements PrismaClientLike {
-  public async $connect(): Promise<void> {
-    throw new Error(
-      "Prisma client generation is reserved for a later ticket. Run `pnpm prisma:generate` after the real schema and runtime wiring are implemented.",
-    );
-  }
+import { PrismaClient } from "../../generated/prisma/client";
 
-  public async $disconnect(): Promise<void> {
-    return Promise.resolve();
-  }
-}
+let prismaClientSingleton: PrismaClient | undefined;
 
 declare global {
-  var __atlasGraphPrisma__: PrismaClientLike | undefined;
+  var __atlasGraphPrisma__: PrismaClient | undefined;
 }
 
-export const databaseClientStatus = {
-  generated: false,
-  readyForRuntimeUse: false,
-  generatedClientOutput: "packages/db/generated/prisma",
-} as const;
+function createPrismaAdapter(): PrismaPg {
+  const { DATABASE_URL } = parseAtlasEnv();
 
-export function createPrismaClient(): PrismaClientLike {
-  return new PlaceholderPrismaClient();
+  return new PrismaPg({
+    connectionString: DATABASE_URL,
+  });
 }
 
-export function getPrismaClient(): PrismaClientLike {
-  if (globalThis.__atlasGraphPrisma__) {
+export function createPrismaClient(): PrismaClient {
+  return new PrismaClient({
+    adapter: createPrismaAdapter(),
+  });
+}
+
+export function getPrismaClient(): PrismaClient {
+  if (
+    process.env["NODE_ENV"] !== "production" &&
+    globalThis.__atlasGraphPrisma__
+  ) {
     return globalThis.__atlasGraphPrisma__;
   }
 
+  if (prismaClientSingleton) {
+    return prismaClientSingleton;
+  }
+
   const client = createPrismaClient();
+  prismaClientSingleton = client;
 
   if (process.env["NODE_ENV"] !== "production") {
     globalThis.__atlasGraphPrisma__ = client;
   }
 
   return client;
+}
+
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, property) {
+    const client = getPrismaClient();
+    const value = Reflect.get(client, property, client);
+
+    if (typeof value === "function") {
+      return value.bind(client);
+    }
+
+    return value;
+  },
+});
+
+export async function disconnectPrismaClient(): Promise<void> {
+  if (!prismaClientSingleton && !globalThis.__atlasGraphPrisma__) {
+    return;
+  }
+
+  const client = globalThis.__atlasGraphPrisma__ ?? prismaClientSingleton;
+
+  if (!client) {
+    return;
+  }
+
+  await client.$disconnect();
+
+  prismaClientSingleton = undefined;
+  globalThis.__atlasGraphPrisma__ = undefined;
 }

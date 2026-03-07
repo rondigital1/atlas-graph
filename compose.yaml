@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: atlas-graph-postgres
+    environment:
+      POSTGRES_DB: atlas_graph
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d atlas_graph"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5433:5432"
+    volumes:
+      - atlas_graph_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  atlas_graph_postgres_data:

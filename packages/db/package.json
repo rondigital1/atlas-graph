@@ -6,19 +6,27 @@
   "exports": {
     ".": "./src/index.ts",
     "./client": "./src/client/index.ts",
+    "./health": "./src/health.ts",
     "./repositories": "./src/repositories/index.ts"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "db:check": "tsx src/scripts/check-database.ts",
     "prisma:generate": "prisma generate --config ../../prisma.config.ts",
-    "prisma:validate": "prisma validate --config ../../prisma.config.ts"
+    "prisma:validate": "prisma validate --config ../../prisma.config.ts",
+    "prisma:migrate:dev": "prisma migrate dev --config ../../prisma.config.ts",
+    "prisma:migrate:deploy": "prisma migrate deploy --config ../../prisma.config.ts",
+    "prisma:migrate:status": "prisma migrate status --config ../../prisma.config.ts",
+    "prisma:studio": "prisma studio --config ../../prisma.config.ts"
   },
   "dependencies": {
     "@atlas-graph/config": "workspace:*",
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.2",
-    "dotenv": "^17.3.1",
     "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0"
   }
 }
