@@ -3,5 +3,10 @@
   "compilerOptions": {
     "emitDeclarationOnly": true
   },
+  "references": [
+    {
+      "path": "../core/tsconfig.build.json"
+    }
+  ],
   "exclude": ["dist", "node_modules", "src/**/*.test.ts"]
 }
