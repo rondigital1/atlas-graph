@@ -11,6 +11,7 @@ AtlasGraph is a production-oriented TypeScript monorepo for a future travel-plan
 - Generated Prisma client wiring owned by `packages/db`
 - Local PostgreSQL development setup via Docker Compose
 - Execution-focused planner-run persistence schema with JSON payload storage
+- Shared Zod runtime schemas and inferred TypeScript types for trip requests, planning context, normalized place data, tool results, and planner output
 - ESLint, Prettier, and Vitest wired for repo-wide use
 
 ## What is intentionally not implemented yet
@@ -49,7 +50,7 @@ Presentation layer only. It does not own business logic or direct database acces
 
 ### `packages/core`
 
-Shared domain-adjacent types and schemas.
+Shared domain-adjacent runtime validation schemas and inferred types. This package defines the request, context, normalized data, tool result, and planner output contracts reused across the app, services, and persistence layers.
 
 ### `packages/agent`
 
@@ -153,5 +154,6 @@ pnpm format
 
 - Planner inputs, tool results, outputs, and error details are stored as JSON payloads for now to avoid premature over-modeling.
 - `PlannerRun` includes top-level searchable execution metadata such as destination, prompt version, and orchestrator version.
+- `packages/core` owns shared Zod contracts and inferred TypeScript types instead of duplicating interfaces across layers.
 - `packages/db` intentionally stops at infrastructure, health checks, and minimal repository helpers.
 - Travel-planning behavior, agent logic, and provider integrations should land in later tickets.
