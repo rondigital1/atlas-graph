@@ -5,6 +5,7 @@
   "version": "0.0.0",
   "exports": {
     ".": "./src/index.ts",
+    "./normalization": "./src/normalization/index.ts",
     "./planner": "./src/planner/index.ts",
     "./prompts": "./src/prompts/index.ts",
     "./providers": "./src/providers/index.ts",
