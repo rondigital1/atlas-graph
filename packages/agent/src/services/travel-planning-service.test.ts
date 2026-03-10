@@ -1,7 +1,12 @@
-import { PlanningContextSchema, TripRequestSchema } from "@atlas-graph/core/schemas";
+import {
+  PlanningContextSchema,
+  TripPlanSchema,
+  TripRequestSchema,
+} from "@atlas-graph/core/schemas";
 import type {
   DestinationSummary,
   PlaceCandidate,
+  TripPlan,
   TripRequest,
   WeatherSummary,
 } from "@atlas-graph/core/types";
@@ -54,21 +59,59 @@ function createPlaceCandidates(): PlaceCandidate[] {
   ];
 }
 
+function createTripPlan(): TripPlan {
+  return TripPlanSchema.parse({
+    destinationSummary: "Tokyo offers varied neighborhoods, food, and culture.",
+    tripStyleSummary: "A balanced city itinerary with food and cultural stops.",
+    practicalNotes: ["Carry a light layer for the evenings."],
+    days: [
+      {
+        dayNumber: 1,
+        date: "2026-04-10",
+        theme: "Shrines and neighborhood walks",
+        morning: [
+          {
+            title: "Visit Meiji Shrine",
+            placeId: "place-1",
+            description: "Start with a calm walk through the shrine grounds.",
+          },
+        ],
+        afternoon: [],
+        evening: [],
+      },
+    ],
+    topRecommendations: [
+      {
+        placeId: "place-1",
+        name: "Meiji Shrine",
+        reason: "It fits the user's culture interest.",
+      },
+    ],
+    warnings: [],
+    rationale: "The plan keeps the pacing balanced and realistic.",
+  });
+}
+
 function createDeps() {
   const destinationSummary = createDestinationSummary();
   const weatherSummary = createWeatherSummary();
   const placeCandidates = createPlaceCandidates();
+  const tripPlan = createTripPlan();
 
   return {
     destinationSummary,
     weatherSummary,
     placeCandidates,
+    tripPlan,
     deps: {
       destinationInfoProvider: {
         getDestinationSummary: vi.fn().mockResolvedValue(destinationSummary),
       },
       placesProvider: {
         searchPlaces: vi.fn().mockResolvedValue(placeCandidates),
+      },
+      plannerRunner: {
+        run: vi.fn().mockResolvedValue(tripPlan),
       },
       weatherProvider: {
         getWeatherSummary: vi.fn().mockResolvedValue(weatherSummary),
@@ -110,13 +153,28 @@ describe("TravelPlanningService", () => {
     );
   });
 
-  it("generatePlan throws a not implemented error", async () => {
+  it("generatePlan delegates to plannerRunner with a valid planning context", async () => {
     const request = createTripRequest();
-    const { deps } = createDeps();
+    const { deps, destinationSummary, placeCandidates, tripPlan, weatherSummary } =
+      createDeps();
     const service = new TravelPlanningService(deps);
 
-    await expect(service.generatePlan(request)).rejects.toThrow(
-      "TravelPlanningService.generatePlan is not implemented yet."
+    const result = await service.generatePlan(request);
+
+    expect(result).toEqual(tripPlan);
+    expect(deps.plannerRunner.run).toHaveBeenCalledTimes(1);
+
+    const context = deps.plannerRunner.run.mock.calls[0]?.[0];
+
+    expect(context).toEqual(
+      PlanningContextSchema.parse({
+        request,
+        destinationSummary,
+        weatherSummary,
+        placeCandidates,
+      })
     );
+
+    expect(PlanningContextSchema.parse(context)).toEqual(context);
   });
 });

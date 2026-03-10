@@ -7,6 +7,11 @@ export function createMockTravelPlanningDeps(): TravelPlanningServiceDeps {
   return {
     destinationInfoProvider: new MockDestinationInfoProvider(),
     placesProvider: new MockPlacesProvider(),
+    plannerRunner: {
+      async run() {
+        throw new Error("Mock plannerRunner.run is not implemented.");
+      },
+    },
     weatherProvider: new MockWeatherProvider(),
   };
 }

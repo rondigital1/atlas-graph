@@ -39,8 +39,8 @@ export class TravelPlanningService {
   }
 
   public async generatePlan(input: TripRequest): Promise<TripPlan> {
-    await this.buildPlanningContext(input);
+    const context = await this.buildPlanningContext(input);
 
-    throw new Error("TravelPlanningService.generatePlan is not implemented yet.");
+    return await this.deps.plannerRunner.run(context);
   }
 }
