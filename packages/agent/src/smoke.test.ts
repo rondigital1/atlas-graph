@@ -1,11 +1,17 @@
 import { describe, expect, it } from "vitest";
 
-import { plannerModuleStatus, promptRegistry, toolRegistry } from "./index";
+import {
+  plannerModuleStatus,
+  PLANNER_PROMPT_VERSION,
+  promptRegistry,
+  toolRegistry,
+} from "./index";
 
 describe("agent package", () => {
-  it("keeps planner, prompt, and tool stubs in place", () => {
+  it("keeps the planner stub in place and exposes prompt assets", () => {
     expect(plannerModuleStatus.implemented).toBe(false);
-    expect(Object.keys(promptRegistry)).toHaveLength(0);
+    expect(promptRegistry.planner.version).toBe(PLANNER_PROMPT_VERSION);
+    expect(promptRegistry.planner.systemPrompt).toContain("Return valid JSON only.");
     expect(Object.keys(toolRegistry)).toHaveLength(0);
   });
 });
