@@ -1,22 +1,26 @@
-import type { Metadata } from "next";
-import { Fraunces, Space_Grotesk } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
 
 import "./globals.css";
-import { siteMetadata } from "../src/lib/site";
 
-const headingFont = Fraunces({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-heading",
+  variable: "--font-sans",
 });
 
-const bodyFont = Space_Grotesk({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-body",
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
-  title: siteMetadata.name,
-  description: siteMetadata.description,
+  title: "AtlasGraph - AI Travel Planning",
+  description:
+    "Plan personalized multi-city or single-destination travel itineraries with AI-powered intelligence.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0a0a0c",
 };
 
 export default function RootLayout({
@@ -25,10 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${headingFont.variable} ${bodyFont.variable}`}>
-      <body className="font-[family-name:var(--font-body)] antialiased">
-        {children}
-      </body>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+      <body className="font-sans antialiased">{children}</body>
     </html>
   );
 }

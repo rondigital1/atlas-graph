@@ -1,50 +1,100 @@
-import { siteMetadata, travelPlannerPlaceholders } from "../src/lib/site";
+"use client";
+
+import Link from "next/link";
+import { Header } from "./components/header";
+import { PlanningWorkspace } from "./components/planning-workspace";
 
 export default function HomePage() {
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 py-10 sm:px-10 lg:px-12">
-      <section className="relative overflow-hidden rounded-[2rem] border border-[color:var(--border)] bg-[color:var(--surface)] p-8 shadow-[0_24px_80px_rgba(23,32,51,0.08)] backdrop-blur sm:p-12">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color:var(--accent)] to-transparent" />
-        <div className="max-w-3xl space-y-6">
-          <p className="text-sm font-medium uppercase tracking-[0.3em] text-[color:var(--accent)]">
-            T-001 Workspace Shell
-          </p>
-          <h1 className="font-[family-name:var(--font-heading)] text-5xl leading-none sm:text-6xl">
-            {siteMetadata.name}
-          </h1>
-          <p className="max-w-2xl text-lg leading-8 text-slate-700">
-            {siteMetadata.description}
-          </p>
+    <div className="flex min-h-screen flex-col bg-background">
+      <Header />
+      
+      {/* Quick link to results page for demo */}
+      <div className="border-b border-border-muted bg-primary-subtle">
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-4 py-2">
+          <span className="text-xs text-muted-foreground">Demo: View the generated itinerary results page</span>
+          <Link 
+            href="/results" 
+            className="flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            View Results
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </Link>
         </div>
-      </section>
+      </div>
 
-      <section className="mt-12 grid gap-5 md:grid-cols-3">
-        {travelPlannerPlaceholders.map((section) => {
-          return (
-            <article
-              key={section.title}
-              className="rounded-[1.5rem] border border-[color:var(--border)] bg-[color:var(--surface-strong)] p-6 shadow-[0_18px_50px_rgba(23,32,51,0.06)]"
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[color:var(--accent-secondary)]">
-                {section.label}
-              </p>
-              <h2 className="mt-4 text-2xl font-semibold text-slate-900">
-                {section.title}
-              </h2>
-              <p className="mt-3 text-sm leading-7 text-slate-700">
-                {section.description}
-              </p>
-            </article>
-          );
-        })}
-      </section>
+      <main className="flex flex-1 flex-col">
+        {/* Workspace Header */}
+        <div className="border-b border-border-muted bg-surface/40">
+          <div className="mx-auto flex max-w-[1400px] items-center justify-between px-4 py-2.5">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/15">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-primary"
+                >
+                  <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+                </svg>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-foreground">New Plan</span>
+                <span className="rounded bg-surface-elevated px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">Draft</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-1">
+              <button className="flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs text-muted-foreground transition-colors hover:bg-surface-elevated hover:text-foreground">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                Save
+              </button>
+              <button className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-surface-elevated hover:text-foreground">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="19" cy="12" r="1" />
+                  <circle cx="5" cy="12" r="1" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
 
-      <section className="mt-12 rounded-[2rem] border border-dashed border-[color:var(--border)] px-6 py-8 text-sm leading-7 text-slate-700">
-        AtlasGraph is intentionally scaffold-only in this ticket. Domain logic,
-        planner behavior, prompts, provider integrations, and production data
-        models will land in later tickets inside shared packages rather than the
-        UI layer.
-      </section>
-    </main>
+        {/* Workspace */}
+        <div className="flex-1 overflow-y-auto px-4 py-6">
+          <div className="mx-auto max-w-[1400px]">
+            <PlanningWorkspace />
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }
