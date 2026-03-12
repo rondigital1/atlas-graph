@@ -92,6 +92,11 @@ cp .env.example .env
 
 `DATABASE_URL` is required for Prisma commands and any runtime code that imports `packages/db`.
 
+For local `/api/plan-trip` development, keep `ATLASGRAPH_USE_DEV_PLANNER=true` to use
+the development-only stub planner. To use the real LangChain/OpenAI path instead, set
+`ATLASGRAPH_USE_DEV_PLANNER=false`, provide `OPENAI_API_KEY`, and optionally override
+`ATLASGRAPH_OPENAI_MODEL`.
+
 ### Start local PostgreSQL
 
 ```bash

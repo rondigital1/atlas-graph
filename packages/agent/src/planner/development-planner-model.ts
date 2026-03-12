@@ -3,6 +3,7 @@ import type { TripPlan } from "@atlas-graph/core/types";
 
 import type { PlannerModel } from "./planner-types";
 
+// Development-only planner stub used for local wiring when no real model is selected.
 interface PlannerPromptPlaceCandidate {
   id: string;
   name: string;
