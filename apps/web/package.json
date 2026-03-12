@@ -9,6 +9,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@atlas-graph/agent": "workspace:*",
     "@atlas-graph/config": "workspace:*",
     "@atlas-graph/core": "workspace:*",
     "next": "^16.1.6",
