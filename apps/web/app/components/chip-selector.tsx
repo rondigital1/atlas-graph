@@ -65,10 +65,10 @@ export function ChipSelector({
                   : "border-border text-muted-foreground hover:border-border/80 hover:bg-surface-elevated hover:text-foreground"
               }`}
             >
-              {multiple && isSelected && (
+              {multiple && (
                 <span
                   aria-hidden="true"
-                  className="h-1.5 w-1.5 rounded-full bg-primary"
+                  className={`h-1.5 w-1.5 rounded-full ${isSelected ? "bg-primary" : "bg-transparent"}`}
                 />
               )}
               {option.label}
