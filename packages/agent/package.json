@@ -5,6 +5,7 @@
   "version": "0.0.0",
   "exports": {
     ".": "./src/index.ts",
+    "./evals": "./src/evals/index.ts",
     "./normalization": "./src/normalization/index.ts",
     "./planner": "./src/planner/index.ts",
     "./prompts": "./src/prompts/index.ts",
@@ -14,6 +15,7 @@
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
+    "eval:planner": "vitest run --root ../.. packages/agent/src/evals/planner-eval.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
