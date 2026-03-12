@@ -8,10 +8,9 @@ import { AIPreviewPanel } from "./ai-preview-panel";
 import { TemplateCards } from "./template-cards";
 
 const STEPS = [
-  { id: "basics", label: "Trip Basics" },
+  { id: "basics", label: "Basics" },
   { id: "preferences", label: "Preferences" },
-  { id: "travel", label: "Flights & Stay" },
-  { id: "experiences", label: "Experiences" },
+  { id: "logistics", label: "Logistics" },
   { id: "generate", label: "Generate" },
 ];
 
@@ -36,14 +35,13 @@ const TRIP_TYPES = [
   { id: "friends", label: "Friends" },
   { id: "family", label: "Family" },
   { id: "business", label: "Business" },
-  { id: "remote-work", label: "Remote Work" },
 ];
 
 const PLANNING_MODES = [
   { id: "weekend", label: "Weekend" },
   { id: "1-week", label: "1 Week" },
   { id: "2-weeks", label: "2 Weeks" },
-  { id: "custom", label: "Custom" },
+  { id: "3-weeks", label: "3+ Weeks" },
   { id: "multi-city", label: "Multi-City" },
 ];
 
@@ -54,12 +52,30 @@ const BUDGET_LEVELS = [
   { id: "luxury", label: "Luxury" },
 ];
 
+const TRAVEL_PACE = [
+  { id: "relaxed", label: "Relaxed" },
+  { id: "balanced", label: "Balanced" },
+  { id: "fast-paced", label: "Fast-Paced" },
+];
+
+const INTERESTS = [
+  { id: "food", label: "Food & Dining" },
+  { id: "art", label: "Art & Museums" },
+  { id: "architecture", label: "Architecture" },
+  { id: "hiking", label: "Hiking" },
+  { id: "beaches", label: "Beaches" },
+  { id: "shopping", label: "Shopping" },
+  { id: "nightlife", label: "Nightlife" },
+  { id: "local", label: "Local Culture" },
+  { id: "nature", label: "Nature" },
+  { id: "photography", label: "Photography" },
+];
+
 const FLIGHT_PREFERENCES = [
   { id: "shortest", label: "Shortest" },
   { id: "cheapest", label: "Cheapest" },
-  { id: "best-overall", label: "Best Overall" },
-  { id: "premium-cabin", label: "Premium Cabin" },
-  { id: "flexible", label: "Flexible" },
+  { id: "best-overall", label: "Best Value" },
+  { id: "premium-cabin", label: "Premium" },
 ];
 
 const ACCOMMODATION_TYPES = [
@@ -68,39 +84,15 @@ const ACCOMMODATION_TYPES = [
   { id: "airbnb", label: "Airbnb" },
   { id: "resort", label: "Resort" },
   { id: "hostel", label: "Hostel" },
-  { id: "mixed", label: "Mixed" },
-];
-
-const TRAVEL_PACE = [
-  { id: "relaxed", label: "Relaxed" },
-  { id: "balanced", label: "Balanced" },
-  { id: "fast-paced", label: "Fast-Paced" },
-];
-
-const INTERESTS = [
-  { id: "food", label: "Food" },
-  { id: "art", label: "Art" },
-  { id: "architecture", label: "Architecture" },
-  { id: "hiking", label: "Hiking" },
-  { id: "beaches", label: "Beaches" },
-  { id: "shopping", label: "Shopping" },
-  { id: "museums", label: "Museums" },
-  { id: "cafes", label: "Cafes" },
-  { id: "nightlife", label: "Nightlife" },
-  { id: "local", label: "Local Experiences" },
-  { id: "nature", label: "Nature" },
-  { id: "photography", label: "Photography" },
 ];
 
 const CONSTRAINTS = [
   { id: "pet-friendly", label: "Pet Friendly" },
   { id: "walkable", label: "Walkable" },
-  { id: "remote-work", label: "Remote Work Ready" },
+  { id: "remote-work", label: "Remote Work" },
   { id: "kid-friendly", label: "Kid Friendly" },
-  { id: "quiet", label: "Quiet Area" },
   { id: "transit", label: "Public Transit" },
-  { id: "visa-friendly", label: "Visa Friendly" },
-  { id: "low-transfers", label: "Low Transfers" },
+  { id: "visa-friendly", label: "Easy Visa" },
 ];
 
 export interface TripSelections {
@@ -136,22 +128,21 @@ export function PlanningWorkspace() {
   };
 
   const handleTemplateSelect = (templateId: string) => {
-    // Pre-fill based on template
     const templates: Record<string, Partial<TripSelections>> = {
       "european-food": {
         destinationType: ["city", "foodie"],
         tripType: ["couple"],
         planningMode: ["1-week"],
         budget: ["moderate"],
-        interests: ["food", "art", "architecture", "cafes"],
+        interests: ["food", "art", "architecture"],
       },
       "tropical-remote": {
         destinationType: ["tropical", "beach"],
-        tripType: ["remote-work"],
+        tripType: ["solo"],
         planningMode: ["2-weeks"],
         budget: ["moderate"],
         constraints: ["remote-work", "walkable"],
-        interests: ["beaches", "cafes", "nature"],
+        interests: ["beaches", "nature"],
       },
       "luxury-couples": {
         destinationType: ["luxury", "romantic"],
@@ -190,24 +181,19 @@ export function PlanningWorkspace() {
 
     const template = templates[templateId];
     if (template) {
-      setSelections((prev) => ({
-        ...prev,
-        ...template,
-      }));
+      setSelections((prev) => ({ ...prev, ...template }));
     }
   };
 
   const handleGenerate = () => {
     setIsGenerating(true);
-    // Simulate generation
     setTimeout(() => {
       setIsGenerating(false);
-      setCurrentStep(4); // Move to generate step
+      setCurrentStep(3);
     }, 3000);
   };
 
   const handleSurprise = () => {
-    // Randomly fill selections
     setSelections({
       destinationType: ["city", "foodie"],
       tripType: ["couple"],
@@ -216,16 +202,13 @@ export function PlanningWorkspace() {
       flightPreference: ["best-overall"],
       accommodation: ["boutique"],
       travelPace: ["balanced"],
-      interests: ["food", "art", "local", "cafes"],
+      interests: ["food", "art", "local"],
       constraints: ["walkable"],
     });
-    setPrompt(
-      "Surprise me with a memorable trip focused on authentic local experiences, great food, and beautiful neighborhoods to explore on foot."
-    );
+    setPrompt("Surprise me with a memorable trip focused on authentic local experiences and great food.");
   };
 
-  const canSubmit =
-    selections.destinationType.length > 0 || prompt.trim().length > 10;
+  const canSubmit = selections.destinationType.length > 0 || prompt.trim().length > 10;
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -233,87 +216,97 @@ export function PlanningWorkspace() {
         return (
           <div className="space-y-8">
             <ChipSelector
-              label="What kind of destination?"
+              label="Destination type"
+              description="What kind of places interest you?"
               options={DESTINATION_TYPES}
               selected={selections.destinationType}
               onChange={(v) => updateSelection("destinationType", v)}
               multiple
-              columns={4}
-            />
-            <ChipSelector
-              label="Who's traveling?"
-              options={TRIP_TYPES}
-              selected={selections.tripType}
-              onChange={(v) => updateSelection("tripType", v)}
               columns={6}
             />
-            <ChipSelector
-              label="Trip duration"
-              options={PLANNING_MODES}
-              selected={selections.planningMode}
-              onChange={(v) => updateSelection("planningMode", v)}
-              columns={5}
-            />
+            <div className="grid gap-8 lg:grid-cols-2">
+              <ChipSelector
+                label="Travelers"
+                options={TRIP_TYPES}
+                selected={selections.tripType}
+                onChange={(v) => updateSelection("tripType", v)}
+                columns={5}
+              />
+              <ChipSelector
+                label="Duration"
+                options={PLANNING_MODES}
+                selected={selections.planningMode}
+                onChange={(v) => updateSelection("planningMode", v)}
+                columns={5}
+              />
+            </div>
           </div>
         );
       case 1:
         return (
           <div className="space-y-8">
+            <div className="grid gap-8 lg:grid-cols-2">
+              <ChipSelector
+                label="Budget"
+                options={BUDGET_LEVELS}
+                selected={selections.budget}
+                onChange={(v) => updateSelection("budget", v)}
+                columns={4}
+              />
+              <ChipSelector
+                label="Pace"
+                description="How do you like to travel?"
+                options={TRAVEL_PACE}
+                selected={selections.travelPace}
+                onChange={(v) => updateSelection("travelPace", v)}
+                columns={3}
+              />
+            </div>
             <ChipSelector
-              label="Budget level"
-              options={BUDGET_LEVELS}
-              selected={selections.budget}
-              onChange={(v) => updateSelection("budget", v)}
-              columns={4}
-            />
-            <ChipSelector
-              label="Travel pace"
-              options={TRAVEL_PACE}
-              selected={selections.travelPace}
-              onChange={(v) => updateSelection("travelPace", v)}
-              columns={3}
-            />
-            <ChipSelector
-              label="What are you into?"
+              label="Interests"
+              description="What activities do you enjoy?"
               options={INTERESTS}
               selected={selections.interests}
               onChange={(v) => updateSelection("interests", v)}
               multiple
-              columns={4}
+              columns={5}
             />
           </div>
         );
       case 2:
         return (
           <div className="space-y-8">
+            <div className="grid gap-8 lg:grid-cols-2">
+              <ChipSelector
+                label="Flights"
+                description="What matters most?"
+                options={FLIGHT_PREFERENCES}
+                selected={selections.flightPreference}
+                onChange={(v) => updateSelection("flightPreference", v)}
+                columns={4}
+              />
+              <ChipSelector
+                label="Accommodation"
+                options={ACCOMMODATION_TYPES}
+                selected={selections.accommodation}
+                onChange={(v) => updateSelection("accommodation", v)}
+                columns={5}
+              />
+            </div>
             <ChipSelector
-              label="Flight preference"
-              options={FLIGHT_PREFERENCES}
-              selected={selections.flightPreference}
-              onChange={(v) => updateSelection("flightPreference", v)}
-              columns={5}
-            />
-            <ChipSelector
-              label="Where to stay"
-              options={ACCOMMODATION_TYPES}
-              selected={selections.accommodation}
-              onChange={(v) => updateSelection("accommodation", v)}
-              columns={6}
-            />
-            <ChipSelector
-              label="Trip constraints"
+              label="Requirements"
+              description="Any specific needs?"
               options={CONSTRAINTS}
               selected={selections.constraints}
               onChange={(v) => updateSelection("constraints", v)}
               multiple
-              columns={4}
+              columns={6}
             />
           </div>
         );
       case 3:
-      case 4:
         return (
-          <div className="space-y-8">
+          <div className="space-y-6">
             <PromptInput
               value={prompt}
               onChange={setPrompt}
@@ -331,7 +324,7 @@ export function PlanningWorkspace() {
   };
 
   return (
-    <div className="flex flex-1 flex-col gap-6 lg:flex-row">
+    <div className="flex flex-1 gap-6 lg:gap-8">
       {/* Main Workspace */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Step Indicator */}
@@ -343,8 +336,8 @@ export function PlanningWorkspace() {
           />
         </div>
 
-        {/* Step Content */}
-        <div className="flex-1 rounded-xl border border-border bg-card p-6">
+        {/* Content Area */}
+        <div className="flex-1 rounded-xl border border-border bg-surface p-6">
           {renderStepContent()}
         </div>
 
@@ -353,11 +346,11 @@ export function PlanningWorkspace() {
           <button
             onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
             disabled={currentStep === 0}
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface-elevated hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
           >
             <svg
-              width="16"
-              height="16"
+              width="14"
+              height="14"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -367,52 +360,66 @@ export function PlanningWorkspace() {
             >
               <path d="m15 18-6-6 6-6" />
             </svg>
-            Previous
+            Back
           </button>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">
-              Step {currentStep + 1} of {STEPS.length}
-            </span>
-          </div>
-          <button
-            onClick={() =>
-              setCurrentStep(Math.min(STEPS.length - 1, currentStep + 1))
-            }
-            disabled={currentStep === STEPS.length - 1}
-            className="flex items-center gap-2 rounded-lg bg-secondary px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Next
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          
+          {currentStep < STEPS.length - 1 && (
+            <button
+              onClick={() => setCurrentStep(Math.min(STEPS.length - 1, currentStep + 1))}
+              className="flex items-center gap-1.5 rounded-lg bg-surface-elevated px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
             >
-              <path d="m9 18 6-6-6-6" />
-            </svg>
-          </button>
+              Continue
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
 
-      {/* AI Preview Panel - Desktop */}
-      <div className="hidden w-80 shrink-0 lg:block xl:w-96">
-        <AIPreviewPanel selections={selections} prompt={prompt} />
+      {/* AI Context Panel - Desktop */}
+      <div className="hidden w-72 shrink-0 lg:block">
+        <div className="sticky top-14">
+          <AIPreviewPanel selections={selections} prompt={prompt} currentStep={currentStep} />
+        </div>
       </div>
 
-      {/* AI Preview Panel - Mobile */}
-      <div className="lg:hidden">
-        <details className="group rounded-xl border border-border bg-card">
-          <summary className="flex cursor-pointer items-center justify-between p-4">
-            <span className="text-sm font-semibold text-foreground">
-              AI Plan Preview
-            </span>
+      {/* AI Context Panel - Mobile */}
+      <div className="fixed bottom-4 left-4 right-4 lg:hidden">
+        <details className="group rounded-xl border border-border bg-surface shadow-lg">
+          <summary className="flex cursor-pointer items-center justify-between p-3 [&::-webkit-details-marker]:hidden">
+            <div className="flex items-center gap-2">
+              <div className="flex h-5 w-5 items-center justify-center rounded bg-primary/15">
+                <svg
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-primary"
+                >
+                  <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                  <path d="M2 17l10 5 10-5" />
+                  <path d="M2 12l10 5 10-5" />
+                </svg>
+              </div>
+              <span className="text-sm font-medium text-foreground">Context</span>
+            </div>
             <svg
-              width="16"
-              height="16"
+              width="14"
+              height="14"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -424,8 +431,8 @@ export function PlanningWorkspace() {
               <path d="m6 9 6 6 6-6" />
             </svg>
           </summary>
-          <div className="border-t border-border-subtle">
-            <AIPreviewPanel selections={selections} prompt={prompt} />
+          <div className="max-h-80 overflow-y-auto border-t border-border-muted">
+            <AIPreviewPanel selections={selections} prompt={prompt} currentStep={currentStep} />
           </div>
         </details>
       </div>

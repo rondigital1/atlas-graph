@@ -25,70 +25,45 @@ export function PromptInput({
   };
 
   return (
-    <div className="space-y-3">
-      <label className="block text-sm font-medium text-foreground">
-        Describe Your Ideal Trip
-      </label>
-      <div className="relative rounded-xl border border-border bg-card transition-colors focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20">
+    <div className="space-y-4">
+      <div>
+        <label className="text-sm font-medium text-foreground">
+          Additional context
+        </label>
+        <p className="mt-0.5 text-xs text-muted-foreground">
+          Dates, specific requests, or anything else to personalize your plan
+        </p>
+      </div>
+      
+      <div className="overflow-hidden rounded-xl border border-border bg-surface transition-all focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20">
         <textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
           rows={4}
-          className="w-full resize-none bg-transparent px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-          placeholder="I want a 10-day trip to Spain and France with great food, walkable neighborhoods, and a mix of city and beach..."
+          className="w-full resize-none bg-transparent px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+          placeholder="e.g., Traveling March 15-25, prefer morning flights, interested in local food markets and architecture..."
         />
-        <div className="flex items-center justify-between border-t border-border-subtle px-3 py-2">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              className="flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-              </svg>
-              Attach
-            </button>
-            <span className="text-xs text-muted-foreground/50">|</span>
-            <span className="text-xs text-muted-foreground">
-              {value.length} chars
-            </span>
-          </div>
-          <span className="text-xs text-muted-foreground">
-            <kbd className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">
-              Cmd
-            </kbd>{" "}
-            +{" "}
-            <kbd className="rounded bg-muted px-1 py-0.5 font-mono text-[10px]">
-              Enter
-            </kbd>{" "}
-            to submit
+        <div className="flex items-center justify-between border-t border-border-muted bg-surface-elevated px-3 py-2">
+          <span className="text-xs text-muted-foreground">{value.length} characters</span>
+          <span className="hidden text-xs text-muted-foreground sm:block">
+            <kbd className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px]">
+              {typeof navigator !== 'undefined' && navigator?.platform?.includes("Mac") ? "Cmd" : "Ctrl"}+Enter
+            </kbd>
+            {" "}to generate
           </span>
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 sm:flex-row">
+      <div className="flex gap-2">
         <button
           onClick={onSubmit}
           disabled={!canSubmit || isGenerating}
-          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isGenerating ? (
             <>
-              <svg
-                className="h-4 w-4 animate-spin"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
+              <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
                 <circle
                   className="opacity-25"
                   cx="12"
@@ -103,13 +78,13 @@ export function PromptInput({
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 />
               </svg>
-              Generating Plan...
+              Generating...
             </>
           ) : (
             <>
               <svg
-                width="16"
-                height="16"
+                width="14"
+                height="14"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -117,9 +92,7 @@ export function PromptInput({
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                <path d="M2 17l10 5 10-5" />
-                <path d="M2 12l10 5 10-5" />
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
               </svg>
               Generate Plan
             </>
@@ -128,11 +101,11 @@ export function PromptInput({
         <button
           onClick={onSurprise}
           disabled={isGenerating}
-          className="flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+          className="flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-medium text-muted-foreground transition-all hover:bg-surface-elevated hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
         >
           <svg
-            width="16"
-            height="16"
+            width="14"
+            height="14"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -144,7 +117,7 @@ export function PromptInput({
             <path d="m3.3 7 8.7 5 8.7-5" />
             <path d="M12 22V12" />
           </svg>
-          Surprise Me
+          <span className="hidden sm:inline">Surprise Me</span>
         </button>
       </div>
     </div>
