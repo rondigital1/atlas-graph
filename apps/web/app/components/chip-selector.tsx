@@ -9,7 +9,6 @@ interface ChipSelectorProps {
   selected: string[];
   onChange: (selected: string[]) => void;
   multiple?: boolean;
-  columns?: 2 | 3 | 4 | 5 | 6;
 }
 
 export function ChipSelector({
@@ -19,7 +18,6 @@ export function ChipSelector({
   selected,
   onChange,
   multiple = false,
-  columns = 4,
 }: ChipSelectorProps) {
   const handleClick = (id: string) => {
     if (multiple) {
@@ -31,14 +29,6 @@ export function ChipSelector({
     } else {
       onChange(selected.includes(id) ? [] : [id]);
     }
-  };
-
-  const gridCols = {
-    2: "grid-cols-2",
-    3: "grid-cols-2 sm:grid-cols-3",
-    4: "grid-cols-2 sm:grid-cols-4",
-    5: "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5",
-    6: "grid-cols-3 sm:grid-cols-6",
   };
 
   return (
@@ -57,7 +47,7 @@ export function ChipSelector({
         )}
       </div>
       <div
-        className={`grid gap-2 ${gridCols[columns]}`}
+        className="flex flex-wrap gap-2"
         role={multiple ? "group" : "radiogroup"}
         aria-label={label}
       >
@@ -69,33 +59,19 @@ export function ChipSelector({
               type="button"
               onClick={() => handleClick(option.id)}
               aria-pressed={isSelected}
-              className={`group relative flex items-center justify-center rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all ${
                 isSelected
-                  ? "border-primary/60 bg-primary/10 text-foreground"
-                  : "border-border bg-surface text-muted-foreground hover:border-border hover:bg-surface-elevated hover:text-foreground"
+                  ? "border-primary/70 bg-primary/10 text-primary"
+                  : "border-border text-muted-foreground hover:border-border/80 hover:bg-surface-elevated hover:text-foreground"
               }`}
             >
-              {isSelected && (
+              {multiple && isSelected && (
                 <span
                   aria-hidden="true"
-                  className="absolute left-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary"
-                >
-                  <svg
-                    width="10"
-                    height="10"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-primary-foreground"
-                  >
-                    <path d="M20 6 9 17l-5-5" />
-                  </svg>
-                </span>
+                  className="h-1.5 w-1.5 rounded-full bg-primary"
+                />
               )}
-              <span className={isSelected ? "ml-3" : ""}>{option.label}</span>
+              {option.label}
             </button>
           );
         })}

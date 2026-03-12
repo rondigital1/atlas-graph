@@ -39,6 +39,25 @@ const EMPTY_SELECTIONS: TripSelections = {
   constraints: [],
 };
 
+const STEP_HEADINGS = [
+  {
+    heading: "Where do you want to go?",
+    subtitle: "Tell us about your destination and trip.",
+  },
+  {
+    heading: "What's your style?",
+    subtitle: "Set your budget, pace, and interests.",
+  },
+  {
+    heading: "How do you want to travel?",
+    subtitle: "Flights, accommodation, and requirements.",
+  },
+  {
+    heading: "Ready to generate your plan",
+    subtitle: "Add any final details or go ahead and generate.",
+  },
+] as const;
+
 export function PlanningWorkspace() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
@@ -89,7 +108,6 @@ export function PlanningWorkspace() {
               selected={selections.destinationType}
               onChange={(v) => updateSelection("destinationType", v)}
               multiple
-              columns={6}
             />
             <div className="grid gap-8 lg:grid-cols-2">
               <ChipSelector
@@ -97,14 +115,12 @@ export function PlanningWorkspace() {
                 options={TRIP_TYPES}
                 selected={selections.tripType}
                 onChange={(v) => updateSelection("tripType", v)}
-                columns={5}
               />
               <ChipSelector
                 label="Duration"
                 options={PLANNING_MODES}
                 selected={selections.planningMode}
                 onChange={(v) => updateSelection("planningMode", v)}
-                columns={5}
               />
             </div>
           </div>
@@ -118,7 +134,6 @@ export function PlanningWorkspace() {
                 options={BUDGET_LEVELS}
                 selected={selections.budget}
                 onChange={(v) => updateSelection("budget", v)}
-                columns={4}
               />
               <ChipSelector
                 label="Pace"
@@ -126,7 +141,6 @@ export function PlanningWorkspace() {
                 options={TRAVEL_PACE}
                 selected={selections.travelPace}
                 onChange={(v) => updateSelection("travelPace", v)}
-                columns={3}
               />
             </div>
             <ChipSelector
@@ -136,7 +150,6 @@ export function PlanningWorkspace() {
               selected={selections.interests}
               onChange={(v) => updateSelection("interests", v)}
               multiple
-              columns={5}
             />
           </div>
         );
@@ -150,14 +163,12 @@ export function PlanningWorkspace() {
                 options={FLIGHT_PREFERENCES}
                 selected={selections.flightPreference}
                 onChange={(v) => updateSelection("flightPreference", v)}
-                columns={4}
               />
               <ChipSelector
                 label="Accommodation"
                 options={ACCOMMODATION_TYPES}
                 selected={selections.accommodation}
                 onChange={(v) => updateSelection("accommodation", v)}
-                columns={5}
               />
             </div>
             <ChipSelector
@@ -167,7 +178,6 @@ export function PlanningWorkspace() {
               selected={selections.constraints}
               onChange={(v) => updateSelection("constraints", v)}
               multiple
-              columns={6}
             />
           </div>
         );
@@ -190,6 +200,8 @@ export function PlanningWorkspace() {
     }
   };
 
+  const { heading, subtitle } = STEP_HEADINGS[currentStep] ?? STEP_HEADINGS[0];
+
   return (
     <div className="flex flex-1 gap-6 lg:gap-8">
       {/* Main Workspace */}
@@ -204,7 +216,13 @@ export function PlanningWorkspace() {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 rounded-xl border border-border bg-surface p-6">
+        <div className="flex-1 rounded-xl border border-border bg-surface p-6 sm:p-8">
+          {/* Step heading */}
+          <div className="mb-6 border-b border-border-muted pb-5">
+            <h2 className="text-base font-semibold text-foreground">{heading}</h2>
+            <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>
+          </div>
+
           {renderStepContent()}
         </div>
 
@@ -238,7 +256,7 @@ export function PlanningWorkspace() {
               onClick={() =>
                 setCurrentStep(Math.min(STEPS.length - 1, currentStep + 1))
               }
-              className="flex items-center gap-1.5 rounded-lg bg-surface-elevated px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+              className="flex items-center gap-1.5 rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
               Continue
               <svg

@@ -32,17 +32,21 @@ function ResultsLoadingSkeleton() {
       <div className="border-b border-border-muted bg-surface/50">
         <div className="mx-auto max-w-[1600px] px-4 py-5 lg:px-6">
           <div className="mb-4 flex gap-2">
-            {[80, 64, 72, 60, 72].map((w, i) => (
-              <SkeletonBlock key={i} className={`h-8 w-${w === 80 ? "20" : w === 64 ? "16" : w === 72 ? "[72px]" : w === 60 ? "[60px]" : "[72px]"}`} />
-            ))}
+            <SkeletonBlock className="h-8 w-20" />
+            <SkeletonBlock className="h-8 w-16" />
+            <SkeletonBlock className="h-8 w-[72px]" />
+            <SkeletonBlock className="h-8 w-[60px]" />
+            <SkeletonBlock className="h-8 w-[72px]" />
           </div>
           <SkeletonBlock className="mb-2 h-4 w-24" />
           <SkeletonBlock className="mb-3 h-8 w-96 max-w-full" />
           <SkeletonBlock className="mb-3 h-4 w-[480px] max-w-full" />
           <div className="flex gap-2">
-            {[5, 4, 6, 5, 5].map((w, i) => (
-              <SkeletonBlock key={i} className={`h-6 w-${w * 4}`} />
-            ))}
+            <SkeletonBlock className="h-6 w-20" />
+            <SkeletonBlock className="h-6 w-16" />
+            <SkeletonBlock className="h-6 w-24" />
+            <SkeletonBlock className="h-6 w-20" />
+            <SkeletonBlock className="h-6 w-20" />
           </div>
         </div>
       </div>
@@ -52,9 +56,14 @@ function ResultsLoadingSkeleton() {
         <div className="mx-auto flex max-w-[1600px] items-center gap-3">
           <SkeletonBlock className="h-6 w-20 shrink-0" />
           <div className="flex flex-1 gap-2">
-            {[5, 6, 5, 5, 6, 4, 7, 5].map((w, i) => (
-              <SkeletonBlock key={i} className={`h-7 w-${w * 4}`} />
-            ))}
+            <SkeletonBlock className="h-7 w-20" />
+            <SkeletonBlock className="h-7 w-24" />
+            <SkeletonBlock className="h-7 w-20" />
+            <SkeletonBlock className="h-7 w-20" />
+            <SkeletonBlock className="h-7 w-24" />
+            <SkeletonBlock className="h-7 w-16" />
+            <SkeletonBlock className="h-7 w-28" />
+            <SkeletonBlock className="h-7 w-20" />
           </div>
         </div>
       </div>
@@ -151,8 +160,7 @@ export default function ResultsPage() {
                     <div
                       aria-live="polite"
                       aria-label="Regenerating plan"
-                      className="absolute inset-0 z-10 flex items-start justify-center rounded-lg pt-10 backdrop-blur-[2px]"
-                      style={{ background: "rgba(9,9,11,0.55)" }}
+                      className="absolute inset-0 z-10 flex items-start justify-center rounded-lg bg-[rgba(9,9,11,0.55)] pt-10 backdrop-blur-[2px]"
                     >
                       <div className="flex items-center gap-2.5 rounded-full border border-border bg-surface px-4 py-2 text-sm text-muted-foreground shadow-lg">
                         <svg

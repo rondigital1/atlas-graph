@@ -54,6 +54,8 @@ function FlightCard({ flight, isSelected, onSelect }: FlightCardProps) {
       aria-pressed={isSelected}
       aria-label={`${flight.airline}, ${flight.departure} to ${flight.arrival}, $${flight.price}${flight.isRecommended ? ", Recommended" : ""}`}
       className={`relative w-full rounded-lg border p-4 text-left transition-all ${
+        flight.isRecommended ? "mt-3" : ""
+      } ${
         isSelected
           ? "border-primary bg-primary-subtle"
           : "border-border-muted bg-surface hover:border-border"
@@ -68,90 +70,92 @@ function FlightCard({ flight, isSelected, onSelect }: FlightCardProps) {
         </div>
       )}
 
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex-1">
-          <div className="mb-2 flex items-center gap-2">
-            <span className="text-sm font-medium text-foreground">
-              {flight.airline}
-            </span>
-            <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
-              {flight.cabinClass}
-            </span>
-          </div>
-
-          <div className="mb-2 flex items-center gap-3">
-            <span className="text-sm text-foreground">{flight.departure}</span>
-            <div className="flex items-center gap-1.5 text-subtle">
-              <div aria-hidden="true" className="h-px w-4 bg-border" />
-              {flight.layovers === 0 ? (
-                <span className="text-[10px] text-success">Direct</span>
-              ) : (
-                <span className="text-[10px]">
-                  {flight.layovers} stop ({flight.layoverCities?.join(", ")})
-                </span>
-              )}
-              <div aria-hidden="true" className="h-px w-4 bg-border" />
-            </div>
-            <span className="text-sm text-foreground">{flight.arrival}</span>
-          </div>
-
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <span>{flight.duration}</span>
-            <span aria-hidden="true" className="text-subtle">
-              |
-            </span>
-            <span className="flex items-center gap-1">
-              <svg
-                aria-hidden="true"
-                width="10"
-                height="10"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="text-warning"
-              >
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-              </svg>
-              {flight.comfortScore}
-            </span>
-          </div>
-
-          {flight.reason && (
-            <p className="mt-2 text-xs text-muted-foreground">{flight.reason}</p>
+      <div className="flex items-start gap-3">
+        {/* Selection indicator */}
+        <div
+          aria-hidden="true"
+          className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 ${
+            isSelected
+              ? "border-primary bg-primary"
+              : "border-muted-foreground bg-transparent"
+          }`}
+        >
+          {isSelected && (
+            <svg
+              width="8"
+              height="8"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-primary-foreground"
+            >
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
           )}
         </div>
 
-        <div className="text-right">
-          <div className="text-lg font-semibold text-foreground">
-            ${flight.price}
-          </div>
-          <div className="text-xs text-muted-foreground">per person</div>
-        </div>
-      </div>
+        <div className="flex flex-1 items-start justify-between gap-4">
+          <div className="flex-1">
+            <div className="mb-2 flex items-center gap-2">
+              <span className="text-sm font-medium text-foreground">
+                {flight.airline}
+              </span>
+              <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                {flight.cabinClass}
+              </span>
+            </div>
 
-      {/* Selection indicator */}
-      <div
-        aria-hidden="true"
-        className={`absolute left-3 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border-2 ${
-          isSelected
-            ? "border-primary bg-primary"
-            : "border-muted-foreground bg-transparent"
-        }`}
-      >
-        {isSelected && (
-          <svg
-            width="8"
-            height="8"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="absolute -left-0.5 -top-0.5 text-primary-foreground"
-          >
-            <path d="M20 6 9 17l-5-5" />
-          </svg>
-        )}
+            <div className="mb-2 flex items-center gap-3">
+              <span className="text-sm text-foreground">{flight.departure}</span>
+              <div className="flex items-center gap-1.5 text-subtle">
+                <div aria-hidden="true" className="h-px w-4 bg-border" />
+                {flight.layovers === 0 ? (
+                  <span className="text-[10px] text-success">Direct</span>
+                ) : (
+                  <span className="text-[10px]">
+                    {flight.layovers} stop ({flight.layoverCities?.join(", ")})
+                  </span>
+                )}
+                <div aria-hidden="true" className="h-px w-4 bg-border" />
+              </div>
+              <span className="text-sm text-foreground">{flight.arrival}</span>
+            </div>
+
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              <span>{flight.duration}</span>
+              <span aria-hidden="true" className="text-subtle">
+                |
+              </span>
+              <span className="flex items-center gap-1">
+                <svg
+                  aria-hidden="true"
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="text-warning"
+                >
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                {flight.comfortScore}
+              </span>
+            </div>
+
+            {flight.reason && (
+              <p className="mt-2 text-xs text-muted-foreground">{flight.reason}</p>
+            )}
+          </div>
+
+          <div className="text-right">
+            <div className="text-lg font-semibold text-foreground">
+              ${flight.price}
+            </div>
+            <div className="text-xs text-muted-foreground">per person</div>
+          </div>
+        </div>
       </div>
     </button>
   );

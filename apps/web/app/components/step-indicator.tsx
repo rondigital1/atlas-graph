@@ -69,7 +69,7 @@ export function StepIndicator({
                     index + 1
                   )}
                 </span>
-                <span className="hidden sm:inline">{step.label}</span>
+                <span className={`hidden sm:inline ${isActive ? "font-semibold" : ""}`}>{step.label}</span>
               </button>
             </li>
           );
