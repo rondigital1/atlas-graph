@@ -7,6 +7,12 @@ export type {
 } from "../schemas/common";
 export type { DestinationSummary } from "../schemas/destination-summary";
 export type { PlaceCandidate } from "../schemas/place-candidate";
+export type {
+  JsonValue,
+  PlanningRun,
+  PlanningRunOutputSummary,
+  PlanningRunStatus,
+} from "../schemas/planning-run";
 export type { PlanningContext } from "../schemas/planning-context";
 export type { ToolResult } from "../schemas/tool-result";
 export type {

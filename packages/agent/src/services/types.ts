@@ -4,8 +4,10 @@ import type {
   PlacesProvider,
   WeatherProvider,
 } from "./interfaces";
+import type { PlanningRunRepository } from "./planning-run-repository";
 import type {
   DestinationSummary,
+  JsonValue,
   PlanningContext,
   PlaceCandidate,
   TripPlan,
@@ -13,11 +15,41 @@ import type {
   WeatherSummary,
 } from "@atlas-graph/core";
 
+export interface PlannerMetadata {
+  provider: string;
+  model: string;
+  version: string;
+}
+
+export interface PlanTripInput {
+  request: TripRequest;
+  userId?: string | null;
+  sessionId?: string | null;
+  requestId?: string | null;
+}
+
 export interface TravelPlanningServiceDeps {
   destinationInfoProvider: DestinationInfoProvider;
   placesProvider: PlacesProvider;
   plannerRunner: PlannerRunner;
   weatherProvider: WeatherProvider;
+}
+
+export interface PlanTripWorkflowServiceDeps {
+  travelPlanningService: {
+    generatePlan(input: TripRequest): Promise<TripPlan>;
+    normalizeRequest(input: TripRequest): TripRequest;
+  };
+  planningRunRepository: PlanningRunRepository;
+  idGenerator: () => string;
+  now: () => Date;
+  plannerMetadata: PlannerMetadata;
+}
+
+export interface PersistedPlanningRunError {
+  code: string;
+  message: string;
+  details: JsonValue | null;
 }
 
 export interface BuildPlanningContextResult {

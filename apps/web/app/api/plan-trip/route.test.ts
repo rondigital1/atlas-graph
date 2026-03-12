@@ -1,13 +1,13 @@
 import { TripPlanSchema } from "@atlas-graph/core/schemas";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-const generatePlan = vi.fn();
+const planTrip = vi.fn();
 
-vi.mock("../../../src/server/create-travel-planning-service", () => {
+vi.mock("../../../src/server/create-plan-trip-workflow-service", () => {
   return {
-    createTravelPlanningService: () => {
+    createPlanTripWorkflowService: () => {
       return {
-        generatePlan,
+        planTrip,
       };
     },
   };
@@ -43,12 +43,12 @@ function createValidTripPlan() {
 
 describe("POST /api/plan-trip", () => {
   afterEach(() => {
-    generatePlan.mockReset();
+    planTrip.mockReset();
   });
 
   it("returns 200 with plan data for a valid request", async () => {
     const tripPlan = createValidTripPlan();
-    generatePlan.mockResolvedValue(tripPlan);
+    planTrip.mockResolvedValue(tripPlan);
     const request = new Request("http://localhost/api/plan-trip", {
       method: "POST",
       body: JSON.stringify({
@@ -72,14 +72,16 @@ describe("POST /api/plan-trip", () => {
     expect(body).toEqual({
       data: tripPlan,
     });
-    expect(generatePlan).toHaveBeenCalledWith({
-      destination: "Paris",
-      startDate: "2026-04-10",
-      endDate: "2026-04-10",
-      budget: "medium",
-      interests: ["art", "food"],
-      travelStyle: "balanced",
-      groupType: "couple",
+    expect(planTrip).toHaveBeenCalledWith({
+      request: {
+        destination: "Paris",
+        startDate: "2026-04-10",
+        endDate: "2026-04-10",
+        budget: "medium",
+        interests: ["art", "food"],
+        travelStyle: "balanced",
+        groupType: "couple",
+      },
     });
   });
 
@@ -106,7 +108,7 @@ describe("POST /api/plan-trip", () => {
     expect(response.status).toBe(400);
     expect(body.error.code).toBe("INVALID_REQUEST");
     expect(body.error.message).toBe("Request validation failed");
-    expect(generatePlan).not.toHaveBeenCalled();
+    expect(planTrip).not.toHaveBeenCalled();
   });
 
   it("returns 400 for malformed JSON", async () => {
@@ -134,7 +136,7 @@ describe("POST /api/plan-trip", () => {
   });
 
   it("returns 500 for unexpected service failures", async () => {
-    generatePlan.mockRejectedValue(new Error("planner failed"));
+    planTrip.mockRejectedValue(new Error("planner failed"));
     const request = new Request("http://localhost/api/plan-trip", {
       method: "POST",
       body: JSON.stringify({

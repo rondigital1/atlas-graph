@@ -1,6 +1,6 @@
 import { TripRequestSchema } from "@atlas-graph/core/schemas";
 import { NextResponse } from "next/server";
-import { createTravelPlanningService } from "../../../src/server/create-travel-planning-service";
+import { createPlanTripWorkflowService } from "../../../src/server/create-plan-trip-workflow-service";
 import {
   createInternalErrorResponse,
   createInvalidRequestResponse,
@@ -31,8 +31,10 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   try {
-    const service = createTravelPlanningService();
-    const plan = await service.generatePlan(parsedRequest.data);
+    const workflowService = createPlanTripWorkflowService();
+    const plan = await workflowService.planTrip({
+      request: parsedRequest.data,
+    });
 
     return NextResponse.json(createPlanTripSuccessResponse(plan), { status: 200 });
   } catch {

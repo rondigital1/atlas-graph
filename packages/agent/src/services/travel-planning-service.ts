@@ -1,12 +1,5 @@
-import {
-  PlanningContextSchema,
-  TripRequestSchema,
-} from "@atlas-graph/core/schemas";
-import type {
-  PlanningContext,
-  TripPlan,
-  TripRequest,
-} from "@atlas-graph/core/types";
+import { PlanningContextSchema, TripRequestSchema } from "@atlas-graph/core/schemas";
+import type { PlanningContext, TripPlan, TripRequest } from "@atlas-graph/core/types";
 import type { TravelPlanningServiceDeps } from "./types";
 import { normalizeProviderResults } from "../normalization/provider-results-normalization";
 
@@ -17,9 +10,25 @@ export class TravelPlanningService {
     this.deps = deps;
   }
 
-  public async buildPlanningContext(input: TripRequest): Promise<PlanningContext> {
-    const validatedInput = TripRequestSchema.parse(input);
+  public normalizeRequest(input: TripRequest): TripRequest {
+    return TripRequestSchema.parse(structuredClone(input));
+  }
 
+  public async buildPlanningContext(input: TripRequest): Promise<PlanningContext> {
+    return await this.buildPlanningContextFromValidatedRequest(
+      this.normalizeRequest(input)
+    );
+  }
+
+  public async generatePlan(input: TripRequest): Promise<TripPlan> {
+    const context = await this.buildPlanningContext(input);
+
+    return await this.deps.plannerRunner.run(context);
+  }
+
+  private async buildPlanningContextFromValidatedRequest(
+    validatedInput: TripRequest
+  ): Promise<PlanningContext> {
     const [destinationSummary, weatherSummary, placeCandidates] =
       await Promise.all([
         this.deps.destinationInfoProvider.getDestinationSummary(validatedInput),
@@ -41,11 +50,5 @@ export class TravelPlanningService {
     };
 
     return PlanningContextSchema.parse(context);
-  }
-
-  public async generatePlan(input: TripRequest): Promise<TripPlan> {
-    const context = await this.buildPlanningContext(input);
-
-    return await this.deps.plannerRunner.run(context);
   }
 }

@@ -1,8 +1,9 @@
 import {
   DevelopmentPlannerModel,
   LangChainPlannerModel,
+  PLANNER_PROMPT_VERSION,
 } from "@atlas-graph/agent";
-import type { PlannerModel } from "@atlas-graph/agent";
+import type { PlannerMetadata, PlannerModel } from "@atlas-graph/agent";
 import { ChatOpenAI } from "@langchain/openai";
 import { z } from "zod";
 
@@ -35,6 +36,13 @@ const plannerModelEnvSchema = z
 const DEFAULT_OPENAI_PLANNER_MODEL = "gpt-4.1-mini";
 type PlannerModelEnvironment = Record<string, string | undefined>;
 
+interface PlannerRuntimeConfig {
+  provider: string;
+  modelName: string;
+  apiKey?: string;
+  useDevelopmentPlanner: boolean;
+}
+
 export interface CreateLangChainPlannerModelInput {
   apiKey: string;
   modelName?: string;
@@ -56,13 +64,17 @@ export function createLangChainPlannerModel(
   );
 }
 
-export function createPlannerModel(
+function resolvePlannerRuntimeConfig(
   environment: PlannerModelEnvironment = process.env
-): PlannerModel {
+): PlannerRuntimeConfig {
   const parsedEnvironment = plannerModelEnvSchema.parse(environment);
 
   if (parsedEnvironment.ATLASGRAPH_USE_DEV_PLANNER === "true") {
-    return createDevelopmentPlannerModel();
+    return {
+      provider: "development",
+      modelName: "development-planner",
+      useDevelopmentPlanner: true,
+    };
   }
 
   if (!parsedEnvironment.OPENAI_API_KEY) {
@@ -71,8 +83,37 @@ export function createPlannerModel(
     );
   }
 
-  return createLangChainPlannerModel({
+  return {
+    provider: "openai",
+    modelName: parsedEnvironment.ATLASGRAPH_OPENAI_MODEL ?? DEFAULT_OPENAI_PLANNER_MODEL,
     apiKey: parsedEnvironment.OPENAI_API_KEY,
-    modelName: parsedEnvironment.ATLASGRAPH_OPENAI_MODEL,
+    useDevelopmentPlanner: false,
+  };
+}
+
+export function createPlannerMetadata(
+  environment: PlannerModelEnvironment = process.env
+): PlannerMetadata {
+  const runtimeConfig = resolvePlannerRuntimeConfig(environment);
+
+  return {
+    provider: runtimeConfig.provider,
+    model: runtimeConfig.modelName,
+    version: PLANNER_PROMPT_VERSION,
+  };
+}
+
+export function createPlannerModel(
+  environment: PlannerModelEnvironment = process.env
+): PlannerModel {
+  const runtimeConfig = resolvePlannerRuntimeConfig(environment);
+
+  if (runtimeConfig.useDevelopmentPlanner) {
+    return createDevelopmentPlannerModel();
+  }
+
+  return createLangChainPlannerModel({
+    apiKey: runtimeConfig.apiKey!,
+    modelName: runtimeConfig.modelName,
   });
 }

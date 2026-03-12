@@ -1,6 +1,7 @@
 import {
   DevelopmentPlannerModel,
   LangChainPlannerModel,
+  PLANNER_PROMPT_VERSION,
 } from "@atlas-graph/agent";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -18,7 +19,10 @@ vi.mock("@langchain/openai", () => {
   };
 });
 
-import { createPlannerModel } from "./create-planner-model";
+import {
+  createPlannerMetadata,
+  createPlannerModel,
+} from "./create-planner-model";
 
 describe("createPlannerModel", () => {
   afterEach(() => {
@@ -69,6 +73,29 @@ describe("createPlannerModel", () => {
       apiKey: "test-key",
       model: "gpt-4o-mini",
       temperature: 0,
+    });
+  });
+
+  it("creates planner metadata that matches the configured runtime", () => {
+    expect(
+      createPlannerMetadata({
+        OPENAI_API_KEY: "test-key",
+        ATLASGRAPH_OPENAI_MODEL: "gpt-4o-mini",
+      })
+    ).toEqual({
+      provider: "openai",
+      model: "gpt-4o-mini",
+      version: PLANNER_PROMPT_VERSION,
+    });
+
+    expect(
+      createPlannerMetadata({
+        ATLASGRAPH_USE_DEV_PLANNER: "true",
+      })
+    ).toEqual({
+      provider: "development",
+      model: "development-planner",
+      version: PLANNER_PROMPT_VERSION,
     });
   });
 });
