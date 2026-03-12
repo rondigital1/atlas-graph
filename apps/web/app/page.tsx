@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { Header } from "./components/header";
 import { PlanningWorkspace } from "./components/planning-workspace";

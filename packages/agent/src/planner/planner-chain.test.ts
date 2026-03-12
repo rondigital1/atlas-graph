@@ -139,12 +139,9 @@ function createTripPlan(): TripPlan {
 }
 
 function createSpyPlannerModel(text: string) {
-  const generate = vi.fn(async (input: {
-    systemPrompt: string;
-    userPrompt: string;
-  }) => {
-    return { text };
-  });
+  const generate = vi.fn<PlannerModel["generate"]>(async () =>
+    Promise.resolve({ text }),
+  );
 
   const model: PlannerModel = {
     generate,

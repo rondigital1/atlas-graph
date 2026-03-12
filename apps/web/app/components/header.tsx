@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 export function Header() {
@@ -10,7 +11,7 @@ export function Header() {
       <div className="mx-auto flex h-11 max-w-[1400px] items-center justify-between px-4">
         {/* Logo */}
         <div className="flex items-center gap-6">
-          <a href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary">
               <svg
                 width="12"
@@ -31,7 +32,7 @@ export function Header() {
             <span className="text-sm font-semibold tracking-tight text-foreground">
               AtlasGraph
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden items-center md:flex">

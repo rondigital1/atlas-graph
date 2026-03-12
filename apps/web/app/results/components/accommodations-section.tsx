@@ -1,75 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import type { ChipOption } from "../../lib/types";
+import { accommodations } from "../../lib/mock/itinerary-data";
 
-interface Accommodation {
-  id: string;
-  city: string;
-  dates: string;
-  nights: number;
-  name: string;
-  type: string;
-  neighborhood: string;
-  pricePerNight: number;
-  rating: number;
-  vibe: string[];
-  features: string[];
-  reason: string;
-  isRecommended?: boolean;
-}
-
-const accommodations: Accommodation[] = [
-  {
-    id: "bcn",
-    city: "Barcelona",
-    dates: "Oct 15-18",
-    nights: 3,
-    name: "Hotel Neri",
-    type: "Boutique Hotel",
-    neighborhood: "Gothic Quarter",
-    pricePerNight: 285,
-    rating: 4.7,
-    vibe: ["Historic", "Central", "Romantic"],
-    features: ["Rooftop terrace", "Walking distance to sites", "24h concierge"],
-    reason:
-      "Perfect Gothic Quarter location with authentic character. Easy access to La Rambla and Born district.",
-    isRecommended: true,
-  },
-  {
-    id: "avignon",
-    city: "Avignon",
-    dates: "Oct 18-21",
-    nights: 3,
-    name: "La Mirande",
-    type: "Historic Hotel",
-    neighborhood: "Old Town",
-    pricePerNight: 320,
-    rating: 4.8,
-    vibe: ["Elegant", "Peaceful", "Luxurious"],
-    features: ["Michelin restaurant", "Garden courtyard", "Spa access"],
-    reason:
-      "Historic palace hotel steps from Palais des Papes. Ideal base for Provence exploration.",
-    isRecommended: true,
-  },
-  {
-    id: "nice",
-    city: "Nice",
-    dates: "Oct 21-24",
-    nights: 3,
-    name: "Hotel La Perouse",
-    type: "Seaside Hotel",
-    neighborhood: "Old Nice",
-    pricePerNight: 245,
-    rating: 4.5,
-    vibe: ["Sea views", "Quiet", "Classic"],
-    features: ["Pool", "Beach access", "Breakfast included"],
-    reason:
-      "Tucked into the cliff below Castle Hill with stunning sea views. Walking distance to Old Nice.",
-    isRecommended: true,
-  },
-];
-
-const alternativeTypes = [
+const alternativeTypes: ChipOption[] = [
   { id: "boutique", label: "Boutique" },
   { id: "hotel", label: "Standard Hotel" },
   { id: "apartment", label: "Apartment" },
@@ -78,16 +13,15 @@ const alternativeTypes = [
 ];
 
 export function AccommodationsSection() {
-  const [selectedTypes, setSelectedTypes] = useState<Record<string, string>>({
-    bcn: "boutique",
-    avignon: "boutique",
-    nice: "boutique",
-  });
+  const [selectedTypes, setSelectedTypes] = useState<Record<string, string>>(
+    Object.fromEntries(accommodations.map((a) => [a.id, "boutique"])),
+  );
 
   return (
     <div className="rounded-lg border border-border-muted bg-surface p-4">
       <div className="mb-4 flex items-center gap-2">
         <svg
+          aria-hidden="true"
           width="18"
           height="18"
           viewBox="0 0 24 24"
@@ -156,6 +90,7 @@ export function AccommodationsSection() {
               </span>
               <span className="flex items-center gap-1 text-muted-foreground">
                 <svg
+                  aria-hidden="true"
                   width="10"
                   height="10"
                   viewBox="0 0 24 24"
@@ -181,10 +116,11 @@ export function AccommodationsSection() {
             </div>
 
             {/* Features */}
-            <div className="mb-3 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+            <ul className="mb-3 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
               {acc.features.map((f) => (
-                <span key={f} className="flex items-center gap-1">
+                <li key={f} className="flex items-center gap-1">
                   <svg
+                    aria-hidden="true"
                     width="10"
                     height="10"
                     viewBox="0 0 24 24"
@@ -196,9 +132,9 @@ export function AccommodationsSection() {
                     <path d="M20 6 9 17l-5-5" />
                   </svg>
                   {f}
-                </span>
+                </li>
               ))}
-            </div>
+            </ul>
 
             {/* Reason */}
             <p className="mb-3 text-xs leading-relaxed text-muted-foreground">
@@ -208,16 +144,22 @@ export function AccommodationsSection() {
             {/* Alternative type selector */}
             <div className="flex items-center gap-2 border-t border-border-muted pt-3">
               <span className="text-xs text-subtle">Alternatives:</span>
-              <div className="flex flex-wrap gap-1">
+              <div
+                role="group"
+                aria-label={`Accommodation type for ${acc.city}`}
+                className="flex flex-wrap gap-1"
+              >
                 {alternativeTypes.map((type) => (
                   <button
                     key={type.id}
+                    type="button"
                     onClick={() =>
                       setSelectedTypes((prev) => ({
                         ...prev,
                         [acc.id]: type.id,
                       }))
                     }
+                    aria-pressed={selectedTypes[acc.id] === type.id}
                     className={`rounded px-2 py-1 text-[10px] font-medium transition-colors ${
                       selectedTypes[acc.id] === type.id
                         ? "bg-primary text-primary-foreground"

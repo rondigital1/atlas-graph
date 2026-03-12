@@ -443,3 +443,31 @@ If a change seems to require:
 - combining planning and persistence responsibilities
 
 stop and explain the concern instead of guessing.
+
+## Frontend rules
+
+Frontend work should optimize for:
+- clear hierarchy
+- premium but restrained product UI
+- maintainability
+- accessibility
+- responsive behavior
+- realistic product states
+
+Do not build:
+- marketing-page UI for product screens
+- generic travel booking UI
+- oversized/cluttered layouts
+- giant monolithic page components
+
+Rules:
+1. Keep page files thin; move rendering into components.
+2. Reuse existing primitives before creating new ones.
+3. Use typed mock data when backend work is not in scope.
+4. Implement loading, empty, error, disabled, and selected states where relevant.
+5. Use consistent spacing, radius, borders, and heading hierarchy.
+6. Ensure keyboard accessibility and visible focus states.
+7. Make mobile layouts intentional; do not blindly stack desktop layouts.
+8. Prefer guided, interactive flows over long forms.
+9. Preserve approved UI direction; improve consistency and usability rather than reinventing.
+10. Summarize files changed and key UI decisions at the end.

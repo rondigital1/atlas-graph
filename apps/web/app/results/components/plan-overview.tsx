@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 interface PlanOverviewProps {
   activeVariant: string;
   onVariantChange: (variant: string) => void;
@@ -17,6 +19,17 @@ export function PlanOverview({
   activeVariant,
   onVariantChange,
 }: PlanOverviewProps) {
+  const [loadingVariant, setLoadingVariant] = useState<string | null>(null);
+
+  const handleVariantChange = (id: string) => {
+    if (id === activeVariant || loadingVariant !== null) { return; }
+    setLoadingVariant(id);
+    setTimeout(() => {
+      onVariantChange(id);
+      setLoadingVariant(null);
+    }, 800);
+  };
+
   return (
     <div className="border-b border-border-muted bg-surface/50">
       <div className="mx-auto max-w-[1600px] px-4 py-5 lg:px-6">
@@ -25,30 +38,50 @@ export function PlanOverview({
           <span className="mr-2 text-xs font-medium text-muted-foreground">
             Plan Variants
           </span>
-          {variants.map((variant) => (
-            <button
-              key={variant.id}
-              onClick={() => onVariantChange(variant.id)}
-              className={`flex items-center gap-1.5 whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-all ${
-                activeVariant === variant.id
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-surface-elevated hover:text-foreground"
-              }`}
-            >
-              {variant.label}
-              {variant.badge && (
-                <span
-                  className={`text-xs ${
-                    activeVariant === variant.id
-                      ? "opacity-80"
-                      : "text-subtle"
-                  }`}
-                >
-                  {variant.badge}
-                </span>
-              )}
-            </button>
-          ))}
+          {variants.map((variant) => {
+            const isActive = activeVariant === variant.id;
+            const isLoading = loadingVariant === variant.id;
+            return (
+              <button
+                key={variant.id}
+                onClick={() => handleVariantChange(variant.id)}
+                disabled={loadingVariant !== null}
+                aria-pressed={isActive}
+                className={`flex items-center gap-1.5 whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-all disabled:cursor-wait ${
+                  isActive
+                    ? "bg-primary text-primary-foreground"
+                    : isLoading
+                      ? "bg-surface-elevated text-foreground"
+                      : "text-muted-foreground hover:bg-surface-elevated hover:text-foreground"
+                }`}
+              >
+                {isLoading && (
+                  <svg
+                    aria-hidden="true"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="animate-spin"
+                  >
+                    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                  </svg>
+                )}
+                {variant.label}
+                {variant.badge && !isLoading && (
+                  <span
+                    className={`text-xs ${
+                      isActive ? "opacity-80" : "text-subtle"
+                    }`}
+                  >
+                    {variant.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {/* Trip Header */}

@@ -1,112 +1,58 @@
 "use client";
 
 import { useState } from "react";
+import type { FlightOption } from "../../lib/types";
+import { outboundFlights, returnFlights } from "../../lib/mock/itinerary-data";
 
-interface FlightOption {
-  id: string;
-  airline: string;
-  departure: string;
-  arrival: string;
-  duration: string;
-  layovers: number;
-  layoverCities?: string[];
-  price: number;
-  cabinClass: string;
-  comfortScore: number;
-  isRecommended?: boolean;
-  reason?: string;
+interface FlightCardProps {
+  flight: FlightOption;
+  isSelected: boolean;
+  onSelect: () => void;
 }
 
-const outboundFlights: FlightOption[] = [
-  {
-    id: "out-1",
-    airline: "Iberia",
-    departure: "JFK 7:15pm",
-    arrival: "BCN 8:45am+1",
-    duration: "7h 30m",
-    layovers: 0,
-    price: 645,
-    cabinClass: "Economy Plus",
-    comfortScore: 4.2,
-    isRecommended: true,
-    reason: "Best balance of price, timing, and comfort",
-  },
-  {
-    id: "out-2",
-    airline: "Delta / Air France",
-    departure: "JFK 5:30pm",
-    arrival: "BCN 11:15am+1",
-    duration: "11h 45m",
-    layovers: 1,
-    layoverCities: ["Paris CDG"],
-    price: 520,
-    cabinClass: "Economy",
-    comfortScore: 3.5,
-    reason: "Lowest price option",
-  },
-  {
-    id: "out-3",
-    airline: "British Airways",
-    departure: "JFK 9:00pm",
-    arrival: "BCN 2:30pm+1",
-    duration: "11h 30m",
-    layovers: 1,
-    layoverCities: ["London LHR"],
-    price: 890,
-    cabinClass: "Premium Economy",
-    comfortScore: 4.6,
-    reason: "Most comfortable option",
-  },
-];
+function FlightCard({ flight, isSelected, onSelect }: FlightCardProps) {
+  const isChecking = flight.status === "checking";
 
-const returnFlights: FlightOption[] = [
-  {
-    id: "ret-1",
-    airline: "Air France",
-    departure: "NCE 12:30pm",
-    arrival: "JFK 4:45pm",
-    duration: "10h 15m",
-    layovers: 1,
-    layoverCities: ["Paris CDG"],
-    price: 580,
-    cabinClass: "Economy Plus",
-    comfortScore: 4.0,
-    isRecommended: true,
-    reason: "Good timing for last day exploration",
-  },
-  {
-    id: "ret-2",
-    airline: "Swiss",
-    departure: "NCE 6:45am",
-    arrival: "JFK 12:10pm",
-    duration: "11h 25m",
-    layovers: 1,
-    layoverCities: ["Zurich"],
-    price: 495,
-    cabinClass: "Economy",
-    comfortScore: 3.8,
-    reason: "Arrives early, lowest price",
-  },
-];
+  if (isChecking) {
+    return (
+      <div className="relative w-full rounded-lg border border-dashed border-border-muted bg-surface p-4 opacity-70">
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted">
+            <svg
+              aria-hidden="true"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="animate-spin text-muted-foreground"
+            >
+              <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+            </svg>
+          </div>
+          <div className="flex-1">
+            <div className="text-sm font-medium text-foreground">
+              {flight.airline}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Checking availability…
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="h-5 w-16 animate-pulse rounded bg-muted" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-export function FlightsSection() {
-  const [selectedOutbound, setSelectedOutbound] = useState("out-1");
-  const [selectedReturn, setSelectedReturn] = useState("ret-1");
-  const [optimizeFor, setOptimizeFor] = useState<
-    "balanced" | "cheapest" | "shortest" | "comfort"
-  >("balanced");
-
-  const FlightCard = ({
-    flight,
-    isSelected,
-    onSelect,
-  }: {
-    flight: FlightOption;
-    isSelected: boolean;
-    onSelect: () => void;
-  }) => (
+  return (
     <button
+      type="button"
       onClick={onSelect}
+      aria-pressed={isSelected}
+      aria-label={`${flight.airline}, ${flight.departure} to ${flight.arrival}, $${flight.price}${flight.isRecommended ? ", Recommended" : ""}`}
       className={`relative w-full rounded-lg border p-4 text-left transition-all ${
         isSelected
           ? "border-primary bg-primary-subtle"
@@ -114,7 +60,10 @@ export function FlightsSection() {
       }`}
     >
       {flight.isRecommended && (
-        <div className="absolute -top-2 right-3 rounded bg-primary px-2 py-0.5 text-[10px] font-medium text-primary-foreground">
+        <div
+          aria-hidden="true"
+          className="absolute -top-2 right-3 rounded bg-primary px-2 py-0.5 text-[10px] font-medium text-primary-foreground"
+        >
           Recommended
         </div>
       )}
@@ -133,7 +82,7 @@ export function FlightsSection() {
           <div className="mb-2 flex items-center gap-3">
             <span className="text-sm text-foreground">{flight.departure}</span>
             <div className="flex items-center gap-1.5 text-subtle">
-              <div className="h-px w-4 bg-border" />
+              <div aria-hidden="true" className="h-px w-4 bg-border" />
               {flight.layovers === 0 ? (
                 <span className="text-[10px] text-success">Direct</span>
               ) : (
@@ -141,16 +90,19 @@ export function FlightsSection() {
                   {flight.layovers} stop ({flight.layoverCities?.join(", ")})
                 </span>
               )}
-              <div className="h-px w-4 bg-border" />
+              <div aria-hidden="true" className="h-px w-4 bg-border" />
             </div>
             <span className="text-sm text-foreground">{flight.arrival}</span>
           </div>
 
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
             <span>{flight.duration}</span>
-            <span className="text-subtle">|</span>
+            <span aria-hidden="true" className="text-subtle">
+              |
+            </span>
             <span className="flex items-center gap-1">
               <svg
+                aria-hidden="true"
                 width="10"
                 height="10"
                 viewBox="0 0 24 24"
@@ -178,7 +130,8 @@ export function FlightsSection() {
 
       {/* Selection indicator */}
       <div
-        className={`absolute left-3 top-1/2 -translate-y-1/2 h-3 w-3 rounded-full border-2 ${
+        aria-hidden="true"
+        className={`absolute left-3 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border-2 ${
           isSelected
             ? "border-primary bg-primary"
             : "border-muted-foreground bg-transparent"
@@ -202,12 +155,21 @@ export function FlightsSection() {
       </div>
     </button>
   );
+}
+
+type OptimizeMode = "balanced" | "cheapest" | "shortest" | "comfort";
+
+export function FlightsSection() {
+  const [selectedOutbound, setSelectedOutbound] = useState("out-1");
+  const [selectedReturn, setSelectedReturn] = useState("ret-1");
+  const [optimizeFor, setOptimizeFor] = useState<OptimizeMode>("balanced");
 
   return (
     <div className="rounded-lg border border-border-muted bg-surface p-4">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <svg
+            aria-hidden="true"
             width="18"
             height="18"
             viewBox="0 0 24 24"
@@ -223,12 +185,18 @@ export function FlightsSection() {
           <h3 className="text-base font-semibold text-foreground">Flights</h3>
         </div>
 
-        <div className="flex items-center gap-1 rounded-md bg-muted p-0.5">
+        <div
+          role="group"
+          aria-label="Optimize flights for"
+          className="flex items-center gap-1 rounded-md bg-muted p-0.5"
+        >
           {(["balanced", "cheapest", "shortest", "comfort"] as const).map(
             (opt) => (
               <button
                 key={opt}
+                type="button"
                 onClick={() => setOptimizeFor(opt)}
+                aria-pressed={optimizeFor === opt}
                 className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
                   optimizeFor === opt
                     ? "bg-surface-elevated text-foreground"
@@ -237,7 +205,7 @@ export function FlightsSection() {
               >
                 {opt.charAt(0).toUpperCase() + opt.slice(1)}
               </button>
-            )
+            ),
           )}
         </div>
       </div>

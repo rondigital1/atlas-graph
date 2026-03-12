@@ -1,9 +1,6 @@
 "use client";
 
-interface ChipOption {
-  id: string;
-  label: string;
-}
+import type { ChipOption } from "../lib/types";
 
 interface ChipSelectorProps {
   label: string;
@@ -48,22 +45,30 @@ export function ChipSelector({
     <div>
       <div className="mb-3 flex items-baseline justify-between">
         <div>
-          <label className="text-sm font-medium text-foreground">{label}</label>
+          <p className="text-sm font-medium text-foreground">{label}</p>
           {description && (
             <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
           )}
         </div>
         {multiple && selected.length > 0 && (
-          <span className="text-xs text-primary">{selected.length} selected</span>
+          <span className="text-xs text-primary" aria-live="polite">
+            {selected.length} selected
+          </span>
         )}
       </div>
-      <div className={`grid gap-2 ${gridCols[columns]}`}>
+      <div
+        className={`grid gap-2 ${gridCols[columns]}`}
+        role={multiple ? "group" : "radiogroup"}
+        aria-label={label}
+      >
         {options.map((option) => {
           const isSelected = selected.includes(option.id);
           return (
             <button
               key={option.id}
+              type="button"
               onClick={() => handleClick(option.id)}
+              aria-pressed={isSelected}
               className={`group relative flex items-center justify-center rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
                 isSelected
                   ? "border-primary/60 bg-primary/10 text-foreground"
@@ -71,7 +76,10 @@ export function ChipSelector({
               }`}
             >
               {isSelected && (
-                <span className="absolute left-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary">
+                <span
+                  aria-hidden="true"
+                  className="absolute left-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary"
+                >
                   <svg
                     width="10"
                     height="10"

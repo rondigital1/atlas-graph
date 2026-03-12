@@ -13,7 +13,11 @@ const quickAdjustments = [
   { id: "luxury", label: "More luxury" },
 ];
 
-export function AdjustmentBar() {
+interface AdjustmentBarProps {
+  onRegeneratingChange?: (isRegenerating: boolean) => void;
+}
+
+export function AdjustmentBar({ onRegeneratingChange }: AdjustmentBarProps) {
   const [activeChips, setActiveChips] = useState<string[]>([]);
   const [prompt, setPrompt] = useState("");
   const [isRegenerating, setIsRegenerating] = useState(false);
@@ -25,9 +29,15 @@ export function AdjustmentBar() {
   };
 
   const handleRegenerate = () => {
-    if (activeChips.length === 0 && !prompt.trim()) return;
+    if (activeChips.length === 0 && !prompt.trim()) { return; }
     setIsRegenerating(true);
-    setTimeout(() => setIsRegenerating(false), 2000);
+    onRegeneratingChange?.(true);
+    setTimeout(() => {
+      setIsRegenerating(false);
+      onRegeneratingChange?.(false);
+      setActiveChips([]);
+      setPrompt("");
+    }, 2000);
   };
 
   return (

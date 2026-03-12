@@ -478,7 +478,7 @@ function resolveMockDestination(destination: string): ResolvedMockDestination {
 }
 
 function stripPlaceTags(place: MockPlaceRecord): PlaceCandidate {
-  const { tags: _tags, ...candidate } = place;
+  const { tags: _tags, ...candidate } = place; // eslint-disable-line @typescript-eslint/no-unused-vars
 
   return candidate;
 }

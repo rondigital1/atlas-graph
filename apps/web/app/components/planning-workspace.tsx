@@ -1,214 +1,81 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { StepIndicator } from "./step-indicator";
 import { ChipSelector } from "./chip-selector";
 import { PromptInput } from "./prompt-input";
 import { AIPreviewPanel } from "./ai-preview-panel";
 import { TemplateCards } from "./template-cards";
+import type { TripSelections } from "../lib/types";
+import { RecentPlansPanel } from "./recent-plans-panel";
+import {
+  STEPS,
+  DESTINATION_TYPES,
+  TRIP_TYPES,
+  PLANNING_MODES,
+  BUDGET_LEVELS,
+  TRAVEL_PACE,
+  INTERESTS,
+  FLIGHT_PREFERENCES,
+  ACCOMMODATION_TYPES,
+  CONSTRAINTS,
+  TEMPLATES,
+  SURPRISE_SELECTIONS,
+  SURPRISE_PROMPT,
+} from "../lib/mock/wizard-options";
 
-const STEPS = [
-  { id: "basics", label: "Basics" },
-  { id: "preferences", label: "Preferences" },
-  { id: "logistics", label: "Logistics" },
-  { id: "generate", label: "Generate" },
-];
+export type { TripSelections };
 
-const DESTINATION_TYPES = [
-  { id: "beach", label: "Beach" },
-  { id: "city", label: "City" },
-  { id: "mountains", label: "Mountains" },
-  { id: "countryside", label: "Countryside" },
-  { id: "tropical", label: "Tropical" },
-  { id: "luxury", label: "Luxury" },
-  { id: "adventure", label: "Adventure" },
-  { id: "foodie", label: "Foodie" },
-  { id: "nightlife", label: "Nightlife" },
-  { id: "romantic", label: "Romantic" },
-  { id: "family-friendly", label: "Family" },
-  { id: "wellness", label: "Wellness" },
-];
-
-const TRIP_TYPES = [
-  { id: "solo", label: "Solo" },
-  { id: "couple", label: "Couple" },
-  { id: "friends", label: "Friends" },
-  { id: "family", label: "Family" },
-  { id: "business", label: "Business" },
-];
-
-const PLANNING_MODES = [
-  { id: "weekend", label: "Weekend" },
-  { id: "1-week", label: "1 Week" },
-  { id: "2-weeks", label: "2 Weeks" },
-  { id: "3-weeks", label: "3+ Weeks" },
-  { id: "multi-city", label: "Multi-City" },
-];
-
-const BUDGET_LEVELS = [
-  { id: "budget", label: "Budget" },
-  { id: "moderate", label: "Moderate" },
-  { id: "premium", label: "Premium" },
-  { id: "luxury", label: "Luxury" },
-];
-
-const TRAVEL_PACE = [
-  { id: "relaxed", label: "Relaxed" },
-  { id: "balanced", label: "Balanced" },
-  { id: "fast-paced", label: "Fast-Paced" },
-];
-
-const INTERESTS = [
-  { id: "food", label: "Food & Dining" },
-  { id: "art", label: "Art & Museums" },
-  { id: "architecture", label: "Architecture" },
-  { id: "hiking", label: "Hiking" },
-  { id: "beaches", label: "Beaches" },
-  { id: "shopping", label: "Shopping" },
-  { id: "nightlife", label: "Nightlife" },
-  { id: "local", label: "Local Culture" },
-  { id: "nature", label: "Nature" },
-  { id: "photography", label: "Photography" },
-];
-
-const FLIGHT_PREFERENCES = [
-  { id: "shortest", label: "Shortest" },
-  { id: "cheapest", label: "Cheapest" },
-  { id: "best-overall", label: "Best Value" },
-  { id: "premium-cabin", label: "Premium" },
-];
-
-const ACCOMMODATION_TYPES = [
-  { id: "hotel", label: "Hotel" },
-  { id: "boutique", label: "Boutique" },
-  { id: "airbnb", label: "Airbnb" },
-  { id: "resort", label: "Resort" },
-  { id: "hostel", label: "Hostel" },
-];
-
-const CONSTRAINTS = [
-  { id: "pet-friendly", label: "Pet Friendly" },
-  { id: "walkable", label: "Walkable" },
-  { id: "remote-work", label: "Remote Work" },
-  { id: "kid-friendly", label: "Kid Friendly" },
-  { id: "transit", label: "Public Transit" },
-  { id: "visa-friendly", label: "Easy Visa" },
-];
-
-export interface TripSelections {
-  destinationType: string[];
-  tripType: string[];
-  planningMode: string[];
-  budget: string[];
-  flightPreference: string[];
-  accommodation: string[];
-  travelPace: string[];
-  interests: string[];
-  constraints: string[];
-}
+const EMPTY_SELECTIONS: TripSelections = {
+  destinationType: [],
+  tripType: [],
+  planningMode: [],
+  budget: [],
+  flightPreference: [],
+  accommodation: [],
+  travelPace: [],
+  interests: [],
+  constraints: [],
+};
 
 export function PlanningWorkspace() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [selections, setSelections] = useState<TripSelections>({
-    destinationType: [],
-    tripType: [],
-    planningMode: [],
-    budget: [],
-    flightPreference: [],
-    accommodation: [],
-    travelPace: [],
-    interests: [],
-    constraints: [],
-  });
+  const [selections, setSelections] = useState<TripSelections>(EMPTY_SELECTIONS);
 
   const updateSelection = (key: keyof TripSelections, value: string[]) => {
     setSelections((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleTemplateSelect = (templateId: string) => {
-    const templates: Record<string, Partial<TripSelections>> = {
-      "european-food": {
-        destinationType: ["city", "foodie"],
-        tripType: ["couple"],
-        planningMode: ["1-week"],
-        budget: ["moderate"],
-        interests: ["food", "art", "architecture"],
-      },
-      "tropical-remote": {
-        destinationType: ["tropical", "beach"],
-        tripType: ["solo"],
-        planningMode: ["2-weeks"],
-        budget: ["moderate"],
-        constraints: ["remote-work", "walkable"],
-        interests: ["beaches", "nature"],
-      },
-      "luxury-couples": {
-        destinationType: ["luxury", "romantic"],
-        tripType: ["couple"],
-        planningMode: ["1-week"],
-        budget: ["luxury"],
-        accommodation: ["resort", "boutique"],
-        interests: ["food", "beaches"],
-      },
-      "adventure-nature": {
-        destinationType: ["mountains", "adventure"],
-        tripType: ["friends"],
-        planningMode: ["1-week"],
-        budget: ["moderate"],
-        travelPace: ["fast-paced"],
-        interests: ["hiking", "nature", "photography"],
-      },
-      "budget-explorer": {
-        destinationType: ["city"],
-        tripType: ["solo"],
-        planningMode: ["multi-city"],
-        budget: ["budget"],
-        accommodation: ["hostel"],
-        travelPace: ["fast-paced"],
-        flightPreference: ["cheapest"],
-      },
-      "family-summer": {
-        destinationType: ["beach", "family-friendly"],
-        tripType: ["family"],
-        planningMode: ["2-weeks"],
-        budget: ["moderate"],
-        constraints: ["kid-friendly", "walkable"],
-        travelPace: ["relaxed"],
-      },
-    };
-
-    const template = templates[templateId];
+    const template = TEMPLATES.find((t) => t.id === templateId);
     if (template) {
-      setSelections((prev) => ({ ...prev, ...template }));
+      setSelections((prev) => ({ ...prev, ...template.selections }));
+      if (template.prompt) {
+        setPrompt(template.prompt);
+      }
     }
   };
 
   const handleGenerate = () => {
     setIsGenerating(true);
+    // TODO: wire to real /api/plan-trip endpoint; navigate with run ID
     setTimeout(() => {
       setIsGenerating(false);
-      setCurrentStep(3);
-    }, 3000);
+      router.push("/results");
+    }, 2000);
   };
 
   const handleSurprise = () => {
-    setSelections({
-      destinationType: ["city", "foodie"],
-      tripType: ["couple"],
-      planningMode: ["1-week"],
-      budget: ["moderate"],
-      flightPreference: ["best-overall"],
-      accommodation: ["boutique"],
-      travelPace: ["balanced"],
-      interests: ["food", "art", "local"],
-      constraints: ["walkable"],
-    });
-    setPrompt("Surprise me with a memorable trip focused on authentic local experiences and great food.");
+    setSelections(SURPRISE_SELECTIONS);
+    setPrompt(SURPRISE_PROMPT);
   };
 
-  const canSubmit = selections.destinationType.length > 0 || prompt.trim().length > 10;
+  const canSubmit =
+    selections.destinationType.length > 0 || prompt.trim().length > 10;
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -344,11 +211,13 @@ export function PlanningWorkspace() {
         {/* Navigation */}
         <div className="mt-4 flex items-center justify-between">
           <button
+            type="button"
             onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
             disabled={currentStep === 0}
             className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface-elevated hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
           >
             <svg
+              aria-hidden="true"
               width="14"
               height="14"
               viewBox="0 0 24 24"
@@ -362,14 +231,18 @@ export function PlanningWorkspace() {
             </svg>
             Back
           </button>
-          
+
           {currentStep < STEPS.length - 1 && (
             <button
-              onClick={() => setCurrentStep(Math.min(STEPS.length - 1, currentStep + 1))}
+              type="button"
+              onClick={() =>
+                setCurrentStep(Math.min(STEPS.length - 1, currentStep + 1))
+              }
               className="flex items-center gap-1.5 rounded-lg bg-surface-elevated px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
             >
               Continue
               <svg
+                aria-hidden="true"
                 width="14"
                 height="14"
                 viewBox="0 0 24 24"
@@ -388,17 +261,25 @@ export function PlanningWorkspace() {
 
       {/* AI Context Panel - Desktop */}
       <div className="hidden w-72 shrink-0 lg:block">
-        <div className="sticky top-14">
-          <AIPreviewPanel selections={selections} prompt={prompt} currentStep={currentStep} />
+        <div className="sticky top-14 space-y-4">
+          <AIPreviewPanel
+            selections={selections}
+            prompt={prompt}
+            currentStep={currentStep}
+          />
+          <RecentPlansPanel />
         </div>
       </div>
 
       {/* AI Context Panel - Mobile */}
       <div className="fixed bottom-4 left-4 right-4 lg:hidden">
         <details className="group rounded-xl border border-border bg-surface shadow-lg">
-          <summary className="flex cursor-pointer items-center justify-between p-3 [&::-webkit-details-marker]:hidden">
+          <summary className="flex cursor-pointer list-none items-center justify-between p-3">
             <div className="flex items-center gap-2">
-              <div className="flex h-5 w-5 items-center justify-center rounded bg-primary/15">
+              <div
+                aria-hidden="true"
+                className="flex h-5 w-5 items-center justify-center rounded bg-primary/15"
+              >
                 <svg
                   width="11"
                   height="11"
@@ -415,9 +296,12 @@ export function PlanningWorkspace() {
                   <path d="M2 12l10 5 10-5" />
                 </svg>
               </div>
-              <span className="text-sm font-medium text-foreground">Context</span>
+              <span className="text-sm font-medium text-foreground">
+                Context
+              </span>
             </div>
             <svg
+              aria-hidden="true"
               width="14"
               height="14"
               viewBox="0 0 24 24"
@@ -432,7 +316,11 @@ export function PlanningWorkspace() {
             </svg>
           </summary>
           <div className="max-h-80 overflow-y-auto border-t border-border-muted">
-            <AIPreviewPanel selections={selections} prompt={prompt} currentStep={currentStep} />
+            <AIPreviewPanel
+              selections={selections}
+              prompt={prompt}
+              currentStep={currentStep}
+            />
           </div>
         </details>
       </div>

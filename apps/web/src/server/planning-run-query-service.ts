@@ -4,7 +4,7 @@ import type {
   PlannerRunSummaryRecord,
 } from "@atlas-graph/db";
 
-export interface PlanningRunSummary extends PlannerRunSummaryRecord {}
+export type PlanningRunSummary = PlannerRunSummaryRecord;
 
 export interface PlanningRunDetail {
   run: Omit<
