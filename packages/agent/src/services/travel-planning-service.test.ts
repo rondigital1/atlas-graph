@@ -127,6 +127,25 @@ describe("TravelPlanningService", () => {
     expect(new TravelPlanningService(deps)).toBeInstanceOf(TravelPlanningService);
   });
 
+  it("buildPlanningContext rejects invalid TripRequest input at the service boundary", async () => {
+    const invalidRequest = {
+      destination: "T",
+      startDate: "2026-04-15",
+      endDate: "2026-04-10",
+      budget: "medium",
+      interests: [],
+      travelStyle: "balanced",
+      groupType: "friends",
+    } as unknown as TripRequest;
+    const { deps } = createDeps();
+    const service = new TravelPlanningService(deps);
+
+    await expect(service.buildPlanningContext(invalidRequest)).rejects.toThrow();
+    expect(deps.destinationInfoProvider.getDestinationSummary).not.toHaveBeenCalled();
+    expect(deps.weatherProvider.getWeatherSummary).not.toHaveBeenCalled();
+    expect(deps.placesProvider.searchPlaces).not.toHaveBeenCalled();
+  });
+
   it("buildPlanningContext calls providers and returns a valid planning context", async () => {
     const request = createTripRequest();
     const { deps, destinationSummary, weatherSummary, placeCandidates } = createDeps();
@@ -153,6 +172,43 @@ describe("TravelPlanningService", () => {
     );
   });
 
+  it("buildPlanningContext deduplicates normalized place candidates deterministically", async () => {
+    const request = createTripRequest();
+    const { deps } = createDeps();
+    deps.placesProvider.searchPlaces = vi.fn().mockResolvedValue([
+      {
+        id: "tokyo-meiji-raw",
+        name: "  Meiji Shrine ",
+        category: "Attractions",
+        source: "test-provider",
+      },
+      {
+        id: "tokyo-meiji-detailed",
+        name: "Meiji Shrine",
+        category: "attraction",
+        source: "test-provider",
+        address: "1-1 Yoyogikamizonocho",
+        description: "  A calm shrine and park complex. ",
+        rating: "4.8",
+      },
+    ] as unknown as PlaceCandidate[]);
+    const service = new TravelPlanningService(deps);
+
+    const result = await service.buildPlanningContext(request);
+
+    expect(result.placeCandidates).toEqual([
+      {
+        id: "tokyo-meiji-detailed",
+        name: "Meiji Shrine",
+        category: "attraction",
+        source: "test-provider",
+        address: "1-1 Yoyogikamizonocho",
+        summary: "A calm shrine and park complex.",
+        rating: 4.8,
+      },
+    ]);
+  });
+
   it("generatePlan delegates to plannerRunner with a valid planning context", async () => {
     const request = createTripRequest();
     const { deps, destinationSummary, placeCandidates, tripPlan, weatherSummary } =
@@ -176,5 +232,139 @@ describe("TravelPlanningService", () => {
     );
 
     expect(PlanningContextSchema.parse(context)).toEqual(context);
+  });
+
+  it("generatePlan passes normalized context to plannerRunner", async () => {
+    const request = createTripRequest();
+    const { deps, tripPlan } = createDeps();
+    deps.destinationInfoProvider.getDestinationSummary = vi.fn().mockResolvedValue({
+      destination: " Tokyo ",
+      country: " Japan ",
+      description: " Dense city with strong neighborhood variety. ",
+      bestAreas: [" Shibuya ", " ", "Asakusa"],
+      notes: [" Transit is efficient. ", "   "],
+    } as unknown as DestinationSummary);
+    deps.weatherProvider.getWeatherSummary = vi.fn().mockResolvedValue({
+      destination: "Tokyo",
+      description: " Mild spring weather is typical. ",
+      dailyNotes: [" Pack a light layer for evenings. ", " "],
+      averageHighC: "19",
+      averageLowC: "11",
+    } as unknown as WeatherSummary);
+    deps.placesProvider.searchPlaces = vi.fn().mockResolvedValue([
+      {
+        name: "  Meiji Shrine ",
+        category: "Attractions",
+        description: " A calm shrine and park complex. ",
+        source: " test-provider ",
+      },
+    ] as unknown as PlaceCandidate[]);
+    const service = new TravelPlanningService(deps);
+
+    const result = await service.generatePlan(request);
+
+    expect(result).toEqual(tripPlan);
+    expect(deps.plannerRunner.run).toHaveBeenCalledWith({
+      request,
+      destinationSummary: {
+        destination: "Tokyo",
+        country: "Japan",
+        summary: "Dense city with strong neighborhood variety.",
+        bestAreas: ["Shibuya", "Asakusa"],
+        notes: ["Transit is efficient."],
+      },
+      weatherSummary: {
+        destination: "Tokyo",
+        summary: "Mild spring weather is typical.",
+        dailyNotes: ["Pack a light layer for evenings."],
+        averageHighC: 19,
+        averageLowC: 11,
+      },
+      placeCandidates: [
+        {
+          id: "meiji-shrine-attraction",
+          name: "Meiji Shrine",
+          category: "attraction",
+          source: "test-provider",
+          summary: "A calm shrine and park complex.",
+        },
+      ],
+    });
+  });
+
+  it("buildPlanningContext returns empty placeCandidates when placesProvider throws", async () => {
+    const request = createTripRequest();
+    const { deps, destinationSummary, weatherSummary } = createDeps();
+    deps.placesProvider.searchPlaces = vi.fn().mockRejectedValue(new Error("API failure"));
+    const service = new TravelPlanningService(deps);
+
+    const result = await service.buildPlanningContext(request);
+
+    expect(result.placeCandidates).toEqual([]);
+    expect(result.destinationSummary).toEqual(destinationSummary);
+    expect(result.weatherSummary).toEqual(weatherSummary);
+  });
+
+  it("buildPlanningContext drops invalid place candidates and keeps valid ones", async () => {
+    const request = createTripRequest();
+    const validCandidate = createPlaceCandidates()[0]!;
+    const { deps } = createDeps();
+    deps.placesProvider.searchPlaces = vi.fn().mockResolvedValue([
+      validCandidate,
+      { id: "bad-1", name: "", category: "attraction", source: "test" },
+      null,
+      { id: "bad-2", name: "No Category", source: "test" },
+      42,
+    ]);
+    const service = new TravelPlanningService(deps);
+
+    const result = await service.buildPlanningContext(request);
+
+    expect(result.placeCandidates).toHaveLength(1);
+    expect(result.placeCandidates[0]!.id).toBe(validCandidate.id);
+  });
+
+  it("buildPlanningContext degrades gracefully when destination data is malformed", async () => {
+    const request = createTripRequest();
+    const validCandidate = createPlaceCandidates()[0]!;
+    const { deps, weatherSummary } = createDeps();
+    deps.destinationInfoProvider.getDestinationSummary = vi.fn().mockResolvedValue({
+      destination: "Tokyo",
+      bestAreas: ["Shibuya"],
+      notes: ["Transit is efficient."],
+    } as unknown as DestinationSummary);
+    deps.placesProvider.searchPlaces = vi.fn().mockResolvedValue([
+      validCandidate,
+    ] as unknown as PlaceCandidate[]);
+    const service = new TravelPlanningService(deps);
+
+    const result = await service.buildPlanningContext(request);
+
+    expect(result.destinationSummary).toBeUndefined();
+    expect(result.weatherSummary).toEqual(weatherSummary);
+    expect(result.placeCandidates).toEqual([validCandidate]);
+    expect(PlanningContextSchema.parse(result)).toEqual(result);
+  });
+
+  it("buildPlanningContext degrades gracefully when weather data is malformed", async () => {
+    const request = createTripRequest();
+    const validCandidate = createPlaceCandidates()[0]!;
+    const { deps, destinationSummary } = createDeps();
+    deps.weatherProvider.getWeatherSummary = vi.fn().mockResolvedValue({
+      destination: "Tokyo",
+      dailyNotes: ["Pack a light layer for evenings."],
+      averageHighC: "19",
+    } as unknown as WeatherSummary);
+    deps.placesProvider.searchPlaces = vi.fn().mockResolvedValue([
+      validCandidate,
+    ] as unknown as PlaceCandidate[]);
+    const service = new TravelPlanningService(deps);
+
+    const result = await service.buildPlanningContext(request);
+
+    expect(result.destinationSummary).toEqual(destinationSummary);
+    expect(result.weatherSummary).toBeUndefined();
+    expect(result.placeCandidates).toEqual([validCandidate]);
+    expect(PlanningContextSchema.parse(result)).toEqual(result);
   });
 });

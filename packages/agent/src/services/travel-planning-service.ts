@@ -8,6 +8,7 @@ import type {
   TripRequest,
 } from "@atlas-graph/core/types";
 import type { TravelPlanningServiceDeps } from "./types";
+import { normalizeProviderResults } from "../normalization/provider-results-normalization";
 
 export class TravelPlanningService {
   private readonly deps: TravelPlanningServiceDeps;
@@ -19,20 +20,24 @@ export class TravelPlanningService {
   public async buildPlanningContext(input: TripRequest): Promise<PlanningContext> {
     const validatedInput = TripRequestSchema.parse(input);
 
-    const destinationSummary =
-      await this.deps.destinationInfoProvider.getDestinationSummary(validatedInput);
+    const [destinationSummary, weatherSummary, placeCandidates] =
+      await Promise.all([
+        this.deps.destinationInfoProvider.getDestinationSummary(validatedInput),
+        this.deps.weatherProvider.getWeatherSummary(validatedInput),
+        this.deps.placesProvider.searchPlaces(validatedInput).catch(() => []),
+      ]);
 
-    const weatherSummary =
-      await this.deps.weatherProvider.getWeatherSummary(validatedInput);
-
-    const placeCandidates =
-      await this.deps.placesProvider.searchPlaces(validatedInput);
-
-    const context = {
-      request: validatedInput,
+    const normalizedResults = normalizeProviderResults({
       destinationSummary,
       weatherSummary,
       placeCandidates,
+    });
+
+    const context = {
+      request: validatedInput,
+      destinationSummary: normalizedResults.destinationSummary,
+      weatherSummary: normalizedResults.weatherSummary,
+      placeCandidates: normalizedResults.placeCandidates,
     };
 
     return PlanningContextSchema.parse(context);
