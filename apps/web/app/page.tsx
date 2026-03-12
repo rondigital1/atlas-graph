@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Header } from "./components/header";
 import { PlanningWorkspace } from "./components/planning-workspace";
 
@@ -7,6 +8,22 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
+      
+      {/* Quick link to results page for demo */}
+      <div className="border-b border-border-muted bg-primary-subtle">
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-4 py-2">
+          <span className="text-xs text-muted-foreground">Demo: View the generated itinerary results page</span>
+          <Link 
+            href="/results" 
+            className="flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            View Results
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </Link>
+        </div>
+      </div>
 
       <main className="flex flex-1 flex-col">
         {/* Workspace Header */}
