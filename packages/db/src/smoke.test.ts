@@ -17,5 +17,7 @@ describe("db package", () => {
     expect(createPrismaClient).toBeTypeOf("function");
     expect(getDatabaseHealth).toBeTypeOf("function");
     expect(plannerRunRepository.create).toBeTypeOf("function");
+    expect(plannerRunRepository.listRecentRuns).toBeTypeOf("function");
+    expect(plannerRunRepository.findDetailById).toBeTypeOf("function");
   });
 });
