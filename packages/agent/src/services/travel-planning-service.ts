@@ -44,8 +44,12 @@ export class TravelPlanningService {
   ): Promise<PlanningContext> {
     const [destinationSummary, weatherSummary, placeCandidates] =
       await Promise.all([
-        this.deps.destinationInfoProvider.getDestinationSummary(validatedInput),
-        this.deps.weatherProvider.getWeatherSummary(validatedInput),
+        this.deps.destinationInfoProvider
+          .getDestinationSummary(validatedInput)
+          .catch(() => undefined),
+        this.deps.weatherProvider
+          .getWeatherSummary(validatedInput)
+          .catch(() => undefined),
         this.deps.placesProvider.searchPlaces(validatedInput).catch(() => []),
       ]);
 

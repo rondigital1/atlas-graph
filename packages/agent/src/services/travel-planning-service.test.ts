@@ -361,6 +361,38 @@ describe("TravelPlanningService", () => {
     expect(result.weatherSummary).toEqual(weatherSummary);
   });
 
+  it("buildPlanningContext degrades gracefully when destinationInfoProvider throws", async () => {
+    const request = createTripRequest();
+    const { deps, weatherSummary, placeCandidates } = createDeps();
+    deps.destinationInfoProvider.getDestinationSummary = vi
+      .fn()
+      .mockRejectedValue(new Error("Destination API failure"));
+    const service = new TravelPlanningService(deps);
+
+    const result = await service.buildPlanningContext(request);
+
+    expect(result.destinationSummary).toBeUndefined();
+    expect(result.weatherSummary).toEqual(weatherSummary);
+    expect(result.placeCandidates).toEqual(placeCandidates);
+    expect(PlanningContextSchema.parse(result)).toEqual(result);
+  });
+
+  it("buildPlanningContext degrades gracefully when weatherProvider throws", async () => {
+    const request = createTripRequest();
+    const { deps, destinationSummary, placeCandidates } = createDeps();
+    deps.weatherProvider.getWeatherSummary = vi
+      .fn()
+      .mockRejectedValue(new Error("Weather API failure"));
+    const service = new TravelPlanningService(deps);
+
+    const result = await service.buildPlanningContext(request);
+
+    expect(result.destinationSummary).toEqual(destinationSummary);
+    expect(result.weatherSummary).toBeUndefined();
+    expect(result.placeCandidates).toEqual(placeCandidates);
+    expect(PlanningContextSchema.parse(result)).toEqual(result);
+  });
+
   it("buildPlanningContext drops invalid place candidates and keeps valid ones", async () => {
     const request = createTripRequest();
     const validCandidate = createPlaceCandidates()[0]!;
