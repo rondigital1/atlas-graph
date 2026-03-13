@@ -36,18 +36,18 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden items-center md:flex">
-            <a
-              href="#"
+            <Link
+              href="/"
               className="px-3 py-1.5 text-sm font-medium text-foreground"
             >
               Planner
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              href="/plans"
               className="px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               My Trips
-            </a>
+            </Link>
           </nav>
         </div>
 
@@ -139,18 +139,18 @@ export function Header() {
       {isMobileMenuOpen && (
         <div className="border-t border-border-muted px-4 py-2 md:hidden">
           <nav className="flex flex-col">
-            <a
-              href="#"
+            <Link
+              href="/"
               className="rounded-md px-3 py-2 text-sm font-medium text-foreground"
             >
               Planner
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              href="/plans"
               className="rounded-md px-3 py-2 text-sm text-muted-foreground"
             >
               My Trips
-            </a>
+            </Link>
           </nav>
         </div>
       )}

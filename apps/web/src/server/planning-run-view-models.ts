@@ -1,4 +1,6 @@
 import type {
+  PlansListItemViewModel,
+  PlansListViewModel,
   RecentRunsPanelViewModel,
   RunInspectorErrorViewModel,
   RunInspectorHeaderViewModel,
@@ -186,6 +188,33 @@ export function createUnavailableRecentRunsPanelViewModel(): RecentRunsPanelView
     state: "unavailable",
     items: [],
   };
+}
+
+export function createPlansListViewModel(
+  runs: PlanningRunSummary[]
+): PlansListViewModel {
+  if (runs.length === 0) {
+    return { state: "empty", items: [] };
+  }
+
+  const items: PlansListItemViewModel[] = runs.map((run) => {
+    const status = getRunStatusPresentation(run.status);
+
+    return {
+      id: run.id,
+      href: `/plan/${run.id}`,
+      destination: run.destination ?? "Untitled",
+      tripDates: formatTripDates(run.startDate, run.endDate),
+      statusLabel: status.label,
+      statusTone: status.tone,
+      budget: formatEnumLabel(run.budget),
+      travelStyle: formatEnumLabel(run.travelStyle),
+      groupType: formatEnumLabel(run.groupType),
+      createdAt: formatDateTime(run.createdAt) ?? "",
+    };
+  });
+
+  return { state: "ready", items };
 }
 
 export function extractInputPayloads(payload: unknown): RunInspectorInputViewModel {

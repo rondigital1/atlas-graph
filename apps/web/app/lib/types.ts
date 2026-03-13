@@ -103,6 +103,24 @@ export interface RecentRunsPanelViewModel {
   state: "empty" | "ready" | "unavailable";
 }
 
+export interface PlansListItemViewModel {
+  id: string;
+  href: string;
+  destination: string;
+  tripDates: string;
+  statusLabel: string;
+  statusTone: StatusTone;
+  budget: string | null;
+  travelStyle: string | null;
+  groupType: string | null;
+  createdAt: string;
+}
+
+export interface PlansListViewModel {
+  items: PlansListItemViewModel[];
+  state: "empty" | "ready" | "error";
+}
+
 export type RunInspectorTabId = "errors" | "input" | "output" | "toolData";
 
 export interface RunInspectorHeaderViewModel {
