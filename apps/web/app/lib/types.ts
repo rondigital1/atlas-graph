@@ -85,3 +85,84 @@ export interface VersionHistoryItem {
   changes: string;
   isActive?: boolean;
 }
+
+export type StatusTone = "neutral" | "success" | "warning" | "danger";
+
+export interface RecentRunItemViewModel {
+  href: string;
+  id: string;
+  meta: string;
+  statusLabel: string;
+  statusTone: StatusTone;
+  subtitle: string;
+  title: string;
+}
+
+export interface RecentRunsPanelViewModel {
+  items: RecentRunItemViewModel[];
+  state: "empty" | "ready" | "unavailable";
+}
+
+export type RunInspectorTabId = "errors" | "input" | "output" | "toolData";
+
+export interface RunInspectorHeaderViewModel {
+  budget: string | null;
+  completedAt: string | null;
+  createdAt: string;
+  defaultTab: RunInspectorTabId;
+  destination: string;
+  duration: string | null;
+  groupType: string | null;
+  id: string;
+  modelName: string | null;
+  promptVersion: string | null;
+  requestId: string;
+  startedAt: string | null;
+  statusLabel: string;
+  statusTone: StatusTone;
+  travelStyle: string | null;
+  tripDates: string;
+}
+
+export interface RunInspectorInputViewModel {
+  isLegacyPayload: boolean;
+  normalizedPayload: unknown | null;
+  recordedAt: string | null;
+  submittedPayload: unknown | null;
+}
+
+export interface RunInspectorToolResultViewModel {
+  createdAt: string;
+  id: string;
+  latency: string | null;
+  payload: unknown;
+  provider: string | null;
+  sequenceLabel: string;
+  statusLabel: string;
+  statusTone: StatusTone;
+  title: string;
+  toolCategory: string | null;
+}
+
+export interface RunInspectorOutputViewModel {
+  createdAt: string;
+  outputFormat: string | null;
+  payload: unknown;
+}
+
+export interface RunInspectorErrorViewModel {
+  createdAt: string;
+  details: unknown | null;
+  errorType: string | null;
+  id: string;
+  message: string;
+  stepName: string | null;
+}
+
+export interface RunInspectorViewModel {
+  errors: RunInspectorErrorViewModel[];
+  header: RunInspectorHeaderViewModel;
+  input: RunInspectorInputViewModel;
+  output: RunInspectorOutputViewModel | null;
+  toolResults: RunInspectorToolResultViewModel[];
+}

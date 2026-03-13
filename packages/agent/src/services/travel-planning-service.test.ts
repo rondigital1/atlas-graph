@@ -1,11 +1,13 @@
 import {
   PlanningContextSchema,
+  ToolResultSchema,
   TripPlanSchema,
   TripRequestSchema,
 } from "@atlas-graph/core/schemas";
 import type {
   DestinationSummary,
   PlaceCandidate,
+  ToolResult,
   TripPlan,
   TripRequest,
   WeatherSummary,
@@ -90,6 +92,36 @@ function createTripPlan(): TripPlan {
     warnings: [],
     rationale: "The plan keeps the pacing balanced and realistic.",
   });
+}
+
+function createExpectedToolResults(
+  destinationSummary: DestinationSummary | undefined,
+  weatherSummary: WeatherSummary | undefined,
+  placeCandidates: PlaceCandidate[]
+): ToolResult[] {
+  return [
+    ToolResultSchema.parse({
+      toolName: "destination-summary",
+      toolCategory: "normalized-context",
+      provider: "normalized-provider",
+      status: destinationSummary ? "SUCCEEDED" : "PARTIAL",
+      payload: destinationSummary ?? null,
+    }),
+    ToolResultSchema.parse({
+      toolName: "weather-summary",
+      toolCategory: "normalized-context",
+      provider: "normalized-provider",
+      status: weatherSummary ? "SUCCEEDED" : "PARTIAL",
+      payload: weatherSummary ?? null,
+    }),
+    ToolResultSchema.parse({
+      toolName: "place-candidates",
+      toolCategory: "normalized-context",
+      provider: "normalized-provider",
+      status: "SUCCEEDED",
+      payload: placeCandidates,
+    }),
+  ];
 }
 
 function createDeps() {
@@ -232,6 +264,30 @@ describe("TravelPlanningService", () => {
     );
 
     expect(PlanningContextSchema.parse(context)).toEqual(context);
+  });
+
+  it("generatePlanResult returns validated context, tool results, and plan", async () => {
+    const request = createTripRequest();
+    const { deps, destinationSummary, weatherSummary, placeCandidates, tripPlan } =
+      createDeps();
+    const service = new TravelPlanningService(deps);
+
+    const result = await service.generatePlanResult(request);
+
+    expect(result).toEqual({
+      plan: tripPlan,
+      context: PlanningContextSchema.parse({
+        request,
+        destinationSummary,
+        weatherSummary,
+        placeCandidates,
+      }),
+      toolResults: createExpectedToolResults(
+        destinationSummary,
+        weatherSummary,
+        placeCandidates
+      ),
+    });
   });
 
   it("generatePlan passes normalized context to plannerRunner", async () => {

@@ -35,18 +35,21 @@ export class PlanTripWorkflowService {
     });
 
     try {
-      const plan = await this.deps.travelPlanningService.generatePlan(normalizedInput);
+      const result = await this.deps.travelPlanningService.generatePlanResult(
+        normalizedInput
+      );
       const completedAt = this.deps.now();
 
       await this.deps.planningRunRepository.markSucceeded({
         id: runId,
-        outputPlan: plan,
-        outputSummary: buildPlanningRunOutputSummary(plan),
+        outputPlan: result.plan,
+        outputSummary: buildPlanningRunOutputSummary(result.plan),
+        toolResults: result.toolResults,
         completedAt,
         durationMs: calculateDurationMs(startedAt, completedAt),
       });
 
-      return plan;
+      return result.plan;
     } catch (error) {
       const completedAt = this.deps.now();
       const persistedError = mapPlanningRunError(error);

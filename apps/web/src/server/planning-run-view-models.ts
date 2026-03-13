@@ -1,0 +1,316 @@
+import type {
+  RecentRunsPanelViewModel,
+  RunInspectorErrorViewModel,
+  RunInspectorHeaderViewModel,
+  RunInspectorInputViewModel,
+  RunInspectorOutputViewModel,
+  RunInspectorToolResultViewModel,
+  RunInspectorViewModel,
+  StatusTone,
+} from "../../app/lib/types";
+import type {
+  PlanningRunDetail,
+  PlanningRunSummary,
+} from "./planning-run-query-service";
+
+function formatDateOnly(value: Date | null): string | null {
+  if (!value) {
+    return null;
+  }
+
+  return value.toISOString().slice(0, 10);
+}
+
+function formatDateTime(value: Date | null): string | null {
+  if (!value) {
+    return null;
+  }
+
+  return value.toISOString();
+}
+
+function formatDuration(durationMs: number | null): string | null {
+  if (durationMs === null) {
+    return null;
+  }
+
+  const totalSeconds = Math.floor(durationMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  if (minutes === 0) {
+    return `${seconds}s`;
+  }
+
+  return `${minutes}m ${seconds}s`;
+}
+
+function formatEnumLabel(value: string | null): string | null {
+  if (!value) {
+    return null;
+  }
+
+  return value
+    .split(/[-_]/g)
+    .filter((part) => {
+      return part.length > 0;
+    })
+    .map((part) => {
+      return part[0]!.toUpperCase() + part.slice(1);
+    })
+    .join(" ");
+}
+
+function formatTripDates(startDate: Date | null, endDate: Date | null): string {
+  const formattedStart = formatDateOnly(startDate);
+  const formattedEnd = formatDateOnly(endDate);
+
+  if (formattedStart && formattedEnd) {
+    return `${formattedStart} -> ${formattedEnd}`;
+  }
+
+  if (formattedStart) {
+    return formattedStart;
+  }
+
+  if (formattedEnd) {
+    return formattedEnd;
+  }
+
+  return "Dates unavailable";
+}
+
+function formatToolTitle(value: string): string {
+  return value
+    .split(/[-_]/g)
+    .filter((part) => {
+      return part.length > 0;
+    })
+    .map((part) => {
+      return part[0]!.toUpperCase() + part.slice(1);
+    })
+    .join(" ");
+}
+
+function getRunStatusPresentation(status: string): {
+  label: string;
+  tone: StatusTone;
+} {
+  switch (status) {
+    case "SUCCEEDED":
+      return {
+        label: "Succeeded",
+        tone: "success",
+      };
+    case "FAILED":
+      return {
+        label: "Failed",
+        tone: "danger",
+      };
+    case "RUNNING":
+      return {
+        label: "Running",
+        tone: "warning",
+      };
+    default:
+      return {
+        label: "Pending",
+        tone: "neutral",
+      };
+  }
+}
+
+function getToolStatusPresentation(status: string): {
+  label: string;
+  tone: StatusTone;
+} {
+  switch (status) {
+    case "SUCCEEDED":
+      return {
+        label: "Succeeded",
+        tone: "success",
+      };
+    case "FAILED":
+      return {
+        label: "Failed",
+        tone: "danger",
+      };
+    default:
+      return {
+        label: "Partial",
+        tone: "warning",
+      };
+  }
+}
+
+function buildRecentRunMeta(run: PlanningRunSummary): string {
+  const metaParts = [run.modelName ?? "Model unavailable", formatDateTime(run.createdAt)];
+
+  return metaParts
+    .filter((value): value is string => {
+      return Boolean(value);
+    })
+    .join(" · ");
+}
+
+export function createRecentRunsPanelViewModel(
+  runs: PlanningRunSummary[]
+): RecentRunsPanelViewModel {
+  if (runs.length === 0) {
+    return {
+      state: "empty",
+      items: [],
+    };
+  }
+
+  return {
+    state: "ready",
+    items: runs.map((run) => {
+      const status = getRunStatusPresentation(run.status);
+
+      return {
+        id: run.id,
+        href: `/runs/${run.id}`,
+        title: run.destination ?? "Untitled run",
+        subtitle: formatTripDates(run.startDate, run.endDate),
+        meta: buildRecentRunMeta(run),
+        statusLabel: status.label,
+        statusTone: status.tone,
+      };
+    }),
+  };
+}
+
+export function createUnavailableRecentRunsPanelViewModel(): RecentRunsPanelViewModel {
+  return {
+    state: "unavailable",
+    items: [],
+  };
+}
+
+export function extractInputPayloads(payload: unknown): RunInspectorInputViewModel {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return {
+      submittedPayload: payload ?? null,
+      normalizedPayload: null,
+      isLegacyPayload: true,
+      recordedAt: null,
+    };
+  }
+
+  const record = payload as Record<string, unknown>;
+  const hasEnvelope =
+    Object.hasOwn(record, "inputSnapshot") || Object.hasOwn(record, "normalizedInput");
+
+  if (!hasEnvelope) {
+    return {
+      submittedPayload: payload,
+      normalizedPayload: null,
+      isLegacyPayload: true,
+      recordedAt: null,
+    };
+  }
+
+  return {
+    submittedPayload: record["inputSnapshot"] ?? null,
+    normalizedPayload: record["normalizedInput"] ?? null,
+    isLegacyPayload: false,
+    recordedAt: null,
+  };
+}
+
+function createHeaderViewModel(detail: PlanningRunDetail): RunInspectorHeaderViewModel {
+  const status = getRunStatusPresentation(detail.run.status);
+
+  return {
+    id: detail.run.id,
+    requestId: detail.run.requestId ?? detail.run.id,
+    destination: detail.run.destination ?? "Untitled run",
+    tripDates: formatTripDates(detail.run.startDate, detail.run.endDate),
+    budget: formatEnumLabel(detail.run.budget),
+    travelStyle: formatEnumLabel(detail.run.travelStyle),
+    groupType: formatEnumLabel(detail.run.groupType),
+    modelName: detail.run.modelName,
+    promptVersion: detail.run.promptVersion,
+    startedAt: formatDateTime(detail.run.startedAt),
+    completedAt: formatDateTime(detail.run.completedAt),
+    createdAt: formatDateTime(detail.run.createdAt) ?? "",
+    duration:
+      detail.run.startedAt && detail.run.completedAt
+        ? formatDuration(
+            detail.run.completedAt.getTime() - detail.run.startedAt.getTime()
+          )
+        : null,
+    statusLabel: status.label,
+    statusTone: status.tone,
+    defaultTab: detail.run.status === "FAILED" ? "errors" : "output",
+  };
+}
+
+function createToolResultsViewModel(
+  detail: PlanningRunDetail
+): RunInspectorToolResultViewModel[] {
+  return detail.toolResults.map((toolResult) => {
+    const status = getToolStatusPresentation(toolResult.status);
+
+    return {
+      id: toolResult.id,
+      title: formatToolTitle(toolResult.toolName),
+      sequenceLabel: `Step ${toolResult.sequence}`,
+      provider: toolResult.provider,
+      toolCategory: toolResult.toolCategory,
+      statusLabel: status.label,
+      statusTone: status.tone,
+      latency:
+        typeof toolResult.latencyMs === "number"
+          ? `${toolResult.latencyMs}ms`
+          : null,
+      createdAt: formatDateTime(toolResult.createdAt) ?? "",
+      payload: toolResult.payload,
+    };
+  });
+}
+
+function createOutputViewModel(
+  detail: PlanningRunDetail
+): RunInspectorOutputViewModel | null {
+  if (!detail.output) {
+    return null;
+  }
+
+  return {
+    outputFormat: detail.output.outputFormat,
+    createdAt: formatDateTime(detail.output.createdAt) ?? "",
+    payload: detail.output.payload,
+  };
+}
+
+function createErrorViewModel(detail: PlanningRunDetail): RunInspectorErrorViewModel[] {
+  return detail.errors.map((error) => {
+    return {
+      id: error.id,
+      errorType: error.errorType,
+      stepName: error.stepName,
+      message: error.message,
+      details: error.details ?? null,
+      createdAt: formatDateTime(error.createdAt) ?? "",
+    };
+  });
+}
+
+export function createRunInspectorViewModel(
+  detail: PlanningRunDetail
+): RunInspectorViewModel {
+  const inputPayloads = extractInputPayloads(detail.input?.payload ?? null);
+
+  return {
+    header: createHeaderViewModel(detail),
+    input: {
+      ...inputPayloads,
+      recordedAt: detail.input ? formatDateTime(detail.input.createdAt) : null,
+    },
+    toolResults: createToolResultsViewModel(detail),
+    output: createOutputViewModel(detail),
+    errors: createErrorViewModel(detail),
+  };
+}

@@ -3,6 +3,7 @@ import type {
   PlanningRun,
   PlanningRunOutputSummary,
   PlanningRunStatus,
+  ToolResult,
   TripPlan,
   TripRequest,
 } from "@atlas-graph/core/types";
@@ -25,6 +26,7 @@ export interface MarkPlanningRunSucceededInput {
   id: string;
   outputPlan: TripPlan;
   outputSummary: PlanningRunOutputSummary;
+  toolResults: ToolResult[];
   completedAt: Date;
   durationMs: number;
 }

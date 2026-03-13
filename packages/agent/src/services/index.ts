@@ -1,5 +1,6 @@
 export { InMemoryPlanningRunRepository } from "./in-memory-planning-run-repository";
 export { PlanTripWorkflowService } from "./plan-trip-workflow-service";
+export { buildPlanningRunOutputSummary } from "./planning-run-output-summary";
 export type {
   CreatePlanningRunInput,
   MarkPlanningRunFailedInput,
@@ -19,4 +20,5 @@ export type {
   PlannerMetadata,
   PersistedPlanningRunError,
   TravelPlanningServiceDeps,
+  GeneratePlanResult,
 } from "./types";

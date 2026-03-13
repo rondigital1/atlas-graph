@@ -10,6 +10,7 @@ import type {
   JsonValue,
   PlanningContext,
   PlaceCandidate,
+  ToolResult,
   TripPlan,
   TripRequest,
   WeatherSummary,
@@ -37,7 +38,7 @@ export interface TravelPlanningServiceDeps {
 
 export interface PlanTripWorkflowServiceDeps {
   travelPlanningService: {
-    generatePlan(input: TripRequest): Promise<TripPlan>;
+    generatePlanResult(input: TripRequest): Promise<GeneratePlanResult>;
     normalizeRequest(input: TripRequest): TripRequest;
   };
   planningRunRepository: PlanningRunRepository;
@@ -60,6 +61,7 @@ export interface BuildPlanningContextResult {
 }
 
 export interface GeneratePlanResult {
-  plan: TripPlan | null;
-  context: PlanningContext | null;
+  plan: TripPlan;
+  context: PlanningContext;
+  toolResults: ToolResult[];
 }

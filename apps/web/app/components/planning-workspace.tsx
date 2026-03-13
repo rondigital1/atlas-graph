@@ -7,7 +7,7 @@ import { ChipSelector } from "./chip-selector";
 import { PromptInput } from "./prompt-input";
 import { AIPreviewPanel } from "./ai-preview-panel";
 import { TemplateCards } from "./template-cards";
-import type { TripSelections } from "../lib/types";
+import type { RecentRunsPanelViewModel, TripSelections } from "../lib/types";
 import { RecentPlansPanel } from "./recent-plans-panel";
 import {
   STEPS,
@@ -58,7 +58,11 @@ const STEP_HEADINGS = [
   },
 ] as const;
 
-export function PlanningWorkspace() {
+export function PlanningWorkspace({
+  recentRunsPanel,
+}: {
+  recentRunsPanel: RecentRunsPanelViewModel;
+}) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [prompt, setPrompt] = useState("");
@@ -216,7 +220,7 @@ export function PlanningWorkspace() {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 rounded-xl border border-border bg-surface p-6 sm:p-8">
+        <div className="min-h-[420px] rounded-xl border border-border bg-surface p-6 sm:p-8">
           {/* Step heading */}
           <div className="mb-6 border-b border-border-muted pb-5">
             <h2 className="text-base font-semibold text-foreground">{heading}</h2>
@@ -285,7 +289,7 @@ export function PlanningWorkspace() {
             prompt={prompt}
             currentStep={currentStep}
           />
-          <RecentPlansPanel />
+          <RecentPlansPanel panel={recentRunsPanel} />
         </div>
       </div>
 

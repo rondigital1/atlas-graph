@@ -1,13 +1,11 @@
 import { randomUUID } from "node:crypto";
 
-import {
-  InMemoryPlanningRunRepository,
-  PlanTripWorkflowService,
-} from "@atlas-graph/agent";
+import { PlanTripWorkflowService } from "@atlas-graph/agent";
 import { createPlannerMetadata } from "./create-planner-model";
+import { createDatabasePlanningRunRepository } from "./database-planning-run-repository";
 import { createTravelPlanningService } from "./create-travel-planning-service";
 
-const planningRunRepository = new InMemoryPlanningRunRepository();
+const planningRunRepository = createDatabasePlanningRunRepository();
 
 export function createPlanTripWorkflowService(): PlanTripWorkflowService {
   return new PlanTripWorkflowService({

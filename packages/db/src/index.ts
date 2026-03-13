@@ -1,5 +1,6 @@
 export {
   PlannerRunStatus,
+  Prisma,
   ToolExecutionStatus,
 } from "../generated/prisma/client";
 export type {

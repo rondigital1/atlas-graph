@@ -1,7 +1,23 @@
 import { Header } from "./components/header";
 import { PlanningWorkspace } from "./components/planning-workspace";
+import { createPlanningRunQueryService } from "../src/server/create-planning-run-query-service";
+import {
+  createRecentRunsPanelViewModel,
+  createUnavailableRecentRunsPanelViewModel,
+} from "../src/server/planning-run-view-models";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const planningRunQueryService = createPlanningRunQueryService();
+  const recentRunsPanel = await (async () => {
+    try {
+      const runs = await planningRunQueryService.listRecentRuns();
+
+      return createRecentRunsPanelViewModel(runs);
+    } catch {
+      return createUnavailableRecentRunsPanelViewModel();
+    }
+  })();
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
@@ -72,7 +88,7 @@ export default function HomePage() {
         {/* Workspace */}
         <div className="flex-1 overflow-y-auto px-4 py-6">
           <div className="mx-auto max-w-[1400px]">
-            <PlanningWorkspace />
+            <PlanningWorkspace recentRunsPanel={recentRunsPanel} />
           </div>
         </div>
       </main>

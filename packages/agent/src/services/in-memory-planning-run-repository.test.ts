@@ -109,6 +109,7 @@ describe("InMemoryPlanningRunRepository", () => {
         topRecommendationCount: tripPlan.topRecommendations.length,
         warningCount: tripPlan.warnings.length,
       },
+      toolResults: [],
       completedAt,
       durationMs: 30000,
     });

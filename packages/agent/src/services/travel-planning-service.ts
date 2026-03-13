@@ -1,6 +1,7 @@
 import { PlanningContextSchema, TripRequestSchema } from "@atlas-graph/core/schemas";
 import type { PlanningContext, TripPlan, TripRequest } from "@atlas-graph/core/types";
-import type { TravelPlanningServiceDeps } from "./types";
+import { buildPlanningToolResults } from "./planning-tool-results";
+import type { GeneratePlanResult, TravelPlanningServiceDeps } from "./types";
 import { normalizeProviderResults } from "../normalization/provider-results-normalization";
 
 export class TravelPlanningService {
@@ -21,9 +22,21 @@ export class TravelPlanningService {
   }
 
   public async generatePlan(input: TripRequest): Promise<TripPlan> {
-    const context = await this.buildPlanningContext(input);
+    const result = await this.generatePlanResult(input);
 
-    return await this.deps.plannerRunner.run(context);
+    return result.plan;
+  }
+
+  public async generatePlanResult(input: TripRequest): Promise<GeneratePlanResult> {
+    const context = await this.buildPlanningContext(input);
+    const toolResults = buildPlanningToolResults(context);
+    const plan = await this.deps.plannerRunner.run(context);
+
+    return {
+      plan,
+      context,
+      toolResults,
+    };
   }
 
   private async buildPlanningContextFromValidatedRequest(

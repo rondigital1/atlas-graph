@@ -1,5 +1,15 @@
-import { TripPlanSchema, TripRequestSchema } from "@atlas-graph/core/schemas";
-import type { TripPlan, TripRequest } from "@atlas-graph/core/types";
+import {
+  PlanningContextSchema,
+  ToolResultSchema,
+  TripPlanSchema,
+  TripRequestSchema,
+} from "@atlas-graph/core/schemas";
+import type {
+  PlanningContext,
+  ToolResult,
+  TripPlan,
+  TripRequest,
+} from "@atlas-graph/core/types";
 import { describe, expect, it, vi } from "vitest";
 
 import { InMemoryPlanningRunRepository } from "./in-memory-planning-run-repository";
@@ -47,11 +57,77 @@ function createTripPlan(): TripPlan {
   });
 }
 
+function createPlanningContext(request: TripRequest): PlanningContext {
+  return PlanningContextSchema.parse({
+    request,
+    destinationSummary: {
+      destination: request.destination,
+      country: "Japan",
+      summary: "A dense city with strong neighborhood variety.",
+      bestAreas: ["Shibuya"],
+      notes: ["Transit is efficient."],
+    },
+    weatherSummary: {
+      destination: request.destination,
+      summary: "Mild spring weather is typical.",
+      dailyNotes: ["Pack a light layer for evenings."],
+      averageHighC: 19,
+      averageLowC: 11,
+    },
+    placeCandidates: [
+      {
+        id: "place-1",
+        name: "Meiji Shrine",
+        category: "attraction",
+        source: "normalized-provider",
+        summary: "A calm shrine and park complex.",
+      },
+    ],
+  });
+}
+
+function createToolResults(context: PlanningContext): ToolResult[] {
+  return [
+    ToolResultSchema.parse({
+      toolName: "destination-summary",
+      toolCategory: "normalized-context",
+      provider: "normalized-provider",
+      status: "SUCCEEDED",
+      payload: context.destinationSummary,
+    }),
+    ToolResultSchema.parse({
+      toolName: "weather-summary",
+      toolCategory: "normalized-context",
+      provider: "normalized-provider",
+      status: "SUCCEEDED",
+      payload: context.weatherSummary,
+    }),
+    ToolResultSchema.parse({
+      toolName: "place-candidates",
+      toolCategory: "normalized-context",
+      provider: "normalized-provider",
+      status: "SUCCEEDED",
+      payload: context.placeCandidates,
+    }),
+  ];
+}
+
+function createGeneratePlanResult(request: TripRequest, plan: TripPlan) {
+  const context = createPlanningContext(request);
+
+  return {
+    plan,
+    context,
+    toolResults: createToolResults(context),
+  };
+}
+
 function createDeps(overrides: {
   now?: () => Date;
 } = {}) {
   const planningRunRepository = new InMemoryPlanningRunRepository();
   const tripPlan = createTripPlan();
+  const request = createTripRequest();
   const now =
     overrides.now ??
     vi
@@ -67,7 +143,9 @@ function createDeps(overrides: {
         normalizeRequest: vi.fn((input: TripRequest) => {
           return TripRequestSchema.parse(structuredClone(input));
         }),
-        generatePlan: vi.fn().mockResolvedValue(tripPlan),
+        generatePlanResult: vi
+          .fn()
+          .mockResolvedValue(createGeneratePlanResult(request, tripPlan)),
       },
       planningRunRepository,
       idGenerator: vi.fn().mockReturnValue("run-123"),
@@ -90,14 +168,14 @@ describe("PlanTripWorkflowService", () => {
       normalizeRequest: vi.fn((input: TripRequest) => {
         return TripRequestSchema.parse(structuredClone(input));
       }),
-      generatePlan: vi.fn(async () => {
+      generatePlanResult: vi.fn(async () => {
         const run = await planningRunRepository.getRunById("run-123");
 
         expect(run).not.toBeNull();
         expect(run?.status).toBe("running");
         expect(run?.requestId).toBe("run-123");
 
-        return tripPlan;
+        return createGeneratePlanResult(request, tripPlan);
       }),
     };
     const service = new PlanTripWorkflowService({
@@ -120,7 +198,7 @@ describe("PlanTripWorkflowService", () => {
     });
 
     expect(result).toEqual(tripPlan);
-    expect(travelPlanningService.generatePlan).toHaveBeenCalledTimes(1);
+    expect(travelPlanningService.generatePlanResult).toHaveBeenCalledTimes(1);
   });
 
   it("marks succeeded when planning returns and persists summary metadata", async () => {
@@ -192,7 +270,7 @@ describe("PlanTripWorkflowService", () => {
         normalizeRequest: vi.fn((input: TripRequest) => {
           return TripRequestSchema.parse(structuredClone(input));
         }),
-        generatePlan: vi.fn().mockRejectedValue(plannerError),
+        generatePlanResult: vi.fn().mockRejectedValue(plannerError),
       },
       planningRunRepository,
       idGenerator: vi.fn().mockReturnValue("run-123"),
@@ -270,7 +348,7 @@ describe("PlanTripWorkflowService", () => {
         normalizeRequest: vi.fn((input: TripRequest) => {
           return TripRequestSchema.parse(structuredClone(input));
         }),
-        generatePlan: vi.fn().mockRejectedValue(plannerError),
+        generatePlanResult: vi.fn().mockRejectedValue(plannerError),
       },
       planningRunRepository,
       idGenerator: vi.fn().mockReturnValue("run-123"),
@@ -300,5 +378,50 @@ describe("PlanTripWorkflowService", () => {
       rawText: "{bad",
       cause: null,
     });
+  });
+
+  it("passes inspectable tool results into markSucceeded", async () => {
+    const request = createTripRequest();
+    const tripPlan = createTripPlan();
+    const generatedResult = createGeneratePlanResult(request, tripPlan);
+    const planningRunRepository = {
+      createRun: vi.fn().mockResolvedValue({}),
+      markSucceeded: vi.fn().mockResolvedValue({}),
+      markFailed: vi.fn().mockResolvedValue({}),
+      getRunById: vi.fn(),
+      listRuns: vi.fn(),
+    };
+    const service = new PlanTripWorkflowService({
+      travelPlanningService: {
+        normalizeRequest: vi.fn((input: TripRequest) => {
+          return TripRequestSchema.parse(structuredClone(input));
+        }),
+        generatePlanResult: vi.fn().mockResolvedValue(generatedResult),
+      },
+      planningRunRepository,
+      idGenerator: vi.fn().mockReturnValue("run-123"),
+      now: vi
+        .fn<() => Date>()
+        .mockReturnValueOnce(new Date("2026-01-01T10:00:00.000Z"))
+        .mockReturnValueOnce(new Date("2026-01-01T10:00:01.000Z")),
+      plannerMetadata: {
+        provider: "test-provider",
+        model: "test-model",
+        version: PLANNER_PROMPT_VERSION,
+      },
+    });
+
+    await service.planTrip({
+      request,
+    });
+
+    expect(planningRunRepository.markSucceeded).toHaveBeenCalledTimes(1);
+    expect(planningRunRepository.markSucceeded).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: "run-123",
+        outputPlan: tripPlan,
+        toolResults: generatedResult.toolResults,
+      })
+    );
   });
 });
