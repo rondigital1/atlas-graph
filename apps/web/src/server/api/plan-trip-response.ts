@@ -1,6 +1,7 @@
 import type { TripPlan } from "@atlas-graph/core/types";
 
 export interface PlanTripSuccessResponse {
+  id: string;
   data: TripPlan;
 }
 
@@ -17,9 +18,11 @@ export interface PlanTripErrorResponse {
 export type PlanTripResponse = PlanTripSuccessResponse | PlanTripErrorResponse;
 
 export function createPlanTripSuccessResponse(
+  id: string,
   plan: TripPlan
 ): PlanTripSuccessResponse {
   return {
+    id,
     data: plan,
   };
 }

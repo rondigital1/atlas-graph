@@ -352,6 +352,23 @@ export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
   _max?: Prisma.NestedJsonNullableFilter<$PrismaModel>
 }
 
+export type EnumTravelPlanStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TravelPlanStatus | Prisma.EnumTravelPlanStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TravelPlanStatus[] | Prisma.ListEnumTravelPlanStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TravelPlanStatus[] | Prisma.ListEnumTravelPlanStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTravelPlanStatusFilter<$PrismaModel> | $Enums.TravelPlanStatus
+}
+
+export type EnumTravelPlanStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TravelPlanStatus | Prisma.EnumTravelPlanStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TravelPlanStatus[] | Prisma.ListEnumTravelPlanStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TravelPlanStatus[] | Prisma.ListEnumTravelPlanStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTravelPlanStatusWithAggregatesFilter<$PrismaModel> | $Enums.TravelPlanStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTravelPlanStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTravelPlanStatusFilter<$PrismaModel>
+}
+
 export type NestedUuidFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -645,6 +662,23 @@ export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
   gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type NestedEnumTravelPlanStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TravelPlanStatus | Prisma.EnumTravelPlanStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TravelPlanStatus[] | Prisma.ListEnumTravelPlanStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TravelPlanStatus[] | Prisma.ListEnumTravelPlanStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTravelPlanStatusFilter<$PrismaModel> | $Enums.TravelPlanStatus
+}
+
+export type NestedEnumTravelPlanStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TravelPlanStatus | Prisma.EnumTravelPlanStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TravelPlanStatus[] | Prisma.ListEnumTravelPlanStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TravelPlanStatus[] | Prisma.ListEnumTravelPlanStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTravelPlanStatusWithAggregatesFilter<$PrismaModel> | $Enums.TravelPlanStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTravelPlanStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTravelPlanStatusFilter<$PrismaModel>
 }
 
 

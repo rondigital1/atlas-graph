@@ -55,7 +55,8 @@ export const ModelName = {
   PlannerRunInput: 'PlannerRunInput',
   PlannerRunToolResult: 'PlannerRunToolResult',
   PlannerRunOutput: 'PlannerRunOutput',
-  PlannerRunError: 'PlannerRunError'
+  PlannerRunError: 'PlannerRunError',
+  TravelPlan: 'TravelPlan'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -144,6 +145,18 @@ export const PlannerRunErrorScalarFieldEnum = {
 } as const
 
 export type PlannerRunErrorScalarFieldEnum = (typeof PlannerRunErrorScalarFieldEnum)[keyof typeof PlannerRunErrorScalarFieldEnum]
+
+
+export const TravelPlanScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  input: 'input',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TravelPlanScalarFieldEnum = (typeof TravelPlanScalarFieldEnum)[keyof typeof TravelPlanScalarFieldEnum]
 
 
 export const SortOrder = {

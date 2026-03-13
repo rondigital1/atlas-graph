@@ -39,10 +39,30 @@ describe("createPlannerModel", () => {
     expect(chatOpenAIConstructor).not.toHaveBeenCalled();
   });
 
+  it("falls back to the development planner in non-production when no API key is configured", () => {
+    const result = createPlannerModel({
+      NODE_ENV: "development",
+      OPENAI_API_KEY: "",
+    });
+
+    expect(result).toBeInstanceOf(DevelopmentPlannerModel);
+    expect(chatOpenAIConstructor).not.toHaveBeenCalled();
+  });
+
   it("throws a clear error when the real planner path is selected without an API key", () => {
     expect(() => {
       createPlannerModel({
         ATLASGRAPH_USE_DEV_PLANNER: "false",
+      });
+    }).toThrow(
+      "OPENAI_API_KEY is required when ATLASGRAPH_USE_DEV_PLANNER is not true."
+    );
+  });
+
+  it("throws in production when no API key is configured", () => {
+    expect(() => {
+      createPlannerModel({
+        NODE_ENV: "production",
       });
     }).toThrow(
       "OPENAI_API_KEY is required when ATLASGRAPH_USE_DEV_PLANNER is not true."
@@ -91,6 +111,16 @@ describe("createPlannerModel", () => {
     expect(
       createPlannerMetadata({
         ATLASGRAPH_USE_DEV_PLANNER: "true",
+      })
+    ).toEqual({
+      provider: "development",
+      model: "development-planner",
+      version: PLANNER_PROMPT_VERSION,
+    });
+
+    expect(
+      createPlannerMetadata({
+        NODE_ENV: "development",
       })
     ).toEqual({
       provider: "development",

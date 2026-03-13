@@ -23,6 +23,13 @@ enum ToolExecutionStatus {
   PARTIAL
 }
 
+enum TravelPlanStatus {
+  DRAFT
+  GENERATING
+  DONE
+  ERROR
+}
+
 model PlannerRun {
   id                  String           @id @default(uuid()) @db.Uuid
   status              PlannerRunStatus @default(PENDING)
@@ -100,4 +107,17 @@ model PlannerRunError {
   @@index([plannerRunId])
   @@index([errorType])
   @@index([stepName])
+}
+
+model TravelPlan {
+  id        String           @id @default(uuid()) @db.Uuid
+  userId    String
+  status    TravelPlanStatus @default(DRAFT)
+  input     Json
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@index([updatedAt(sort: Desc)])
+  @@index([userId, updatedAt(sort: Desc)])
+  @@map("travel_plans")
 }

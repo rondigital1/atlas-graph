@@ -2,7 +2,11 @@ import type { TripPlan } from "@atlas-graph/core/types";
 import { buildPlanningRunOutputSummary } from "./planning-run-output-summary";
 import { calculateDurationMs, normalizeOptionalString } from "./planning-run-utils";
 import { mapPlanningRunError } from "./planning-run-error-mapper";
-import type { PlanTripInput, PlanTripWorkflowServiceDeps } from "./types";
+import type {
+  PlanTripInput,
+  PlanTripResult,
+  PlanTripWorkflowServiceDeps,
+} from "./types";
 
 export class PlanTripWorkflowService {
   private readonly deps: PlanTripWorkflowServiceDeps;
@@ -12,6 +16,12 @@ export class PlanTripWorkflowService {
   }
 
   public async planTrip(input: PlanTripInput): Promise<TripPlan> {
+    const result = await this.planTripWithRun(input);
+
+    return result.plan;
+  }
+
+  public async planTripWithRun(input: PlanTripInput): Promise<PlanTripResult> {
     const runId = this.deps.idGenerator();
     const startedAt = this.deps.now();
     const normalizedInput = this.deps.travelPlanningService.normalizeRequest(
@@ -49,7 +59,10 @@ export class PlanTripWorkflowService {
         durationMs: calculateDurationMs(startedAt, completedAt),
       });
 
-      return result.plan;
+      return {
+        plan: result.plan,
+        runId,
+      };
     } catch (error) {
       const completedAt = this.deps.now();
       const persistedError = mapPlanningRunError(error);

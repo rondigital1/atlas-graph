@@ -42,3 +42,8 @@ export type PlannerRunOutput = Prisma.PlannerRunOutputModel
  * 
  */
 export type PlannerRunError = Prisma.PlannerRunErrorModel
+/**
+ * Model TravelPlan
+ * 
+ */
+export type TravelPlan = Prisma.TravelPlanModel

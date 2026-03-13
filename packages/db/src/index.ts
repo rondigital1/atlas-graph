@@ -1,6 +1,7 @@
 export {
   PlannerRunStatus,
   Prisma,
+  TravelPlanStatus,
   ToolExecutionStatus,
 } from "../generated/prisma/client";
 export type {
@@ -10,6 +11,7 @@ export type {
   PlannerRunOutput,
   PlannerRunToolResult,
   PrismaClient,
+  TravelPlan,
 } from "../generated/prisma/client";
 
 export * from "./client/index";

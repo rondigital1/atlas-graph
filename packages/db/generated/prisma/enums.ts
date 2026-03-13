@@ -26,3 +26,13 @@ export const ToolExecutionStatus = {
 } as const
 
 export type ToolExecutionStatus = (typeof ToolExecutionStatus)[keyof typeof ToolExecutionStatus]
+
+
+export const TravelPlanStatus = {
+  DRAFT: 'DRAFT',
+  GENERATING: 'GENERATING',
+  DONE: 'DONE',
+  ERROR: 'ERROR'
+} as const
+
+export type TravelPlanStatus = (typeof TravelPlanStatus)[keyof typeof TravelPlanStatus]

@@ -16,6 +16,7 @@ export type {
 } from "./interfaces";
 export type {
   PlanTripInput,
+  PlanTripResult,
   PlanTripWorkflowServiceDeps,
   PlannerMetadata,
   PersistedPlanningRunError,

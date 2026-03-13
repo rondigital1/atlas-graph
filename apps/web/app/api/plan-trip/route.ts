@@ -32,11 +32,14 @@ export async function POST(request: Request): Promise<Response> {
 
   try {
     const workflowService = createPlanTripWorkflowService();
-    const plan = await workflowService.planTrip({
+    const result = await workflowService.planTripWithRun({
       request: parsedRequest.data,
     });
 
-    return NextResponse.json(createPlanTripSuccessResponse(plan), { status: 200 });
+    return NextResponse.json(
+      createPlanTripSuccessResponse(result.runId, result.plan),
+      { status: 200 }
+    );
   } catch {
     return NextResponse.json(createInternalErrorResponse(), { status: 500 });
   }

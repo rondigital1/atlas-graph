@@ -388,7 +388,8 @@ export const ModelName = {
   PlannerRunInput: 'PlannerRunInput',
   PlannerRunToolResult: 'PlannerRunToolResult',
   PlannerRunOutput: 'PlannerRunOutput',
-  PlannerRunError: 'PlannerRunError'
+  PlannerRunError: 'PlannerRunError',
+  TravelPlan: 'TravelPlan'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -404,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "plannerRun" | "plannerRunInput" | "plannerRunToolResult" | "plannerRunOutput" | "plannerRunError"
+    modelProps: "plannerRun" | "plannerRunInput" | "plannerRunToolResult" | "plannerRunOutput" | "plannerRunError" | "travelPlan"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -778,6 +779,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TravelPlan: {
+      payload: Prisma.$TravelPlanPayload<ExtArgs>
+      fields: Prisma.TravelPlanFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TravelPlanFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TravelPlanPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TravelPlanFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TravelPlanPayload>
+        }
+        findFirst: {
+          args: Prisma.TravelPlanFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TravelPlanPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TravelPlanFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TravelPlanPayload>
+        }
+        findMany: {
+          args: Prisma.TravelPlanFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TravelPlanPayload>[]
+        }
+        create: {
+          args: Prisma.TravelPlanCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TravelPlanPayload>
+        }
+        createMany: {
+          args: Prisma.TravelPlanCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TravelPlanCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TravelPlanPayload>[]
+        }
+        delete: {
+          args: Prisma.TravelPlanDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TravelPlanPayload>
+        }
+        update: {
+          args: Prisma.TravelPlanUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TravelPlanPayload>
+        }
+        deleteMany: {
+          args: Prisma.TravelPlanDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TravelPlanUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TravelPlanUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TravelPlanPayload>[]
+        }
+        upsert: {
+          args: Prisma.TravelPlanUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TravelPlanPayload>
+        }
+        aggregate: {
+          args: Prisma.TravelPlanAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTravelPlan>
+        }
+        groupBy: {
+          args: Prisma.TravelPlanGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TravelPlanGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TravelPlanCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TravelPlanCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -887,6 +962,18 @@ export const PlannerRunErrorScalarFieldEnum = {
 } as const
 
 export type PlannerRunErrorScalarFieldEnum = (typeof PlannerRunErrorScalarFieldEnum)[keyof typeof PlannerRunErrorScalarFieldEnum]
+
+
+export const TravelPlanScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  input: 'input',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TravelPlanScalarFieldEnum = (typeof TravelPlanScalarFieldEnum)[keyof typeof TravelPlanScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1028,6 +1115,20 @@ export type ListEnumToolExecutionStatusFieldRefInput<$PrismaModel> = FieldRefInp
 
 
 /**
+ * Reference to a field of type 'TravelPlanStatus'
+ */
+export type EnumTravelPlanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TravelPlanStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'TravelPlanStatus[]'
+ */
+export type ListEnumTravelPlanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TravelPlanStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1140,6 +1241,7 @@ export type GlobalOmitConfig = {
   plannerRunToolResult?: Prisma.PlannerRunToolResultOmit
   plannerRunOutput?: Prisma.PlannerRunOutputOmit
   plannerRunError?: Prisma.PlannerRunErrorOmit
+  travelPlan?: Prisma.TravelPlanOmit
 }
 
 /* Types for Logging */

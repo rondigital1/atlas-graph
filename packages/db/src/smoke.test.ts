@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   PlannerRunStatus,
+  TravelPlanStatus,
   ToolExecutionStatus,
   createPrismaClient,
   getDatabaseHealth,
@@ -11,9 +12,14 @@ import {
 
 describe("db package", () => {
   it("exposes prisma wiring without forcing a connection on import", () => {
+    process.env["DATABASE_URL"] ??=
+      "postgresql://postgres:postgres@localhost:5433/atlas_graph?schema=public";
+
     expect(PlannerRunStatus.PENDING).toBe("PENDING");
+    expect(TravelPlanStatus.DRAFT).toBe("DRAFT");
     expect(ToolExecutionStatus.PARTIAL).toBe("PARTIAL");
     expect(prisma).toBeDefined();
+    expect(prisma.travelPlan).toBeDefined();
     expect(createPrismaClient).toBeTypeOf("function");
     expect(getDatabaseHealth).toBeTypeOf("function");
     expect(plannerRunRepository.create).toBeTypeOf("function");

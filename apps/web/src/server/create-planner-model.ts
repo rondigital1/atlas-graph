@@ -26,6 +26,7 @@ const plannerModelEnvSchema = z
       blankStringToUndefined,
       z.string().min(1).optional()
     ),
+    NODE_ENV: z.preprocess(blankStringToUndefined, z.string().min(1).optional()),
     OPENAI_API_KEY: z.preprocess(
       blankStringToUndefined,
       z.string().min(1).optional()
@@ -68,6 +69,7 @@ function resolvePlannerRuntimeConfig(
   environment: PlannerModelEnvironment = process.env
 ): PlannerRuntimeConfig {
   const parsedEnvironment = plannerModelEnvSchema.parse(environment);
+  const runningInProduction = parsedEnvironment.NODE_ENV === "production";
 
   if (parsedEnvironment.ATLASGRAPH_USE_DEV_PLANNER === "true") {
     return {
@@ -78,6 +80,17 @@ function resolvePlannerRuntimeConfig(
   }
 
   if (!parsedEnvironment.OPENAI_API_KEY) {
+    if (
+      parsedEnvironment.ATLASGRAPH_USE_DEV_PLANNER !== "false" &&
+      !runningInProduction
+    ) {
+      return {
+        provider: "development",
+        modelName: "development-planner",
+        useDevelopmentPlanner: true,
+      };
+    }
+
     throw new Error(
       "OPENAI_API_KEY is required when ATLASGRAPH_USE_DEV_PLANNER is not true."
     );

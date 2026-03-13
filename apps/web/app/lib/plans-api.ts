@@ -9,6 +9,8 @@ interface PlanIdResponse {
   id: string;
 }
 
+const legacyGeneratedPlanIds = new Set<string>();
+
 export class PlansApiError extends Error {
   public readonly code: string | null;
   public readonly status: number;
@@ -33,6 +35,10 @@ export async function updatePlan(
 }
 
 export async function generatePlan(planId: string): Promise<void> {
+  if (legacyGeneratedPlanIds.delete(planId)) {
+    return;
+  }
+
   const response = await fetch(`/api/plans/${planId}/generate`, {
     method: "POST",
   });
@@ -62,6 +68,10 @@ async function savePlan(
     method,
   });
 
+  if (response.status === 404 && method === "POST") {
+    return await createPlanThroughLegacyRoute(request);
+  }
+
   const payload = await readJsonSafely(response);
 
   if (!response.ok) {
@@ -79,6 +89,41 @@ async function savePlan(
       status: response.status,
     });
   }
+
+  return {
+    id: planId,
+  };
+}
+
+async function createPlanThroughLegacyRoute(
+  request: TripRequest
+): Promise<PlanIdResponse> {
+  const response = await fetch("/api/plan-trip", {
+    body: JSON.stringify(request),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+  });
+  const payload = await readJsonSafely(response);
+
+  if (!response.ok) {
+    throw buildPlansApiError(
+      response.status,
+      payload,
+      "Plan request failed. Please review the form and try again."
+    );
+  }
+
+  const planId = extractPlanId(payload);
+  if (!planId) {
+    throw new PlansApiError("Plan API response did not include a plan id.", {
+      code: null,
+      status: response.status,
+    });
+  }
+
+  legacyGeneratedPlanIds.add(planId);
 
   return {
     id: planId,

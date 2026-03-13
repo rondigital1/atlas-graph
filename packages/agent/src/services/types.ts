@@ -29,6 +29,11 @@ export interface PlanTripInput {
   requestId?: string | null;
 }
 
+export interface PlanTripResult {
+  plan: TripPlan;
+  runId: string;
+}
+
 export interface TravelPlanningServiceDeps {
   destinationInfoProvider: DestinationInfoProvider;
   placesProvider: PlacesProvider;

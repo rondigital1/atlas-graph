@@ -1,13 +1,13 @@
 import { TripPlanSchema } from "@atlas-graph/core/schemas";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-const planTrip = vi.fn();
+const planTripWithRun = vi.fn();
 
 vi.mock("../../../src/server/create-plan-trip-workflow-service", () => {
   return {
     createPlanTripWorkflowService: () => {
       return {
-        planTrip,
+        planTripWithRun,
       };
     },
   };
@@ -43,12 +43,15 @@ function createValidTripPlan() {
 
 describe("POST /api/plan-trip", () => {
   afterEach(() => {
-    planTrip.mockReset();
+    planTripWithRun.mockReset();
   });
 
   it("returns 200 with plan data for a valid request", async () => {
     const tripPlan = createValidTripPlan();
-    planTrip.mockResolvedValue(tripPlan);
+    planTripWithRun.mockResolvedValue({
+      plan: tripPlan,
+      runId: "run-123",
+    });
     const request = new Request("http://localhost/api/plan-trip", {
       method: "POST",
       body: JSON.stringify({
@@ -70,9 +73,10 @@ describe("POST /api/plan-trip", () => {
 
     expect(response.status).toBe(200);
     expect(body).toEqual({
+      id: "run-123",
       data: tripPlan,
     });
-    expect(planTrip).toHaveBeenCalledWith({
+    expect(planTripWithRun).toHaveBeenCalledWith({
       request: {
         destination: "Paris",
         startDate: "2026-04-10",
@@ -108,7 +112,7 @@ describe("POST /api/plan-trip", () => {
     expect(response.status).toBe(400);
     expect(body.error.code).toBe("INVALID_REQUEST");
     expect(body.error.message).toBe("Request validation failed");
-    expect(planTrip).not.toHaveBeenCalled();
+    expect(planTripWithRun).not.toHaveBeenCalled();
   });
 
   it("returns 400 for malformed JSON", async () => {
@@ -136,7 +140,7 @@ describe("POST /api/plan-trip", () => {
   });
 
   it("returns 500 for unexpected service failures", async () => {
-    planTrip.mockRejectedValue(new Error("planner failed"));
+    planTripWithRun.mockRejectedValue(new Error("planner failed"));
     const request = new Request("http://localhost/api/plan-trip", {
       method: "POST",
       body: JSON.stringify({
