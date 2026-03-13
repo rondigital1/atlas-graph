@@ -9,13 +9,20 @@ export interface ChipOption {
 export interface TripSelections {
   destinationType: string[];
   tripType: string[];
-  planningMode: string[];
   budget: string[];
   flightPreference: string[];
   accommodation: string[];
   travelPace: string[];
   interests: string[];
   constraints: string[];
+}
+
+export interface PlannerFormState {
+  destination: string;
+  endDate: string;
+  prompt: string;
+  selections: TripSelections;
+  startDate: string;
 }
 
 // Results page types

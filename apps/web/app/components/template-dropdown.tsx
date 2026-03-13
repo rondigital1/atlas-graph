@@ -4,14 +4,23 @@ import { useState, useRef, useEffect } from "react";
 import { TEMPLATES } from "../lib/mock/wizard-options";
 
 interface TemplateDropdownProps {
+  disabled?: boolean;
   onSelect: (templateId: string) => void;
 }
 
-export function TemplateDropdown({ onSelect }: TemplateDropdownProps) {
+export function TemplateDropdown({
+  disabled = false,
+  onSelect,
+}: TemplateDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (disabled) {
+      setIsOpen(false);
+      return;
+    }
+
     if (!isOpen) {
       return;
     }
@@ -42,7 +51,12 @@ export function TemplateDropdown({ onSelect }: TemplateDropdownProps) {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+        disabled={disabled}
+        className={`text-sm transition-colors ${
+          disabled
+            ? "cursor-not-allowed text-muted-foreground/60"
+            : "text-muted-foreground hover:text-foreground"
+        }`}
       >
         Try a template
       </button>
@@ -57,7 +71,8 @@ export function TemplateDropdown({ onSelect }: TemplateDropdownProps) {
                   onSelect(template.id);
                   setIsOpen(false);
                 }}
-                className="flex w-full flex-col items-start rounded-md px-3 py-2 text-left transition-colors hover:bg-surface-elevated"
+                disabled={disabled}
+                className="flex w-full flex-col items-start rounded-md px-3 py-2 text-left transition-colors hover:bg-surface-elevated disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <span className="text-sm font-medium text-foreground">
                   {template.title}

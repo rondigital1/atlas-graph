@@ -27,15 +27,6 @@ export const TRIP_TYPES: ChipOption[] = [
   { id: "couple", label: "Couple" },
   { id: "friends", label: "Friends" },
   { id: "family", label: "Family" },
-  { id: "business", label: "Business" },
-];
-
-export const PLANNING_MODES: ChipOption[] = [
-  { id: "weekend", label: "Weekend" },
-  { id: "1-week", label: "1 Week" },
-  { id: "2-weeks", label: "2 Weeks" },
-  { id: "3-weeks", label: "3+ Weeks" },
-  { id: "multi-city", label: "Multi-City" },
 ];
 
 export const BUDGET_LEVELS: ChipOption[] = [
@@ -104,7 +95,6 @@ export const TEMPLATES: Template[] = [
     selections: {
       destinationType: ["city", "foodie"],
       tripType: ["couple"],
-      planningMode: ["1-week"],
       budget: ["moderate"],
       interests: ["food", "art", "architecture"],
     },
@@ -116,7 +106,6 @@ export const TEMPLATES: Template[] = [
     selections: {
       destinationType: ["tropical", "beach"],
       tripType: ["solo"],
-      planningMode: ["2-weeks"],
       budget: ["moderate"],
       constraints: ["remote-work", "walkable"],
       interests: ["beaches", "nature"],
@@ -129,7 +118,6 @@ export const TEMPLATES: Template[] = [
     selections: {
       destinationType: ["luxury", "romantic"],
       tripType: ["couple"],
-      planningMode: ["1-week"],
       budget: ["luxury"],
       accommodation: ["resort", "boutique"],
       interests: ["food", "beaches"],
@@ -142,7 +130,6 @@ export const TEMPLATES: Template[] = [
     selections: {
       destinationType: ["mountains", "adventure"],
       tripType: ["friends"],
-      planningMode: ["1-week"],
       budget: ["moderate"],
       travelPace: ["fast-paced"],
       interests: ["hiking", "nature", "photography"],
@@ -155,7 +142,6 @@ export const TEMPLATES: Template[] = [
     selections: {
       destinationType: ["city"],
       tripType: ["solo"],
-      planningMode: ["multi-city"],
       budget: ["budget"],
       accommodation: ["hostel"],
       travelPace: ["fast-paced"],
@@ -169,7 +155,6 @@ export const TEMPLATES: Template[] = [
     selections: {
       destinationType: ["beach", "family-friendly"],
       tripType: ["family"],
-      planningMode: ["2-weeks"],
       budget: ["moderate"],
       constraints: ["kid-friendly", "walkable"],
       travelPace: ["relaxed"],
@@ -180,7 +165,6 @@ export const TEMPLATES: Template[] = [
 export const SURPRISE_SELECTIONS: TripSelections = {
   destinationType: ["city", "foodie"],
   tripType: ["couple"],
-  planningMode: ["1-week"],
   budget: ["moderate"],
   flightPreference: ["best-overall"],
   accommodation: ["boutique"],
