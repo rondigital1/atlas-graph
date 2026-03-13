@@ -121,6 +121,30 @@ export interface PlansListViewModel {
   state: "empty" | "ready" | "error";
 }
 
+export interface VersionListItemViewModel {
+  id: string;
+  versionNumber: number;
+  label: string;
+  generatedAt: string;
+  isCurrent: boolean;
+  statusLabel: string;
+  statusTone: StatusTone;
+}
+
+export interface VersionListViewModel {
+  items: VersionListItemViewModel[];
+  state: "single" | "multi" | "empty";
+  activeVersionId: string;
+}
+
+export type RegenerationAvailability = "available" | "unavailable" | "in-progress";
+
+export interface RegenerationTriggerViewModel {
+  availability: RegenerationAvailability;
+  unavailableReason?: string;
+  planId: string;
+}
+
 export type RunInspectorTabId = "errors" | "input" | "output" | "toolData";
 
 export interface RunInspectorHeaderViewModel {
@@ -183,4 +207,44 @@ export interface RunInspectorViewModel {
   input: RunInspectorInputViewModel;
   output: RunInspectorOutputViewModel | null;
   toolResults: RunInspectorToolResultViewModel[];
+}
+
+// Plan detail view model types
+
+export interface PlanOverviewViewModel {
+  destination: string;
+  tripStyleSummary: string;
+  dates: string;
+  budget: string | null;
+  statusLabel: string;
+  statusTone: StatusTone;
+  practicalNotes: string[];
+  warnings: string[];
+  rationale: string;
+}
+
+export interface PlanActivityViewModel {
+  title: string;
+  description: string;
+}
+
+export interface PlanDayViewModel {
+  id: string;
+  dayNumber: number;
+  date: string;
+  theme: string;
+  morning: PlanActivityViewModel[];
+  afternoon: PlanActivityViewModel[];
+  evening: PlanActivityViewModel[];
+}
+
+export interface PlanRecommendationViewModel {
+  name: string;
+  reason: string;
+}
+
+export interface PlanDetailViewModel {
+  overview: PlanOverviewViewModel;
+  days: PlanDayViewModel[];
+  topRecommendations: PlanRecommendationViewModel[];
 }

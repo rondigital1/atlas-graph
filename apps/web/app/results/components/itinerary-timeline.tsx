@@ -261,7 +261,7 @@ export function ItineraryTimeline() {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-2 pt-1">
+                    <div className="flex items-center gap-2 pt-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
                       <button
                         type="button"
                         className="text-xs text-muted-foreground transition-colors hover:text-foreground"

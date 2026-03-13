@@ -13,6 +13,8 @@ const quickAdjustments = [
   { id: "luxury", label: "More luxury" },
 ];
 
+const VISIBLE_COUNT = 3;
+
 interface AdjustmentBarProps {
   onRegeneratingChange?: (isRegenerating: boolean) => void;
 }
@@ -21,6 +23,7 @@ export function AdjustmentBar({ onRegeneratingChange }: AdjustmentBarProps) {
   const [activeChips, setActiveChips] = useState<string[]>([]);
   const [prompt, setPrompt] = useState("");
   const [isRegenerating, setIsRegenerating] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleChip = (id: string) => {
     setActiveChips((prev) =>
@@ -29,7 +32,9 @@ export function AdjustmentBar({ onRegeneratingChange }: AdjustmentBarProps) {
   };
 
   const handleRegenerate = () => {
-    if (activeChips.length === 0 && !prompt.trim()) { return; }
+    if (activeChips.length === 0 && !prompt.trim()) {
+      return;
+    }
     setIsRegenerating(true);
     onRegeneratingChange?.(true);
     setTimeout(() => {
@@ -40,9 +45,14 @@ export function AdjustmentBar({ onRegeneratingChange }: AdjustmentBarProps) {
     }, 2000);
   };
 
+  const visibleChips = isExpanded
+    ? quickAdjustments
+    : quickAdjustments.slice(0, VISIBLE_COUNT);
+  const hiddenCount = quickAdjustments.length - VISIBLE_COUNT;
+
   return (
     <div className="border-b border-border-muted bg-background">
-      <div className="mx-auto max-w-[1600px] px-4 py-3 lg:px-6">
+      <div className="mx-auto max-w-4xl px-4 py-3">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           {/* Label */}
           <div className="flex items-center gap-2">
@@ -61,13 +71,13 @@ export function AdjustmentBar({ onRegeneratingChange }: AdjustmentBarProps) {
               <path d="M18.375 2.625a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z" />
             </svg>
             <span className="text-sm font-medium text-foreground">
-              Adjust Plan
+              Quick tweaks
             </span>
           </div>
 
           {/* Quick adjustment chips */}
           <div className="flex flex-1 flex-wrap items-center gap-1.5">
-            {quickAdjustments.map((adj) => (
+            {visibleChips.map((adj) => (
               <button
                 key={adj.id}
                 onClick={() => toggleChip(adj.id)}
@@ -81,6 +91,24 @@ export function AdjustmentBar({ onRegeneratingChange }: AdjustmentBarProps) {
                 {adj.label}
               </button>
             ))}
+            {!isExpanded && hiddenCount > 0 && (
+              <button
+                type="button"
+                onClick={() => setIsExpanded(true)}
+                className="rounded-md px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                + {hiddenCount} more
+              </button>
+            )}
+            {isExpanded && (
+              <button
+                type="button"
+                onClick={() => setIsExpanded(false)}
+                className="rounded-md px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Show less
+              </button>
+            )}
           </div>
 
           {/* Custom prompt input */}

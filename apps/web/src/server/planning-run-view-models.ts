@@ -2,6 +2,7 @@ import type {
   PlansListItemViewModel,
   PlansListViewModel,
   RecentRunsPanelViewModel,
+  RegenerationTriggerViewModel,
   RunInspectorErrorViewModel,
   RunInspectorHeaderViewModel,
   RunInspectorInputViewModel,
@@ -9,78 +10,19 @@ import type {
   RunInspectorToolResultViewModel,
   RunInspectorViewModel,
   StatusTone,
+  VersionListViewModel,
 } from "../../app/lib/types";
 import type {
   PlanningRunDetail,
   PlanningRunSummary,
 } from "./planning-run-query-service";
-
-function formatDateOnly(value: Date | null): string | null {
-  if (!value) {
-    return null;
-  }
-
-  return value.toISOString().slice(0, 10);
-}
-
-function formatDateTime(value: Date | null): string | null {
-  if (!value) {
-    return null;
-  }
-
-  return value.toISOString();
-}
-
-function formatDuration(durationMs: number | null): string | null {
-  if (durationMs === null) {
-    return null;
-  }
-
-  const totalSeconds = Math.floor(durationMs / 1000);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  if (minutes === 0) {
-    return `${seconds}s`;
-  }
-
-  return `${minutes}m ${seconds}s`;
-}
-
-function formatEnumLabel(value: string | null): string | null {
-  if (!value) {
-    return null;
-  }
-
-  return value
-    .split(/[-_]/g)
-    .filter((part) => {
-      return part.length > 0;
-    })
-    .map((part) => {
-      return part[0]!.toUpperCase() + part.slice(1);
-    })
-    .join(" ");
-}
-
-function formatTripDates(startDate: Date | null, endDate: Date | null): string {
-  const formattedStart = formatDateOnly(startDate);
-  const formattedEnd = formatDateOnly(endDate);
-
-  if (formattedStart && formattedEnd) {
-    return `${formattedStart} -> ${formattedEnd}`;
-  }
-
-  if (formattedStart) {
-    return formattedStart;
-  }
-
-  if (formattedEnd) {
-    return formattedEnd;
-  }
-
-  return "Dates unavailable";
-}
+import {
+  formatDateTime,
+  formatDuration,
+  formatEnumLabel,
+  formatTripDates,
+  getRunStatusPresentation,
+} from "./view-model-utils";
 
 function formatToolTitle(value: string): string {
   return value
@@ -92,34 +34,6 @@ function formatToolTitle(value: string): string {
       return part[0]!.toUpperCase() + part.slice(1);
     })
     .join(" ");
-}
-
-function getRunStatusPresentation(status: string): {
-  label: string;
-  tone: StatusTone;
-} {
-  switch (status) {
-    case "SUCCEEDED":
-      return {
-        label: "Succeeded",
-        tone: "success",
-      };
-    case "FAILED":
-      return {
-        label: "Failed",
-        tone: "danger",
-      };
-    case "RUNNING":
-      return {
-        label: "Running",
-        tone: "warning",
-      };
-    default:
-      return {
-        label: "Pending",
-        tone: "neutral",
-      };
-  }
 }
 
 function getToolStatusPresentation(status: string): {
@@ -341,5 +255,40 @@ export function createRunInspectorViewModel(
     toolResults: createToolResultsViewModel(detail),
     output: createOutputViewModel(detail),
     errors: createErrorViewModel(detail),
+  };
+}
+
+export function createVersionListViewModel(
+  detail: PlanningRunDetail
+): VersionListViewModel {
+  const status = getRunStatusPresentation(detail.run.status);
+
+  return {
+    state: "single",
+    activeVersionId: detail.run.id,
+    items: [
+      {
+        id: detail.run.id,
+        versionNumber: 1,
+        label: "Version 1",
+        generatedAt:
+          formatDateTime(detail.run.completedAt) ??
+          formatDateTime(detail.run.createdAt) ??
+          "",
+        isCurrent: true,
+        statusLabel: status.label,
+        statusTone: status.tone,
+      },
+    ],
+  };
+}
+
+export function createRegenerationTriggerViewModel(
+  planId: string
+): RegenerationTriggerViewModel {
+  return {
+    availability: "unavailable",
+    unavailableReason: "Regeneration not yet available",
+    planId,
   };
 }
