@@ -389,7 +389,9 @@ export const ModelName = {
   PlannerRunToolResult: 'PlannerRunToolResult',
   PlannerRunOutput: 'PlannerRunOutput',
   PlannerRunError: 'PlannerRunError',
-  TravelPlan: 'TravelPlan'
+  TravelPlan: 'TravelPlan',
+  ItineraryVersion: 'ItineraryVersion',
+  GenerationRun: 'GenerationRun'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "plannerRun" | "plannerRunInput" | "plannerRunToolResult" | "plannerRunOutput" | "plannerRunError" | "travelPlan"
+    modelProps: "plannerRun" | "plannerRunInput" | "plannerRunToolResult" | "plannerRunOutput" | "plannerRunError" | "travelPlan" | "itineraryVersion" | "generationRun"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +855,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ItineraryVersion: {
+      payload: Prisma.$ItineraryVersionPayload<ExtArgs>
+      fields: Prisma.ItineraryVersionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ItineraryVersionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryVersionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ItineraryVersionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryVersionPayload>
+        }
+        findFirst: {
+          args: Prisma.ItineraryVersionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryVersionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ItineraryVersionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryVersionPayload>
+        }
+        findMany: {
+          args: Prisma.ItineraryVersionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryVersionPayload>[]
+        }
+        create: {
+          args: Prisma.ItineraryVersionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryVersionPayload>
+        }
+        createMany: {
+          args: Prisma.ItineraryVersionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ItineraryVersionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryVersionPayload>[]
+        }
+        delete: {
+          args: Prisma.ItineraryVersionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryVersionPayload>
+        }
+        update: {
+          args: Prisma.ItineraryVersionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryVersionPayload>
+        }
+        deleteMany: {
+          args: Prisma.ItineraryVersionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ItineraryVersionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ItineraryVersionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryVersionPayload>[]
+        }
+        upsert: {
+          args: Prisma.ItineraryVersionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ItineraryVersionPayload>
+        }
+        aggregate: {
+          args: Prisma.ItineraryVersionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateItineraryVersion>
+        }
+        groupBy: {
+          args: Prisma.ItineraryVersionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ItineraryVersionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ItineraryVersionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ItineraryVersionCountAggregateOutputType> | number
+        }
+      }
+    }
+    GenerationRun: {
+      payload: Prisma.$GenerationRunPayload<ExtArgs>
+      fields: Prisma.GenerationRunFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GenerationRunFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationRunPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GenerationRunFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationRunPayload>
+        }
+        findFirst: {
+          args: Prisma.GenerationRunFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationRunPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GenerationRunFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationRunPayload>
+        }
+        findMany: {
+          args: Prisma.GenerationRunFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationRunPayload>[]
+        }
+        create: {
+          args: Prisma.GenerationRunCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationRunPayload>
+        }
+        createMany: {
+          args: Prisma.GenerationRunCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GenerationRunCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationRunPayload>[]
+        }
+        delete: {
+          args: Prisma.GenerationRunDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationRunPayload>
+        }
+        update: {
+          args: Prisma.GenerationRunUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationRunPayload>
+        }
+        deleteMany: {
+          args: Prisma.GenerationRunDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GenerationRunUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GenerationRunUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationRunPayload>[]
+        }
+        upsert: {
+          args: Prisma.GenerationRunUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationRunPayload>
+        }
+        aggregate: {
+          args: Prisma.GenerationRunAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGenerationRun>
+        }
+        groupBy: {
+          args: Prisma.GenerationRunGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GenerationRunGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GenerationRunCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GenerationRunCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -974,6 +1124,40 @@ export const TravelPlanScalarFieldEnum = {
 } as const
 
 export type TravelPlanScalarFieldEnum = (typeof TravelPlanScalarFieldEnum)[keyof typeof TravelPlanScalarFieldEnum]
+
+
+export const ItineraryVersionScalarFieldEnum = {
+  id: 'id',
+  travelPlanId: 'travelPlanId',
+  versionNumber: 'versionNumber',
+  content: 'content',
+  generatedAt: 'generatedAt',
+  generationRunId: 'generationRunId',
+  isCurrent: 'isCurrent'
+} as const
+
+export type ItineraryVersionScalarFieldEnum = (typeof ItineraryVersionScalarFieldEnum)[keyof typeof ItineraryVersionScalarFieldEnum]
+
+
+export const GenerationRunScalarFieldEnum = {
+  id: 'id',
+  travelPlanId: 'travelPlanId',
+  status: 'status',
+  inputSnapshot: 'inputSnapshot',
+  providerData: 'providerData',
+  modelProvider: 'modelProvider',
+  modelName: 'modelName',
+  modelVersion: 'modelVersion',
+  durationMs: 'durationMs',
+  errorMessage: 'errorMessage',
+  errorPayload: 'errorPayload',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GenerationRunScalarFieldEnum = (typeof GenerationRunScalarFieldEnum)[keyof typeof GenerationRunScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1129,6 +1313,27 @@ export type ListEnumTravelPlanStatusFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'GenerationRunStatus'
+ */
+export type EnumGenerationRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GenerationRunStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'GenerationRunStatus[]'
+ */
+export type ListEnumGenerationRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GenerationRunStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1242,6 +1447,8 @@ export type GlobalOmitConfig = {
   plannerRunOutput?: Prisma.PlannerRunOutputOmit
   plannerRunError?: Prisma.PlannerRunErrorOmit
   travelPlan?: Prisma.TravelPlanOmit
+  itineraryVersion?: Prisma.ItineraryVersionOmit
+  generationRun?: Prisma.GenerationRunOmit
 }
 
 /* Types for Logging */

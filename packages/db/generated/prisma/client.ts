@@ -71,3 +71,13 @@ export type PlannerRunError = Prisma.PlannerRunErrorModel
  * 
  */
 export type TravelPlan = Prisma.TravelPlanModel
+/**
+ * Model ItineraryVersion
+ * 
+ */
+export type ItineraryVersion = Prisma.ItineraryVersionModel
+/**
+ * Model GenerationRun
+ * 
+ */
+export type GenerationRun = Prisma.GenerationRunModel

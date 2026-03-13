@@ -36,3 +36,13 @@ export const TravelPlanStatus = {
 } as const
 
 export type TravelPlanStatus = (typeof TravelPlanStatus)[keyof typeof TravelPlanStatus]
+
+
+export const GenerationRunStatus = {
+  pending: 'pending',
+  running: 'running',
+  done: 'done',
+  error: 'error'
+} as const
+
+export type GenerationRunStatus = (typeof GenerationRunStatus)[keyof typeof GenerationRunStatus]

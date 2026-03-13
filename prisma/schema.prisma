@@ -30,6 +30,13 @@ enum TravelPlanStatus {
   ERROR
 }
 
+enum GenerationRunStatus {
+  pending
+  running
+  done
+  error
+}
+
 model PlannerRun {
   id                  String           @id @default(uuid()) @db.Uuid
   status              PlannerRunStatus @default(PENDING)
@@ -110,14 +117,56 @@ model PlannerRunError {
 }
 
 model TravelPlan {
-  id        String           @id @default(uuid()) @db.Uuid
-  userId    String
-  status    TravelPlanStatus @default(DRAFT)
-  input     Json
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  id                String             @id @default(uuid()) @db.Uuid
+  userId            String
+  status            TravelPlanStatus   @default(DRAFT)
+  input             Json
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  itineraryVersions ItineraryVersion[]
+  generationRuns    GenerationRun[]
 
   @@index([updatedAt(sort: Desc)])
   @@index([userId, updatedAt(sort: Desc)])
   @@map("travel_plans")
+}
+
+model ItineraryVersion {
+  id              String        @id @default(uuid()) @db.Uuid
+  travelPlanId    String        @db.Uuid
+  versionNumber   Int
+  content         Json
+  generatedAt     DateTime      @default(now())
+  generationRunId String        @unique @db.Uuid
+  isCurrent       Boolean       @default(false)
+  travelPlan      TravelPlan    @relation(fields: [travelPlanId], references: [id], onDelete: Cascade)
+  generationRun   GenerationRun @relation(fields: [generationRunId], references: [id], onDelete: Cascade)
+
+  @@unique([travelPlanId, versionNumber])
+  @@index([travelPlanId, generatedAt(sort: Desc)])
+  @@map("itinerary_versions")
+}
+
+model GenerationRun {
+  id               String              @id @default(uuid()) @db.Uuid
+  travelPlanId     String              @db.Uuid
+  status           GenerationRunStatus @default(pending)
+  inputSnapshot    Json
+  providerData     Json?
+  modelProvider    String?
+  modelName        String?
+  modelVersion     String?
+  durationMs       Int                 @default(0)
+  errorMessage     String?             @db.Text
+  errorPayload     Json?
+  startedAt        DateTime?
+  completedAt      DateTime?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  travelPlan       TravelPlan          @relation(fields: [travelPlanId], references: [id], onDelete: Cascade)
+  itineraryVersion ItineraryVersion?
+
+  @@index([travelPlanId, createdAt(sort: Desc)])
+  @@index([status, createdAt(sort: Desc)])
+  @@map("generation_runs")
 }

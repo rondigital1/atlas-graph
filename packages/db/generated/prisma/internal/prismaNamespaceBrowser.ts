@@ -56,7 +56,9 @@ export const ModelName = {
   PlannerRunToolResult: 'PlannerRunToolResult',
   PlannerRunOutput: 'PlannerRunOutput',
   PlannerRunError: 'PlannerRunError',
-  TravelPlan: 'TravelPlan'
+  TravelPlan: 'TravelPlan',
+  ItineraryVersion: 'ItineraryVersion',
+  GenerationRun: 'GenerationRun'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -157,6 +159,40 @@ export const TravelPlanScalarFieldEnum = {
 } as const
 
 export type TravelPlanScalarFieldEnum = (typeof TravelPlanScalarFieldEnum)[keyof typeof TravelPlanScalarFieldEnum]
+
+
+export const ItineraryVersionScalarFieldEnum = {
+  id: 'id',
+  travelPlanId: 'travelPlanId',
+  versionNumber: 'versionNumber',
+  content: 'content',
+  generatedAt: 'generatedAt',
+  generationRunId: 'generationRunId',
+  isCurrent: 'isCurrent'
+} as const
+
+export type ItineraryVersionScalarFieldEnum = (typeof ItineraryVersionScalarFieldEnum)[keyof typeof ItineraryVersionScalarFieldEnum]
+
+
+export const GenerationRunScalarFieldEnum = {
+  id: 'id',
+  travelPlanId: 'travelPlanId',
+  status: 'status',
+  inputSnapshot: 'inputSnapshot',
+  providerData: 'providerData',
+  modelProvider: 'modelProvider',
+  modelName: 'modelName',
+  modelVersion: 'modelVersion',
+  durationMs: 'durationMs',
+  errorMessage: 'errorMessage',
+  errorPayload: 'errorPayload',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GenerationRunScalarFieldEnum = (typeof GenerationRunScalarFieldEnum)[keyof typeof GenerationRunScalarFieldEnum]
 
 
 export const SortOrder = {

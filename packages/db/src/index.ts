@@ -1,10 +1,13 @@
 export {
+  GenerationRunStatus,
   PlannerRunStatus,
   Prisma,
   TravelPlanStatus,
   ToolExecutionStatus,
 } from "../generated/prisma/client";
 export type {
+  GenerationRun,
+  ItineraryVersion,
   PlannerRun,
   PlannerRunError,
   PlannerRunInput,

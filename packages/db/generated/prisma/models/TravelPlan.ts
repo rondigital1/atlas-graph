@@ -186,6 +186,8 @@ export type TravelPlanWhereInput = {
   input?: Prisma.JsonFilter<"TravelPlan">
   createdAt?: Prisma.DateTimeFilter<"TravelPlan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TravelPlan"> | Date | string
+  itineraryVersions?: Prisma.ItineraryVersionListRelationFilter
+  generationRuns?: Prisma.GenerationRunListRelationFilter
 }
 
 export type TravelPlanOrderByWithRelationInput = {
@@ -195,6 +197,8 @@ export type TravelPlanOrderByWithRelationInput = {
   input?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  itineraryVersions?: Prisma.ItineraryVersionOrderByRelationAggregateInput
+  generationRuns?: Prisma.GenerationRunOrderByRelationAggregateInput
 }
 
 export type TravelPlanWhereUniqueInput = Prisma.AtLeast<{
@@ -207,6 +211,8 @@ export type TravelPlanWhereUniqueInput = Prisma.AtLeast<{
   input?: Prisma.JsonFilter<"TravelPlan">
   createdAt?: Prisma.DateTimeFilter<"TravelPlan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TravelPlan"> | Date | string
+  itineraryVersions?: Prisma.ItineraryVersionListRelationFilter
+  generationRuns?: Prisma.GenerationRunListRelationFilter
 }, "id">
 
 export type TravelPlanOrderByWithAggregationInput = {
@@ -240,6 +246,8 @@ export type TravelPlanCreateInput = {
   input: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  itineraryVersions?: Prisma.ItineraryVersionCreateNestedManyWithoutTravelPlanInput
+  generationRuns?: Prisma.GenerationRunCreateNestedManyWithoutTravelPlanInput
 }
 
 export type TravelPlanUncheckedCreateInput = {
@@ -249,6 +257,8 @@ export type TravelPlanUncheckedCreateInput = {
   input: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  itineraryVersions?: Prisma.ItineraryVersionUncheckedCreateNestedManyWithoutTravelPlanInput
+  generationRuns?: Prisma.GenerationRunUncheckedCreateNestedManyWithoutTravelPlanInput
 }
 
 export type TravelPlanUpdateInput = {
@@ -258,6 +268,8 @@ export type TravelPlanUpdateInput = {
   input?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  itineraryVersions?: Prisma.ItineraryVersionUpdateManyWithoutTravelPlanNestedInput
+  generationRuns?: Prisma.GenerationRunUpdateManyWithoutTravelPlanNestedInput
 }
 
 export type TravelPlanUncheckedUpdateInput = {
@@ -267,6 +279,8 @@ export type TravelPlanUncheckedUpdateInput = {
   input?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  itineraryVersions?: Prisma.ItineraryVersionUncheckedUpdateManyWithoutTravelPlanNestedInput
+  generationRuns?: Prisma.GenerationRunUncheckedUpdateManyWithoutTravelPlanNestedInput
 }
 
 export type TravelPlanCreateManyInput = {
@@ -321,10 +335,193 @@ export type TravelPlanMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type TravelPlanScalarRelationFilter = {
+  is?: Prisma.TravelPlanWhereInput
+  isNot?: Prisma.TravelPlanWhereInput
+}
+
 export type EnumTravelPlanStatusFieldUpdateOperationsInput = {
   set?: $Enums.TravelPlanStatus
 }
 
+export type TravelPlanCreateNestedOneWithoutItineraryVersionsInput = {
+  create?: Prisma.XOR<Prisma.TravelPlanCreateWithoutItineraryVersionsInput, Prisma.TravelPlanUncheckedCreateWithoutItineraryVersionsInput>
+  connectOrCreate?: Prisma.TravelPlanCreateOrConnectWithoutItineraryVersionsInput
+  connect?: Prisma.TravelPlanWhereUniqueInput
+}
+
+export type TravelPlanUpdateOneRequiredWithoutItineraryVersionsNestedInput = {
+  create?: Prisma.XOR<Prisma.TravelPlanCreateWithoutItineraryVersionsInput, Prisma.TravelPlanUncheckedCreateWithoutItineraryVersionsInput>
+  connectOrCreate?: Prisma.TravelPlanCreateOrConnectWithoutItineraryVersionsInput
+  upsert?: Prisma.TravelPlanUpsertWithoutItineraryVersionsInput
+  connect?: Prisma.TravelPlanWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TravelPlanUpdateToOneWithWhereWithoutItineraryVersionsInput, Prisma.TravelPlanUpdateWithoutItineraryVersionsInput>, Prisma.TravelPlanUncheckedUpdateWithoutItineraryVersionsInput>
+}
+
+export type TravelPlanCreateNestedOneWithoutGenerationRunsInput = {
+  create?: Prisma.XOR<Prisma.TravelPlanCreateWithoutGenerationRunsInput, Prisma.TravelPlanUncheckedCreateWithoutGenerationRunsInput>
+  connectOrCreate?: Prisma.TravelPlanCreateOrConnectWithoutGenerationRunsInput
+  connect?: Prisma.TravelPlanWhereUniqueInput
+}
+
+export type TravelPlanUpdateOneRequiredWithoutGenerationRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.TravelPlanCreateWithoutGenerationRunsInput, Prisma.TravelPlanUncheckedCreateWithoutGenerationRunsInput>
+  connectOrCreate?: Prisma.TravelPlanCreateOrConnectWithoutGenerationRunsInput
+  upsert?: Prisma.TravelPlanUpsertWithoutGenerationRunsInput
+  connect?: Prisma.TravelPlanWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TravelPlanUpdateToOneWithWhereWithoutGenerationRunsInput, Prisma.TravelPlanUpdateWithoutGenerationRunsInput>, Prisma.TravelPlanUncheckedUpdateWithoutGenerationRunsInput>
+}
+
+export type TravelPlanCreateWithoutItineraryVersionsInput = {
+  id?: string
+  userId: string
+  status?: $Enums.TravelPlanStatus
+  input: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  generationRuns?: Prisma.GenerationRunCreateNestedManyWithoutTravelPlanInput
+}
+
+export type TravelPlanUncheckedCreateWithoutItineraryVersionsInput = {
+  id?: string
+  userId: string
+  status?: $Enums.TravelPlanStatus
+  input: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  generationRuns?: Prisma.GenerationRunUncheckedCreateNestedManyWithoutTravelPlanInput
+}
+
+export type TravelPlanCreateOrConnectWithoutItineraryVersionsInput = {
+  where: Prisma.TravelPlanWhereUniqueInput
+  create: Prisma.XOR<Prisma.TravelPlanCreateWithoutItineraryVersionsInput, Prisma.TravelPlanUncheckedCreateWithoutItineraryVersionsInput>
+}
+
+export type TravelPlanUpsertWithoutItineraryVersionsInput = {
+  update: Prisma.XOR<Prisma.TravelPlanUpdateWithoutItineraryVersionsInput, Prisma.TravelPlanUncheckedUpdateWithoutItineraryVersionsInput>
+  create: Prisma.XOR<Prisma.TravelPlanCreateWithoutItineraryVersionsInput, Prisma.TravelPlanUncheckedCreateWithoutItineraryVersionsInput>
+  where?: Prisma.TravelPlanWhereInput
+}
+
+export type TravelPlanUpdateToOneWithWhereWithoutItineraryVersionsInput = {
+  where?: Prisma.TravelPlanWhereInput
+  data: Prisma.XOR<Prisma.TravelPlanUpdateWithoutItineraryVersionsInput, Prisma.TravelPlanUncheckedUpdateWithoutItineraryVersionsInput>
+}
+
+export type TravelPlanUpdateWithoutItineraryVersionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTravelPlanStatusFieldUpdateOperationsInput | $Enums.TravelPlanStatus
+  input?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  generationRuns?: Prisma.GenerationRunUpdateManyWithoutTravelPlanNestedInput
+}
+
+export type TravelPlanUncheckedUpdateWithoutItineraryVersionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTravelPlanStatusFieldUpdateOperationsInput | $Enums.TravelPlanStatus
+  input?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  generationRuns?: Prisma.GenerationRunUncheckedUpdateManyWithoutTravelPlanNestedInput
+}
+
+export type TravelPlanCreateWithoutGenerationRunsInput = {
+  id?: string
+  userId: string
+  status?: $Enums.TravelPlanStatus
+  input: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  itineraryVersions?: Prisma.ItineraryVersionCreateNestedManyWithoutTravelPlanInput
+}
+
+export type TravelPlanUncheckedCreateWithoutGenerationRunsInput = {
+  id?: string
+  userId: string
+  status?: $Enums.TravelPlanStatus
+  input: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  itineraryVersions?: Prisma.ItineraryVersionUncheckedCreateNestedManyWithoutTravelPlanInput
+}
+
+export type TravelPlanCreateOrConnectWithoutGenerationRunsInput = {
+  where: Prisma.TravelPlanWhereUniqueInput
+  create: Prisma.XOR<Prisma.TravelPlanCreateWithoutGenerationRunsInput, Prisma.TravelPlanUncheckedCreateWithoutGenerationRunsInput>
+}
+
+export type TravelPlanUpsertWithoutGenerationRunsInput = {
+  update: Prisma.XOR<Prisma.TravelPlanUpdateWithoutGenerationRunsInput, Prisma.TravelPlanUncheckedUpdateWithoutGenerationRunsInput>
+  create: Prisma.XOR<Prisma.TravelPlanCreateWithoutGenerationRunsInput, Prisma.TravelPlanUncheckedCreateWithoutGenerationRunsInput>
+  where?: Prisma.TravelPlanWhereInput
+}
+
+export type TravelPlanUpdateToOneWithWhereWithoutGenerationRunsInput = {
+  where?: Prisma.TravelPlanWhereInput
+  data: Prisma.XOR<Prisma.TravelPlanUpdateWithoutGenerationRunsInput, Prisma.TravelPlanUncheckedUpdateWithoutGenerationRunsInput>
+}
+
+export type TravelPlanUpdateWithoutGenerationRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTravelPlanStatusFieldUpdateOperationsInput | $Enums.TravelPlanStatus
+  input?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  itineraryVersions?: Prisma.ItineraryVersionUpdateManyWithoutTravelPlanNestedInput
+}
+
+export type TravelPlanUncheckedUpdateWithoutGenerationRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTravelPlanStatusFieldUpdateOperationsInput | $Enums.TravelPlanStatus
+  input?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  itineraryVersions?: Prisma.ItineraryVersionUncheckedUpdateManyWithoutTravelPlanNestedInput
+}
+
+
+/**
+ * Count Type TravelPlanCountOutputType
+ */
+
+export type TravelPlanCountOutputType = {
+  itineraryVersions: number
+  generationRuns: number
+}
+
+export type TravelPlanCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  itineraryVersions?: boolean | TravelPlanCountOutputTypeCountItineraryVersionsArgs
+  generationRuns?: boolean | TravelPlanCountOutputTypeCountGenerationRunsArgs
+}
+
+/**
+ * TravelPlanCountOutputType without action
+ */
+export type TravelPlanCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TravelPlanCountOutputType
+   */
+  select?: Prisma.TravelPlanCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * TravelPlanCountOutputType without action
+ */
+export type TravelPlanCountOutputTypeCountItineraryVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ItineraryVersionWhereInput
+}
+
+/**
+ * TravelPlanCountOutputType without action
+ */
+export type TravelPlanCountOutputTypeCountGenerationRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GenerationRunWhereInput
+}
 
 
 export type TravelPlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -334,6 +531,9 @@ export type TravelPlanSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   input?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  itineraryVersions?: boolean | Prisma.TravelPlan$itineraryVersionsArgs<ExtArgs>
+  generationRuns?: boolean | Prisma.TravelPlan$generationRunsArgs<ExtArgs>
+  _count?: boolean | Prisma.TravelPlanCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["travelPlan"]>
 
 export type TravelPlanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -364,10 +564,20 @@ export type TravelPlanSelectScalar = {
 }
 
 export type TravelPlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "status" | "input" | "createdAt" | "updatedAt", ExtArgs["result"]["travelPlan"]>
+export type TravelPlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  itineraryVersions?: boolean | Prisma.TravelPlan$itineraryVersionsArgs<ExtArgs>
+  generationRuns?: boolean | Prisma.TravelPlan$generationRunsArgs<ExtArgs>
+  _count?: boolean | Prisma.TravelPlanCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type TravelPlanIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type TravelPlanIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $TravelPlanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "TravelPlan"
-  objects: {}
+  objects: {
+    itineraryVersions: Prisma.$ItineraryVersionPayload<ExtArgs>[]
+    generationRuns: Prisma.$GenerationRunPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
@@ -769,6 +979,8 @@ readonly fields: TravelPlanFieldRefs;
  */
 export interface Prisma__TravelPlanClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  itineraryVersions<T extends Prisma.TravelPlan$itineraryVersionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TravelPlan$itineraryVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItineraryVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  generationRuns<T extends Prisma.TravelPlan$generationRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TravelPlan$generationRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GenerationRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -821,6 +1033,10 @@ export type TravelPlanFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.TravelPlanOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TravelPlanInclude<ExtArgs> | null
+  /**
    * Filter, which TravelPlan to fetch.
    */
   where: Prisma.TravelPlanWhereUniqueInput
@@ -839,6 +1055,10 @@ export type TravelPlanFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.TravelPlanOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TravelPlanInclude<ExtArgs> | null
+  /**
    * Filter, which TravelPlan to fetch.
    */
   where: Prisma.TravelPlanWhereUniqueInput
@@ -856,6 +1076,10 @@ export type TravelPlanFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the TravelPlan
    */
   omit?: Prisma.TravelPlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TravelPlanInclude<ExtArgs> | null
   /**
    * Filter, which TravelPlan to fetch.
    */
@@ -905,6 +1129,10 @@ export type TravelPlanFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.TravelPlanOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TravelPlanInclude<ExtArgs> | null
+  /**
    * Filter, which TravelPlan to fetch.
    */
   where?: Prisma.TravelPlanWhereInput
@@ -953,6 +1181,10 @@ export type TravelPlanFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.TravelPlanOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TravelPlanInclude<ExtArgs> | null
+  /**
    * Filter, which TravelPlans to fetch.
    */
   where?: Prisma.TravelPlanWhereInput
@@ -995,6 +1227,10 @@ export type TravelPlanCreateArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the TravelPlan
    */
   omit?: Prisma.TravelPlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TravelPlanInclude<ExtArgs> | null
   /**
    * The data needed to create a TravelPlan.
    */
@@ -1043,6 +1279,10 @@ export type TravelPlanUpdateArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the TravelPlan
    */
   omit?: Prisma.TravelPlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TravelPlanInclude<ExtArgs> | null
   /**
    * The data needed to update a TravelPlan.
    */
@@ -1110,6 +1350,10 @@ export type TravelPlanUpsertArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.TravelPlanOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TravelPlanInclude<ExtArgs> | null
+  /**
    * The filter to search for the TravelPlan to update in case it exists.
    */
   where: Prisma.TravelPlanWhereUniqueInput
@@ -1136,6 +1380,10 @@ export type TravelPlanDeleteArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.TravelPlanOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TravelPlanInclude<ExtArgs> | null
+  /**
    * Filter which TravelPlan to delete.
    */
   where: Prisma.TravelPlanWhereUniqueInput
@@ -1156,6 +1404,54 @@ export type TravelPlanDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
+ * TravelPlan.itineraryVersions
+ */
+export type TravelPlan$itineraryVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ItineraryVersion
+   */
+  select?: Prisma.ItineraryVersionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ItineraryVersion
+   */
+  omit?: Prisma.ItineraryVersionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ItineraryVersionInclude<ExtArgs> | null
+  where?: Prisma.ItineraryVersionWhereInput
+  orderBy?: Prisma.ItineraryVersionOrderByWithRelationInput | Prisma.ItineraryVersionOrderByWithRelationInput[]
+  cursor?: Prisma.ItineraryVersionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ItineraryVersionScalarFieldEnum | Prisma.ItineraryVersionScalarFieldEnum[]
+}
+
+/**
+ * TravelPlan.generationRuns
+ */
+export type TravelPlan$generationRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GenerationRun
+   */
+  select?: Prisma.GenerationRunSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GenerationRun
+   */
+  omit?: Prisma.GenerationRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GenerationRunInclude<ExtArgs> | null
+  where?: Prisma.GenerationRunWhereInput
+  orderBy?: Prisma.GenerationRunOrderByWithRelationInput | Prisma.GenerationRunOrderByWithRelationInput[]
+  cursor?: Prisma.GenerationRunWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GenerationRunScalarFieldEnum | Prisma.GenerationRunScalarFieldEnum[]
+}
+
+/**
  * TravelPlan without action
  */
 export type TravelPlanDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1167,4 +1463,8 @@ export type TravelPlanDefaultArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the TravelPlan
    */
   omit?: Prisma.TravelPlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TravelPlanInclude<ExtArgs> | null
 }
