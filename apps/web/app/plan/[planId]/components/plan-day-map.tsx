@@ -370,7 +370,7 @@ function MapContent({
 }
 
 export function PlanDayMap({ days }: Props) {
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  const apiKey = process.env["NEXT_PUBLIC_GOOGLE_MAPS_API_KEY"];
   const [selectedDayId, setSelectedDayId] = useState(days[0]?.id ?? "");
   const [selectedActivity, setSelectedActivity] = useState<number | null>(null);
 
