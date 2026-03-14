@@ -1,7 +1,7 @@
 import { PlaceCandidateSchema } from "@atlas-graph/core/schemas";
 import type { PlaceCandidate, TripRequest } from "@atlas-graph/core/types";
 
-import type { PlacesProvider } from "../../services/interfaces";
+import type { PlacesProvider } from "../ports";
 import { buildMockPlaceCandidates } from "./mock-data";
 
 const PlaceCandidateListSchema = PlaceCandidateSchema.array();

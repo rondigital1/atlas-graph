@@ -1,7 +1,7 @@
 import { WeatherSummarySchema } from "@atlas-graph/core/schemas";
 import type { TripRequest, WeatherSummary } from "@atlas-graph/core/types";
 
-import type { WeatherProvider } from "../../services/interfaces";
+import type { WeatherProvider } from "../ports";
 import { buildMockWeatherSummary } from "./mock-data";
 
 export class MockWeatherProvider implements WeatherProvider {

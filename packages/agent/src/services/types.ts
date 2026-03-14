@@ -3,7 +3,7 @@ import type {
   DestinationInfoProvider,
   PlacesProvider,
   WeatherProvider,
-} from "./interfaces";
+} from "../providers/ports";
 import type { PlanningRunRepository } from "./planning-run-repository";
 import type {
   DestinationSummary,

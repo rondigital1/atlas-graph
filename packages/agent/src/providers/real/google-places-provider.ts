@@ -5,7 +5,7 @@ import {
   normalizeAndDeduplicatePlaceCandidates,
 } from "../../normalization";
 import { normalizeComparisonText } from "../../normalization/text-cleaning";
-import type { PlacesProvider } from "../../services/interfaces";
+import type { PlacesProvider } from "../ports";
 import {
   mapGooglePlaceToCandidate,
   type MappedGooglePlaceCandidate,

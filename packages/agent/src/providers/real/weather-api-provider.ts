@@ -1,7 +1,7 @@
 import type { TripRequest, WeatherSummary } from "@atlas-graph/core/types";
 
 import { cleanOptionalText } from "../../normalization";
-import type { WeatherProvider } from "../../services/interfaces";
+import type { WeatherProvider } from "../ports";
 import {
   WeatherApiClient,
   type WeatherApiForecastInput,
@@ -69,4 +69,3 @@ export class WeatherApiProvider implements WeatherProvider {
     }
   }
 }
-

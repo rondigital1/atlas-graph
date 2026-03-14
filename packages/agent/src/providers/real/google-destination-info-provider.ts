@@ -9,7 +9,7 @@ import {
   buildSummary,
   LANDMARK_QUERY_DEFINITION,
 } from "./google-destination-summary-builder";
-import type { DestinationInfoProvider } from "../../services/interfaces";
+import type { DestinationInfoProvider } from "../ports";
 import {
   GoogleGeocodingClient,
   type ResolvedGoogleDestination,
@@ -118,5 +118,4 @@ export class GoogleDestinationInfoProvider implements DestinationInfoProvider {
     };
   }
 }
-
 

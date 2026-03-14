@@ -1,7 +1,7 @@
 import { DestinationSummarySchema } from "@atlas-graph/core/schemas";
 import type { DestinationSummary, TripRequest } from "@atlas-graph/core/types";
 
-import type { DestinationInfoProvider } from "../../services/interfaces";
+import type { DestinationInfoProvider } from "../ports";
 import { buildMockDestinationSummary } from "./mock-data";
 
 export class MockDestinationInfoProvider implements DestinationInfoProvider {
