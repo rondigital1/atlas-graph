@@ -18,6 +18,62 @@ export const itineraryDays: DayItem[] = [
     dining: "Can Culleretes - traditional Catalan dinner",
     neighborhood: "Gothic Quarter",
     notes: "Check-in after 3pm. Pre-book dinner.",
+    daySummary:
+      "Arrive in Barcelona and settle into the historic Gothic Quarter. Ease into the city with a market stroll and rooftop sunset.",
+    morningActivities: [
+      {
+        id: "1-m-1",
+        name: "Airport Transfer to Gothic Quarter",
+        description:
+          "Private transfer from BCN El Prat to your hotel in the Gothic Quarter. Driver meets you at arrivals.",
+        tags: ["Transfer"],
+        duration: "45 min",
+        activityType: "transit",
+      },
+    ],
+    afternoonActivities: [
+      {
+        id: "1-a-1",
+        name: "Las Ramblas Walk",
+        description:
+          "Stroll down Barcelona's iconic tree-lined boulevard from Placa Catalunya to the waterfront.",
+        tags: ["Outdoor", "Free"],
+        duration: "1 hour",
+        activityType: "leisure",
+      },
+      {
+        id: "1-a-2",
+        name: "La Boqueria Market",
+        description:
+          "Explore the famous covered market bursting with fresh produce, tapas bars, and local delicacies.",
+        tags: ["Must See", "Culinary"],
+        duration: "1.5 hours",
+        costRange: "$",
+        activityType: "food",
+      },
+    ],
+    eveningActivities: [
+      {
+        id: "1-e-1",
+        name: "Rooftop Sunset Drinks",
+        description:
+          "Craft cocktails with panoramic views over Barcelona's skyline at a boutique hotel rooftop in El Born.",
+        tags: ["Romantic", "Views"],
+        duration: "1.5 hours",
+        costRange: "$$",
+        activityType: "leisure",
+      },
+      {
+        id: "1-e-2",
+        name: "Can Culleretes Dinner",
+        description:
+          "One of Barcelona's oldest restaurants, serving traditional Catalan cuisine since 1786.",
+        tags: ["Historic", "Culinary"],
+        duration: "2 hours",
+        costRange: "$$",
+        activityType: "food",
+      },
+    ],
   },
   {
     id: "2",
@@ -29,6 +85,55 @@ export const itineraryDays: DayItem[] = [
     evening: "Tapas crawl in El Born district",
     dining: "Cal Pep - fresh seafood tapas",
     neighborhood: "Eixample / El Born",
+    daySummary:
+      "A full day of Gaudi masterpieces — from the soaring Sagrada Familia to the whimsical mosaics of Park Guell, ending with a lively tapas crawl.",
+    morningActivities: [
+      {
+        id: "2-m-1",
+        name: "Sagrada Familia",
+        description:
+          "Skip-the-line timed entry at 9am to Gaudi's unfinished masterpiece. Tower access included.",
+        tags: ["Must See", "Book Ahead"],
+        duration: "2 hours",
+        costRange: "$$$",
+        activityType: "landmark",
+        linkUrl: "https://sagradafamilia.org",
+        linkLabel: "Book tickets",
+      },
+    ],
+    afternoonActivities: [
+      {
+        id: "2-a-1",
+        name: "Park Guell",
+        description:
+          "Explore Gaudi's colorful mosaic park with sweeping views over Barcelona. Monumental zone requires tickets.",
+        tags: ["Scenic", "Outdoor"],
+        duration: "1.5 hours",
+        costRange: "$",
+        activityType: "landmark",
+      },
+      {
+        id: "2-a-2",
+        name: "Gracia Neighborhood",
+        description:
+          "Wander the bohemian streets of Gracia — indie boutiques, plaza cafes, and local street art.",
+        tags: ["Local Favorite", "Free"],
+        duration: "1.5 hours",
+        activityType: "leisure",
+      },
+    ],
+    eveningActivities: [
+      {
+        id: "2-e-1",
+        name: "El Born Tapas Crawl",
+        description:
+          "Hit 3-4 tapas bars across El Born district with local specialties at each stop.",
+        tags: ["Culinary", "Nightlife"],
+        duration: "3 hours",
+        costRange: "$$",
+        activityType: "food",
+      },
+    ],
   },
   {
     id: "3",
@@ -40,6 +145,55 @@ export const itineraryDays: DayItem[] = [
     evening: "Flamenco show at Palau de la Musica",
     dining: "La Mar Salada - paella by the beach",
     neighborhood: "El Born / Barceloneta",
+    daySummary:
+      "Art, beach, and culture — from Picasso's early works to sun-soaked Barceloneta and an evening flamenco performance.",
+    morningActivities: [
+      {
+        id: "3-m-1",
+        name: "Picasso Museum",
+        description:
+          "Comprehensive collection of Picasso's formative years in five adjoining medieval palaces.",
+        tags: ["Culture", "Must See"],
+        duration: "2 hours",
+        costRange: "$$",
+        activityType: "culture",
+      },
+      {
+        id: "3-m-2",
+        name: "El Born Cultural Center",
+        description:
+          "Former market hall turned archaeological site revealing 18th-century Barcelona beneath glass floors.",
+        tags: ["Historic", "Free"],
+        duration: "45 min",
+        activityType: "culture",
+      },
+    ],
+    afternoonActivities: [
+      {
+        id: "3-a-1",
+        name: "Barceloneta Beach",
+        description:
+          "Relax on Barcelona's most popular urban beach. Rent a sunbed or swim in the Mediterranean.",
+        tags: ["Outdoor", "Relaxing"],
+        duration: "3 hours",
+        costRange: "$",
+        activityType: "leisure",
+      },
+    ],
+    eveningActivities: [
+      {
+        id: "3-e-1",
+        name: "Flamenco at Palau de la Musica",
+        description:
+          "Intimate flamenco performance inside one of the world's most beautiful concert halls.",
+        tags: ["Romantic", "Must See"],
+        duration: "1.5 hours",
+        costRange: "$$",
+        activityType: "culture",
+        linkUrl: "https://palaumusica.cat",
+        linkLabel: "View showtimes",
+      },
+    ],
   },
   {
     id: "4",
@@ -53,6 +207,52 @@ export const itineraryDays: DayItem[] = [
     dining: "Le Vintage - casual French bistro",
     neighborhood: "Avignon Centre",
     notes: "TGV train departs 8:42am. Book first class.",
+    daySummary:
+      "Travel day — high-speed TGV from Barcelona to Avignon. Settle into your Provencal hotel and explore the medieval old town.",
+    morningActivities: [
+      {
+        id: "4-m-1",
+        name: "TGV Barcelona to Avignon",
+        description:
+          "High-speed train from Barcelona Sants to Avignon TGV. Book first class for extra legroom and quiet car.",
+        tags: ["Transit", "Book Ahead"],
+        duration: "4h 15m",
+        costRange: "$$",
+        activityType: "transit",
+      },
+    ],
+    afternoonActivities: [
+      {
+        id: "4-a-1",
+        name: "Check into La Mirande",
+        description:
+          "Arrive at your historic hotel steps from Palais des Papes. Take time to settle in and freshen up.",
+        tags: ["Hotel"],
+        duration: "1 hour",
+        activityType: "leisure",
+      },
+    ],
+    eveningActivities: [
+      {
+        id: "4-e-1",
+        name: "Old Town Evening Stroll",
+        description:
+          "Walk the cobblestone streets of Avignon, past Place de l'Horloge and the famous half-bridge Pont d'Avignon.",
+        tags: ["Free", "Scenic"],
+        duration: "1.5 hours",
+        activityType: "leisure",
+      },
+      {
+        id: "4-e-2",
+        name: "Dinner at Le Vintage",
+        description:
+          "Casual French bistro near Place des Corps Saints with seasonal Provencal dishes.",
+        tags: ["Culinary"],
+        duration: "1.5 hours",
+        costRange: "$$",
+        activityType: "food",
+      },
+    ],
   },
   {
     id: "5",
@@ -65,6 +265,62 @@ export const itineraryDays: DayItem[] = [
     dining: "Picnic lunch from local markets",
     neighborhood: "Luberon Valley",
     notes: "Rent car for day trip recommended.",
+    daySummary:
+      "Full-day road trip through the stunning Luberon Valley — perched hilltop villages, ochre cliffs, and a rustic market picnic.",
+    morningActivities: [
+      {
+        id: "5-m-1",
+        name: "Drive to Luberon",
+        description:
+          "Pick up rental car and drive through lavender fields toward the first hilltop village.",
+        tags: ["Scenic", "Road Trip"],
+        duration: "1 hour",
+        costRange: "$$",
+        activityType: "transit",
+      },
+      {
+        id: "5-m-2",
+        name: "Gordes Village",
+        description:
+          "Explore one of France's most beautiful villages, perched dramatically on a rocky hillside.",
+        tags: ["Must See", "Scenic"],
+        duration: "1.5 hours",
+        activityType: "landmark",
+      },
+    ],
+    afternoonActivities: [
+      {
+        id: "5-a-1",
+        name: "Roussillon Ochre Trails",
+        description:
+          "Hike through surreal ochre quarries with vivid red, orange, and yellow rock formations.",
+        tags: ["Nature", "Outdoor"],
+        duration: "2 hours",
+        costRange: "$",
+        activityType: "nature",
+      },
+      {
+        id: "5-a-2",
+        name: "Market Picnic",
+        description:
+          "Grab cheese, bread, charcuterie, and wine from a village market for a scenic hillside lunch.",
+        tags: ["Budget-Friendly", "Local Favorite"],
+        duration: "1 hour",
+        costRange: "$",
+        activityType: "food",
+      },
+    ],
+    eveningActivities: [
+      {
+        id: "5-e-1",
+        name: "Return to Avignon",
+        description:
+          "Scenic drive back to Avignon through the golden-hour countryside.",
+        tags: ["Transit"],
+        duration: "1 hour",
+        activityType: "transit",
+      },
+    ],
   },
   {
     id: "6",
@@ -76,6 +332,46 @@ export const itineraryDays: DayItem[] = [
     evening: "Dinner in Avignon",
     dining: "La Mirande - fine dining experience",
     neighborhood: "Avignon / Chateauneuf",
+    daySummary:
+      "Roman engineering and world-class wine — visit the towering Pont du Gard aqueduct, then taste legendary Chateauneuf-du-Pape reds.",
+    morningActivities: [
+      {
+        id: "6-m-1",
+        name: "Pont du Gard",
+        description:
+          "Marvel at the 2,000-year-old Roman aqueduct bridge, one of the best-preserved in the world. Walk across the top tier.",
+        tags: ["Must See", "Historic"],
+        duration: "2.5 hours",
+        costRange: "$",
+        activityType: "landmark",
+        linkUrl: "https://pontdugard.fr",
+        linkLabel: "Learn more",
+      },
+    ],
+    afternoonActivities: [
+      {
+        id: "6-a-1",
+        name: "Chateauneuf-du-Pape Wine Tasting",
+        description:
+          "Private tasting at a family-run vineyard with cellar tour. Sample the region's iconic reds.",
+        tags: ["Premium", "Local Favorite"],
+        duration: "2.5 hours",
+        costRange: "$$$",
+        activityType: "food",
+      },
+    ],
+    eveningActivities: [
+      {
+        id: "6-e-1",
+        name: "Fine Dining at La Mirande",
+        description:
+          "Michelin-starred dinner in your hotel's acclaimed restaurant — multi-course Provencal tasting menu.",
+        tags: ["Fine Dining", "Splurge"],
+        duration: "2.5 hours",
+        costRange: "$$$$",
+        activityType: "food",
+      },
+    ],
   },
   {
     id: "7",
@@ -88,6 +384,52 @@ export const itineraryDays: DayItem[] = [
     evening: "Promenade des Anglais sunset walk",
     dining: "Chez Pipo - authentic socca",
     neighborhood: "Old Nice",
+    daySummary:
+      "Train along the Mediterranean coast to Nice. Spend the afternoon exploring the colorful old town and catch a seaside sunset.",
+    morningActivities: [
+      {
+        id: "7-m-1",
+        name: "Train to Nice",
+        description:
+          "Scenic 3-hour TGV journey from Avignon to Nice Ville station, hugging the coast for the final stretch.",
+        tags: ["Transit", "Scenic"],
+        duration: "3 hours",
+        costRange: "$$",
+        activityType: "transit",
+      },
+    ],
+    afternoonActivities: [
+      {
+        id: "7-a-1",
+        name: "Vieux Nice Exploration",
+        description:
+          "Wander narrow alleys filled with Baroque churches, gelato shops, and hidden squares in Nice's old town.",
+        tags: ["Free", "Culture"],
+        duration: "2 hours",
+        activityType: "leisure",
+      },
+    ],
+    eveningActivities: [
+      {
+        id: "7-e-1",
+        name: "Promenade des Anglais Sunset",
+        description:
+          "Walk along the iconic waterfront promenade as the sun sets over the Baie des Anges.",
+        tags: ["Romantic", "Free"],
+        duration: "1 hour",
+        activityType: "leisure",
+      },
+      {
+        id: "7-e-2",
+        name: "Dinner at Chez Pipo",
+        description:
+          "Try authentic Nicoise socca (chickpea flatbread) at this beloved local institution since 1923.",
+        tags: ["Local Favorite", "Budget-Friendly"],
+        duration: "1 hour",
+        costRange: "$",
+        activityType: "food",
+      },
+    ],
   },
   {
     id: "8",
@@ -99,6 +441,53 @@ export const itineraryDays: DayItem[] = [
     evening: "Dinner in Nice port area",
     dining: "Jan - modern Mediterranean",
     neighborhood: "Old Nice / Eze",
+    daySummary:
+      "Market morning and hilltop village — browse Cours Saleya's flowers and produce, then visit the medieval clifftop village of Eze.",
+    morningActivities: [
+      {
+        id: "8-m-1",
+        name: "Cours Saleya Market",
+        description:
+          "Nice's vibrant outdoor market with fresh flowers, produce, olives, and local specialties every morning.",
+        tags: ["Local Favorite", "Culinary"],
+        duration: "1.5 hours",
+        costRange: "$",
+        activityType: "food",
+      },
+      {
+        id: "8-m-2",
+        name: "Castle Hill Viewpoint",
+        description:
+          "Climb to the top of Colline du Chateau for panoramic views of Nice, the port, and the coastline.",
+        tags: ["Views", "Free"],
+        duration: "1 hour",
+        activityType: "nature",
+      },
+    ],
+    afternoonActivities: [
+      {
+        id: "8-a-1",
+        name: "Eze Village",
+        description:
+          "Medieval hilltop village with exotic botanical gardens, artisan shops, and views down to the sea.",
+        tags: ["Scenic", "Hidden Gem"],
+        duration: "3 hours",
+        costRange: "$",
+        activityType: "landmark",
+      },
+    ],
+    eveningActivities: [
+      {
+        id: "8-e-1",
+        name: "Dinner at Jan",
+        description:
+          "Michelin-starred South African-French fusion in Nice's port district. Creative tasting menu.",
+        tags: ["Fine Dining", "Unique"],
+        duration: "2 hours",
+        costRange: "$$$$",
+        activityType: "food",
+      },
+    ],
   },
   {
     id: "9",
@@ -110,6 +499,63 @@ export const itineraryDays: DayItem[] = [
     evening: "Final dinner in Old Nice",
     dining: "Olive et Artichaut - farm to table",
     neighborhood: "Cimiez / Beach",
+    daySummary:
+      "A relaxed final full day — art at the Matisse Museum, beach time or an optional Monaco excursion, and a farewell dinner.",
+    morningActivities: [
+      {
+        id: "9-m-1",
+        name: "Matisse Museum",
+        description:
+          "Beautiful collection of Matisse paintings, drawings, and cut-outs in a 17th-century Genoese villa.",
+        tags: ["Culture", "Relaxing"],
+        duration: "1.5 hours",
+        costRange: "$",
+        activityType: "culture",
+      },
+      {
+        id: "9-m-2",
+        name: "Cimiez Gardens",
+        description:
+          "Peaceful olive groves and Roman ruins surrounding the museum. Perfect morning stroll.",
+        tags: ["Free", "Nature"],
+        duration: "45 min",
+        activityType: "nature",
+      },
+    ],
+    afternoonActivities: [
+      {
+        id: "9-a-1",
+        name: "Beach Relaxation",
+        description:
+          "Soak up the sun on a private or public beach along the Promenade des Anglais.",
+        tags: ["Relaxing", "Outdoor"],
+        duration: "2-3 hours",
+        costRange: "$",
+        activityType: "leisure",
+      },
+      {
+        id: "9-a-2",
+        name: "Monaco Day Trip (Optional)",
+        description:
+          "Take the coastal train to Monte Carlo — see the casino, oceanographic museum, and prince's palace.",
+        tags: ["Luxurious", "Popular"],
+        duration: "Half day",
+        costRange: "$$",
+        activityType: "landmark",
+      },
+    ],
+    eveningActivities: [
+      {
+        id: "9-e-1",
+        name: "Farewell Dinner at Olive et Artichaut",
+        description:
+          "Farm-to-table Nicoise cuisine in a cozy Old Nice setting. The perfect last supper.",
+        tags: ["Culinary", "Local Favorite"],
+        duration: "2 hours",
+        costRange: "$$",
+        activityType: "food",
+      },
+    ],
   },
   {
     id: "10",
@@ -122,6 +568,40 @@ export const itineraryDays: DayItem[] = [
     evening: "Flight home",
     neighborhood: "Nice Airport",
     notes: "Flight departs 4:30pm. Arrive airport by 2pm.",
+    daySummary:
+      "Departure day — enjoy a leisurely final breakfast, then transfer to Nice airport for your flight home.",
+    morningActivities: [
+      {
+        id: "10-m-1",
+        name: "Leisurely Breakfast",
+        description:
+          "Final croissants and cafe au lait at your hotel or a favorite cafe before packing up.",
+        tags: ["Relaxing"],
+        duration: "1.5 hours",
+        activityType: "leisure",
+      },
+    ],
+    afternoonActivities: [
+      {
+        id: "10-a-1",
+        name: "Airport Transfer",
+        description:
+          "Private transfer or tram to Nice Cote d'Azur airport (NCE). Allow 2 hours before departure.",
+        tags: ["Transit"],
+        duration: "30 min",
+        activityType: "transit",
+      },
+    ],
+    eveningActivities: [
+      {
+        id: "10-e-1",
+        name: "Flight Home",
+        description: "Depart Nice for your return journey.",
+        tags: ["Transit"],
+        duration: "10+ hours",
+        activityType: "transit",
+      },
+    ],
   },
 ];
 

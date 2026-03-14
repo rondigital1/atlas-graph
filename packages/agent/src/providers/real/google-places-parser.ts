@@ -1,6 +1,10 @@
 import { cleanOptionalText } from "../../normalization/text-cleaning";
-import { asRecord, asStringArray } from "./type-parsing";
-import type { GooglePlaceSearchResult, GooglePlaceAddressComponent } from "./google-places-client";
+import { asNumber, asRecord, asStringArray } from "./type-parsing";
+import type {
+  GooglePlaceAddressComponent,
+  GooglePlaceLocation,
+  GooglePlaceSearchResult,
+} from "./google-places-client";
 
 export function parseGooglePlacesResponse(payload: unknown): GooglePlaceSearchResult[] {
   const record = asRecord(payload);
@@ -32,11 +36,24 @@ function parsePlace(value: unknown): GooglePlaceSearchResult | null {
     return null;
   }
 
+  const id = cleanOptionalText(place["id"]);
+  const formattedAddress = cleanOptionalText(place["formattedAddress"]);
+  const primaryType = cleanOptionalText(place["primaryType"]);
+  const types = asStringArray(place["types"]);
+  const location = parseLocation(place["location"]);
+  const rating = asNumber(place["rating"]);
+  const priceLevel = cleanOptionalText(place["priceLevel"]);
+
   return {
     displayName,
-    formattedAddress: cleanOptionalText(place["formattedAddress"]),
-    primaryType: cleanOptionalText(place["primaryType"]),
     addressComponents: parseAddressComponents(place["addressComponents"]),
+    ...(id ? { id } : {}),
+    ...(formattedAddress ? { formattedAddress } : {}),
+    ...(primaryType ? { primaryType } : {}),
+    ...(types.length > 0 ? { types } : {}),
+    ...(location ? { location } : {}),
+    ...(rating !== undefined ? { rating } : {}),
+    ...(priceLevel ? { priceLevel } : {}),
   };
 }
 
@@ -61,4 +78,19 @@ function parseAddressComponents(value: unknown): GooglePlaceAddressComponent[] {
       };
     })
     .filter((item): item is GooglePlaceAddressComponent => item !== null);
+}
+
+function parseLocation(value: unknown): GooglePlaceLocation | undefined {
+  const location = asRecord(value);
+  const lat = asNumber(location?.["latitude"]);
+  const lng = asNumber(location?.["longitude"]);
+
+  if (lat === undefined || lng === undefined) {
+    return undefined;
+  }
+
+  return {
+    lat,
+    lng,
+  };
 }

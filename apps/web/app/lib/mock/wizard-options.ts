@@ -175,3 +175,102 @@ export const SURPRISE_SELECTIONS: TripSelections = {
 
 export const SURPRISE_PROMPT =
   "Surprise me with a memorable trip focused on authentic local experiences and great food.";
+
+// --- Surprise Me randomization ---
+
+const SURPRISE_CITIES = [
+  "Tokyo, Japan",
+  "Lisbon, Portugal",
+  "Buenos Aires, Argentina",
+  "Cape Town, South Africa",
+  "Kyoto, Japan",
+  "Reykjavik, Iceland",
+  "Bangkok, Thailand",
+  "New York, USA",
+  "Barcelona, Spain",
+  "Havana, Cuba",
+  "Sydney, Australia",
+  "Prague, Czech Republic",
+  "Mexico City, Mexico",
+  "Santorini, Greece",
+  "Nairobi, Kenya",
+  "Vienna, Austria",
+  "Seoul, South Korea",
+  "Dubrovnik, Croatia",
+  "Cartagena, Colombia",
+  "Amsterdam, Netherlands",
+  "Chiang Mai, Thailand",
+  "Rio de Janeiro, Brazil",
+];
+
+const SURPRISE_PROMPTS = [
+  "Surprise me with a memorable trip focused on authentic local experiences and great food.",
+  "I want an unforgettable adventure exploring hidden gems and vibrant culture.",
+  "Plan me a spontaneous getaway full of local flavors and surprising discoveries.",
+  "Take me somewhere amazing — I'm open to anything memorable and unique.",
+  "I want to explore like a local and discover things most tourists miss.",
+];
+
+function pickRandom<T>(arr: readonly T[], count: number): T[] {
+  const shuffled = [...arr].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
+
+function pickOne<T>(arr: readonly T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)]!;
+}
+
+let lastSurpriseCity = "";
+
+export function generateSurprise(): {
+  destination: string;
+  startDate: string;
+  endDate: string;
+  prompt: string;
+  selections: TripSelections;
+} {
+  // Pick a city different from the last one
+  let city = pickOne(SURPRISE_CITIES);
+  while (city === lastSurpriseCity && SURPRISE_CITIES.length > 1) {
+    city = pickOne(SURPRISE_CITIES);
+  }
+  lastSurpriseCity = city;
+
+  // Random duration 3–14 days, starting ~30 days from now
+  const duration = 3 + Math.floor(Math.random() * 12);
+  const start = new Date();
+  start.setDate(start.getDate() + 25 + Math.floor(Math.random() * 15));
+  const end = new Date(start);
+  end.setDate(end.getDate() + duration);
+
+  const formatDate = (d: Date): string => d.toISOString().slice(0, 10);
+
+  const destTypes = pickRandom(
+    DESTINATION_TYPES.map((d) => d.id),
+    2 + Math.floor(Math.random() * 2)
+  );
+  const interests = pickRandom(
+    INTERESTS.map((i) => i.id),
+    3 + Math.floor(Math.random() * 3)
+  );
+
+  return {
+    destination: city,
+    startDate: formatDate(start),
+    endDate: formatDate(end),
+    prompt: pickOne(SURPRISE_PROMPTS),
+    selections: {
+      destinationType: destTypes,
+      tripType: [pickOne(TRIP_TYPES.map((t) => t.id))],
+      budget: [pickOne(BUDGET_LEVELS.map((b) => b.id))],
+      flightPreference: [pickOne(FLIGHT_PREFERENCES.map((f) => f.id))],
+      accommodation: [pickOne(ACCOMMODATION_TYPES.map((a) => a.id))],
+      travelPace: [pickOne(TRAVEL_PACE.map((p) => p.id))],
+      interests,
+      constraints: pickRandom(
+        CONSTRAINTS.map((c) => c.id),
+        Math.floor(Math.random() * 3)
+      ),
+    },
+  };
+}

@@ -1,4 +1,13 @@
 export {
+  GooglePlacesProvider,
+  type GooglePlacesProviderDependencies,
+  type GooglePlacesProviderOptions,
+} from "./google-places-provider";
+export {
+  buildDestinationPlacesFieldMask,
+  buildPlaceCandidateFieldMask,
+} from "./google-places-field-mask";
+export {
   GoogleDestinationInfoProvider,
   type GoogleDestinationInfoProviderDependencies,
   type GoogleDestinationInfoProviderOptions,
@@ -10,8 +19,5 @@ export {
 } from "./google-geocoding-client";
 export {
   GooglePlacesClient,
-  type GooglePlaceAddressComponent,
-  type GooglePlaceSearchResult,
   type GooglePlacesClientOptions,
-  type GooglePlacesSearchTextInput,
 } from "./google-places-client";

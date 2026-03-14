@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { TravelPlanningService } from "../../services/travel-planning-service";
 import { GoogleDestinationInfoProvider } from "./google-destination-info-provider";
+import type { GooglePlaceSearchResult } from "./google-places-client";
 
 function createTripRequest(overrides: Partial<TripRequest> = {}): TripRequest {
   return TripRequestSchema.parse({
@@ -36,7 +37,14 @@ describe("GoogleDestinationInfoProvider", () => {
       geocodeDestination: vi.fn().mockResolvedValue(createResolvedDestination()),
     };
     const placesClient = {
-      searchText: vi.fn(async (input: { textQuery: string }) => {
+      searchText: vi.fn(
+        async (input: {
+          textQuery: string;
+          center: {
+            lat: number;
+            lng: number;
+          };
+        }): Promise<GooglePlaceSearchResult[]> => {
         if (input.textQuery.startsWith("neighborhoods")) {
           return [
             {
@@ -103,7 +111,8 @@ describe("GoogleDestinationInfoProvider", () => {
             addressComponents: [],
           },
         ];
-      }),
+        }
+      ),
     };
     const provider = new GoogleDestinationInfoProvider({
       geocodingClient,
@@ -173,7 +182,14 @@ describe("GoogleDestinationInfoProvider", () => {
         geocodeDestination: vi.fn().mockResolvedValue(createResolvedDestination()),
       },
       placesClient: {
-        searchText: vi.fn(async (input: { textQuery: string }) => {
+        searchText: vi.fn(
+          async (input: {
+            textQuery: string;
+            center: {
+              lat: number;
+              lng: number;
+            };
+          }): Promise<GooglePlaceSearchResult[]> => {
           if (input.textQuery.startsWith("top attractions")) {
             return [
               {
@@ -198,7 +214,8 @@ describe("GoogleDestinationInfoProvider", () => {
               ],
             },
           ];
-        }),
+          }
+        ),
       },
     });
     const service = new TravelPlanningService({
