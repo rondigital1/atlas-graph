@@ -1,5 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import {
+  buildDestinationPlacesFieldMask,
+  buildPlaceCandidateFieldMask,
+} from "./google-places-field-mask";
 import { GooglePlacesClient } from "./google-places-client";
 
 describe("GooglePlacesClient", () => {
@@ -7,7 +11,7 @@ describe("GooglePlacesClient", () => {
     vi.unstubAllGlobals();
   });
 
-  it("calls text search with the configured field mask and parses the response", async () => {
+  it("uses the destination field mask by default and preserves destination-summary behavior", async () => {
     const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(
       Response.json({
         places: [
@@ -61,8 +65,7 @@ describe("GooglePlacesClient", () => {
         headers: {
           "Content-Type": "application/json",
           "X-Goog-Api-Key": "test-key",
-          "X-Goog-FieldMask":
-            "places.displayName,places.formattedAddress,places.addressComponents,places.primaryType",
+          "X-Goog-FieldMask": buildDestinationPlacesFieldMask(),
         },
       })
     );
@@ -81,6 +84,74 @@ describe("GooglePlacesClient", () => {
           radius: 25000,
         },
       },
+    });
+  });
+
+  it("accepts a caller-supplied field mask and page size for place-candidate retrieval", async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(
+      Response.json({
+        places: [
+          {
+            id: "place-123",
+            displayName: {
+              text: "Hotel Test",
+            },
+            formattedAddress: "1 Main St, Paris, France",
+            primaryType: "lodging",
+            types: ["lodging", "point_of_interest"],
+            rating: 4.4,
+            priceLevel: "PRICE_LEVEL_EXPENSIVE",
+            location: {
+              latitude: 48.8566,
+              longitude: 2.3522,
+            },
+          },
+        ],
+      })
+    );
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    const client = new GooglePlacesClient({ apiKey: "test-key" });
+    const result = await client.searchText({
+      textQuery: "hotels in Paris",
+      fieldMask: buildPlaceCandidateFieldMask(),
+      pageSize: 2,
+    });
+
+    expect(result).toEqual([
+      {
+        id: "place-123",
+        displayName: "Hotel Test",
+        formattedAddress: "1 Main St, Paris, France",
+        primaryType: "lodging",
+        types: ["lodging", "point_of_interest"],
+        addressComponents: [],
+        rating: 4.4,
+        priceLevel: "PRICE_LEVEL_EXPENSIVE",
+        location: {
+          lat: 48.8566,
+          lng: 2.3522,
+        },
+      },
+    ]);
+    expect(fetchMock).toHaveBeenCalledWith(
+      "https://places.googleapis.com/v1/places:searchText",
+      expect.objectContaining({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Goog-Api-Key": "test-key",
+          "X-Goog-FieldMask": buildPlaceCandidateFieldMask(),
+        },
+      })
+    );
+
+    const requestBody = JSON.parse(fetchMock.mock.calls[0]?.[1]?.body as string);
+
+    expect(requestBody).toEqual({
+      textQuery: "hotels in Paris",
+      pageSize: 2,
     });
   });
 

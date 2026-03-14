@@ -27,6 +27,19 @@ export interface PlannerFormState {
 
 // Results page types
 
+export interface ItineraryActivity {
+  id: string;
+  name: string;
+  description: string;
+  tags: string[];
+  imageUrl?: string;
+  linkUrl?: string;
+  linkLabel?: string;
+  duration?: string;
+  costRange?: string;
+  activityType?: "landmark" | "food" | "culture" | "nature" | "transit" | "leisure";
+}
+
 export interface DayItem {
   id: string;
   day: number;
@@ -36,6 +49,11 @@ export interface DayItem {
   morning?: string;
   afternoon?: string;
   evening?: string;
+  morningActivities?: ItineraryActivity[];
+  afternoonActivities?: ItineraryActivity[];
+  eveningActivities?: ItineraryActivity[];
+  daySummary?: string;
+  heroImageUrl?: string;
   dining?: string;
   neighborhood?: string;
   notes?: string;
