@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 
 import { ChipSelector } from "./chip-selector";
+import { DestinationAutocomplete } from "./destination-autocomplete";
 import { PromptInput } from "./prompt-input";
-import { TemplateDropdown } from "./template-dropdown";
+import { TemplateSidebar } from "./template-sidebar";
 import { usePlanSubmission } from "./use-plan-submission";
 import {
   buildTripRequestFromForm,
@@ -18,11 +19,10 @@ import {
   DESTINATION_TYPES,
   FLIGHT_PREFERENCES,
   INTERESTS,
-  SURPRISE_PROMPT,
-  SURPRISE_SELECTIONS,
   TEMPLATES,
   TRAVEL_PACE,
   TRIP_TYPES,
+  generateSurprise,
 } from "../lib/mock/wizard-options";
 
 const EMPTY_SELECTIONS: TripSelections = {
@@ -48,10 +48,15 @@ export function PlannerForm() {
   const [formState, setFormState] = useState<PlannerFormState>(INITIAL_FORM_STATE);
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [activeTemplateId, setActiveTemplateId] = useState<string | null>(null);
+  const [flashKey, setFlashKey] = useState(0);
+  const startDateRef = useRef<HTMLInputElement>(null);
+  const endDateRef = useRef<HTMLInputElement>(null);
   const { errorMessage, isSubmitting, submissionStage, submit } =
     usePlanSubmission();
 
   const updateSelection = (key: keyof TripSelections, value: string[]) => {
+    setActiveTemplateId(null);
     setValidationError(null);
     setFormState((prev) => ({
       ...prev,
@@ -62,16 +67,20 @@ export function PlannerForm() {
     }));
   };
 
-  const updateField = (
-    key: "destination" | "endDate" | "prompt" | "startDate",
-    value: string
-  ) => {
-    setValidationError(null);
-    setFormState((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+  const updateField = useCallback(
+    (
+      key: "destination" | "endDate" | "prompt" | "startDate",
+      value: string
+    ) => {
+      setActiveTemplateId(null);
+      setValidationError(null);
+      setFormState((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+    },
+    []
+  );
 
   const handleTemplateSelect = (templateId: string) => {
     const template = TEMPLATES.find((candidate) => candidate.id === templateId);
@@ -80,6 +89,7 @@ export function PlannerForm() {
     }
 
     setValidationError(null);
+    setActiveTemplateId(templateId);
     setFormState((prev) => ({
       ...prev,
       prompt: template.prompt ?? prev.prompt,
@@ -96,11 +106,16 @@ export function PlannerForm() {
     }
 
     setValidationError(null);
-    setFormState((prev) => ({
-      ...prev,
-      prompt: SURPRISE_PROMPT,
-      selections: SURPRISE_SELECTIONS,
-    }));
+    setActiveTemplateId(null);
+    const surprise = generateSurprise();
+    setFormState({
+      destination: surprise.destination,
+      startDate: surprise.startDate,
+      endDate: surprise.endDate,
+      prompt: surprise.prompt,
+      selections: surprise.selections,
+    });
+    setFlashKey((prev) => prev + 1);
   };
 
   const handleGenerate = async () => {
@@ -123,6 +138,12 @@ export function PlannerForm() {
     }
   };
 
+  const openDatePicker = (ref: React.RefObject<HTMLInputElement | null>) => {
+    if (ref.current && !isSubmitting) {
+      ref.current.showPicker();
+    }
+  };
+
   let canSubmit = false;
 
   try {
@@ -134,8 +155,10 @@ export function PlannerForm() {
 
   const activeError = validationError ?? errorMessage;
 
+  const flashClass = flashKey > 0 ? "animate-flash" : "";
+
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
+    <div className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
       <div className="mb-10 text-center">
         <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
           Plan your trip
@@ -146,171 +169,210 @@ export function PlannerForm() {
         </p>
       </div>
 
-      <div className="space-y-8">
-        <PromptInput
-          value={formState.prompt}
-          onChange={(value) => updateField("prompt", value)}
-          onSubmit={handleGenerate}
-          onSurprise={handleSurprise}
-          canSubmit={canSubmit}
+      <div className="flex gap-8">
+        {/* Template sidebar (desktop) */}
+        <TemplateSidebar
+          variant="desktop"
           disabled={isSubmitting}
-          helperText="Optional notes only. Submission uses the destination, dates, and selections below."
-          isSubmitting={isSubmitting}
-          submissionStage={submissionStage}
+          activeTemplateId={activeTemplateId}
+          onSelect={handleTemplateSelect}
         />
 
-        <TemplateDropdown disabled={isSubmitting} onSelect={handleTemplateSelect} />
-
-        {activeError ? (
-          <div
-            role="alert"
-            className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-200"
-          >
-            {activeError}
-          </div>
-        ) : null}
-
-        <div className="grid gap-4 sm:grid-cols-[1.6fr_1fr_1fr]">
-          <label className="space-y-2">
-            <span className="text-sm font-medium text-foreground">Destination</span>
-            <input
-              type="text"
-              value={formState.destination}
-              onChange={(event) => updateField("destination", event.target.value)}
+        {/* Main form */}
+        <div className="min-w-0 flex-1 space-y-8">
+          {/* Mobile template strip */}
+          <div className="lg:hidden">
+            <TemplateSidebar
+              variant="mobile"
               disabled={isSubmitting}
-              placeholder="Lisbon, Portugal"
-              className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
-            />
-          </label>
-          <label className="space-y-2">
-            <span className="text-sm font-medium text-foreground">Start date</span>
-            <input
-              type="date"
-              value={formState.startDate}
-              onChange={(event) => updateField("startDate", event.target.value)}
-              disabled={isSubmitting}
-              className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
-            />
-          </label>
-          <label className="space-y-2">
-            <span className="text-sm font-medium text-foreground">End date</span>
-            <input
-              type="date"
-              value={formState.endDate}
-              min={formState.startDate || undefined}
-              onChange={(event) => updateField("endDate", event.target.value)}
-              disabled={isSubmitting}
-              className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
-            />
-          </label>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <div className="h-px flex-1 bg-border" />
-          <span className="text-xs font-medium text-muted-foreground">
-            Trip preferences
-          </span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
-
-        <div className="space-y-6">
-          <ChipSelector
-            label="Destination type"
-            description="What kind of places interest you?"
-            disabled={isSubmitting}
-            options={DESTINATION_TYPES}
-            selected={formState.selections.destinationType}
-            onChange={(value) => updateSelection("destinationType", value)}
-            multiple
-          />
-          <div className="grid gap-6 sm:grid-cols-3">
-            <ChipSelector
-              label="Travelers"
-              disabled={isSubmitting}
-              options={TRIP_TYPES}
-              selected={formState.selections.tripType}
-              onChange={(value) => updateSelection("tripType", value)}
-            />
-            <ChipSelector
-              label="Budget"
-              disabled={isSubmitting}
-              options={BUDGET_LEVELS}
-              selected={formState.selections.budget}
-              onChange={(value) => updateSelection("budget", value)}
-            />
-            <ChipSelector
-              label="Pace"
-              description="How do you like to travel?"
-              disabled={isSubmitting}
-              options={TRAVEL_PACE}
-              selected={formState.selections.travelPace}
-              onChange={(value) => updateSelection("travelPace", value)}
+              activeTemplateId={activeTemplateId}
+              onSelect={handleTemplateSelect}
             />
           </div>
-          <ChipSelector
-            label="Interests"
-            description="Choose at least one interest or trip preference."
-            disabled={isSubmitting}
-            options={INTERESTS}
-            selected={formState.selections.interests}
-            onChange={(value) => updateSelection("interests", value)}
-            multiple
-          />
-        </div>
 
-        <div>
-          <button
-            type="button"
-            onClick={() => setShowMoreOptions(!showMoreOptions)}
+          <PromptInput
+            value={formState.prompt}
+            onChange={(value) => updateField("prompt", value)}
+            onSubmit={handleGenerate}
+            onSurprise={handleSurprise}
+            canSubmit={canSubmit}
             disabled={isSubmitting}
-            className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className={`transition-transform ${showMoreOptions ? "rotate-90" : ""}`}
+            helperText="Optional notes only. Submission uses the destination, dates, and selections below."
+            isSubmitting={isSubmitting}
+            submissionStage={submissionStage}
+          />
+
+          {activeError ? (
+            <div
+              role="alert"
+              className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-200"
             >
-              <path d="m9 18 6-6-6-6" />
-            </svg>
-            More options
-          </button>
-
-          {showMoreOptions ? (
-            <div className="mt-4 space-y-6">
-              <div className="grid gap-6 sm:grid-cols-2">
-                <ChipSelector
-                  label="Flights"
-                  description="What matters most?"
-                  disabled={isSubmitting}
-                  options={FLIGHT_PREFERENCES}
-                  selected={formState.selections.flightPreference}
-                  onChange={(value) => updateSelection("flightPreference", value)}
-                />
-                <ChipSelector
-                  label="Accommodation"
-                  disabled={isSubmitting}
-                  options={ACCOMMODATION_TYPES}
-                  selected={formState.selections.accommodation}
-                  onChange={(value) => updateSelection("accommodation", value)}
-                />
-              </div>
-              <ChipSelector
-                label="Requirements"
-                description="Any specific needs?"
-                disabled={isSubmitting}
-                options={CONSTRAINTS}
-                selected={formState.selections.constraints}
-                onChange={(value) => updateSelection("constraints", value)}
-                multiple
-              />
+              {activeError}
             </div>
           ) : null}
+
+          <div key={`dest-dates-${flashKey}`} className={flashClass}>
+            <div className="grid gap-4 sm:grid-cols-[1.6fr_1fr_1fr] sm:items-end">
+              <DestinationAutocomplete
+                value={formState.destination}
+                onChange={(value) => updateField("destination", value)}
+                disabled={isSubmitting}
+              />
+              <label className="space-y-2">
+                <span className="text-sm font-medium text-foreground">
+                  Start date
+                </span>
+                <div
+                  onClick={() => openDatePicker(startDateRef)}
+                  className="cursor-pointer"
+                >
+                  <input
+                    ref={startDateRef}
+                    type="date"
+                    value={formState.startDate}
+                    onChange={(event) =>
+                      updateField("startDate", event.target.value)
+                    }
+                    disabled={isSubmitting}
+                    className="pointer-events-auto w-full cursor-pointer rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
+                  />
+                </div>
+              </label>
+              <label className="space-y-2">
+                <span className="text-sm font-medium text-foreground">
+                  End date
+                </span>
+                <div
+                  onClick={() => openDatePicker(endDateRef)}
+                  className="cursor-pointer"
+                >
+                  <input
+                    ref={endDateRef}
+                    type="date"
+                    value={formState.endDate}
+                    min={formState.startDate || undefined}
+                    onChange={(event) =>
+                      updateField("endDate", event.target.value)
+                    }
+                    disabled={isSubmitting}
+                    className="pointer-events-auto w-full cursor-pointer rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
+                  />
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="h-px flex-1 bg-border" />
+            <span className="text-xs font-medium text-muted-foreground">
+              Trip preferences
+            </span>
+            <div className="h-px flex-1 bg-border" />
+          </div>
+
+          <div key={`prefs-${flashKey}`} className={`space-y-6 ${flashClass}`}>
+            <ChipSelector
+              label="Destination type"
+              description="What kind of places interest you?"
+              disabled={isSubmitting}
+              options={DESTINATION_TYPES}
+              selected={formState.selections.destinationType}
+              onChange={(value) => updateSelection("destinationType", value)}
+              multiple
+            />
+            <div className="grid gap-6 sm:grid-cols-3">
+              <ChipSelector
+                label="Travelers"
+                disabled={isSubmitting}
+                options={TRIP_TYPES}
+                selected={formState.selections.tripType}
+                onChange={(value) => updateSelection("tripType", value)}
+              />
+              <ChipSelector
+                label="Budget"
+                disabled={isSubmitting}
+                options={BUDGET_LEVELS}
+                selected={formState.selections.budget}
+                onChange={(value) => updateSelection("budget", value)}
+              />
+              <ChipSelector
+                label="Pace"
+                description="How do you like to travel?"
+                disabled={isSubmitting}
+                options={TRAVEL_PACE}
+                selected={formState.selections.travelPace}
+                onChange={(value) => updateSelection("travelPace", value)}
+              />
+            </div>
+            <ChipSelector
+              label="Interests"
+              description="Choose at least one interest or trip preference."
+              disabled={isSubmitting}
+              options={INTERESTS}
+              selected={formState.selections.interests}
+              onChange={(value) => updateSelection("interests", value)}
+              multiple
+            />
+          </div>
+
+          <div>
+            <button
+              type="button"
+              onClick={() => setShowMoreOptions(!showMoreOptions)}
+              disabled={isSubmitting}
+              className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={`transition-transform ${showMoreOptions ? "rotate-90" : ""}`}
+              >
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+              More options
+            </button>
+
+            {showMoreOptions ? (
+              <div className="mt-4 space-y-6">
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <ChipSelector
+                    label="Flights"
+                    description="What matters most?"
+                    disabled={isSubmitting}
+                    options={FLIGHT_PREFERENCES}
+                    selected={formState.selections.flightPreference}
+                    onChange={(value) =>
+                      updateSelection("flightPreference", value)
+                    }
+                  />
+                  <ChipSelector
+                    label="Accommodation"
+                    disabled={isSubmitting}
+                    options={ACCOMMODATION_TYPES}
+                    selected={formState.selections.accommodation}
+                    onChange={(value) =>
+                      updateSelection("accommodation", value)
+                    }
+                  />
+                </div>
+                <ChipSelector
+                  label="Requirements"
+                  description="Any specific needs?"
+                  disabled={isSubmitting}
+                  options={CONSTRAINTS}
+                  selected={formState.selections.constraints}
+                  onChange={(value) => updateSelection("constraints", value)}
+                  multiple
+                />
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>

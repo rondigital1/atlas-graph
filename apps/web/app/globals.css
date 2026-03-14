@@ -90,3 +90,24 @@ body {
   background: var(--color-primary-muted);
   color: var(--color-foreground);
 }
+
+/* Hidden scrollbar for horizontal nav */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Surprise Me flash animation */
+@keyframes surprise-flash {
+  0% { background-color: transparent; }
+  15% { background-color: var(--color-primary-subtle); }
+  100% { background-color: transparent; }
+}
+
+.animate-flash {
+  animation: surprise-flash 0.8s ease-out;
+  border-radius: 0.75rem;
+}

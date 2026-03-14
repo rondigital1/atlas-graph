@@ -104,11 +104,7 @@ export function PromptInput({
           disabled={isSubmitting}
           className="flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-medium text-muted-foreground transition-all hover:bg-surface-elevated hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-            <path d="m3.3 7 8.7 5 8.7-5" />
-            <path d="M12 22V12" />
-          </svg>
+          <span className="text-base" aria-hidden="true">{"\uD83C\uDFB2"}</span>
           <span className="hidden sm:inline">Surprise Me</span>
         </button>
       </div>

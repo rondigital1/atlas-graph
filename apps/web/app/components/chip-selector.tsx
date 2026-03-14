@@ -72,11 +72,20 @@ export function ChipSelector({
                   : "border-border text-muted-foreground hover:border-border/80 hover:bg-surface-elevated hover:text-foreground"
               } ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
             >
-              {multiple && (
-                <span
+              {multiple && isSelected && (
+                <svg
                   aria-hidden="true"
-                  className={`h-1.5 w-1.5 rounded-full ${isSelected ? "bg-primary" : "bg-transparent"}`}
-                />
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
               )}
               {option.label}
             </button>
