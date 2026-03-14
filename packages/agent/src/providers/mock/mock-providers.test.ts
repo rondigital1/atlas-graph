@@ -81,6 +81,12 @@ describe("mock travel providers", () => {
       "lisbon-market-kitchen",
       "lisbon-city-stay",
     ]);
+    expect(weatherSummary).toBeDefined();
+
+    if (!weatherSummary) {
+      throw new Error("MockWeatherProvider should always return a weather summary.");
+    }
+
     expect(weatherSummary.destination).toBe("Lisbon");
     expect(weatherSummary.summary).toContain("Mock seasonal profile");
   });
@@ -105,6 +111,7 @@ describe("mock travel providers", () => {
     expect(PlaceCandidateListSchema.parse(placeCandidates)).toEqual(
       placeCandidates
     );
+    expect(weatherSummary).toBeDefined();
     expect(WeatherSummarySchema.parse(weatherSummary)).toEqual(weatherSummary);
   });
 

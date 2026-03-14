@@ -14,5 +14,5 @@ export interface PlacesProvider {
 }
 
 export interface WeatherProvider {
-  getWeatherSummary(input: TripRequest): Promise<WeatherSummary>;
+  getWeatherSummary(input: TripRequest): Promise<WeatherSummary | undefined>;
 }

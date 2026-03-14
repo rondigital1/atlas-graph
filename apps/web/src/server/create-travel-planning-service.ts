@@ -2,6 +2,7 @@ import { TravelPlanningService, createMockTravelPlanningDeps } from "@atlas-grap
 import { createPlannerRunner } from "./create-planner-runner";
 import { createDestinationInfoProvider } from "./create-destination-info-provider";
 import { createPlacesProvider } from "./create-places-provider";
+import { createWeatherProvider } from "./create-weather-provider";
 
 type TravelPlanningServiceEnvironment = Record<string, string | undefined>;
 
@@ -13,6 +14,7 @@ export function createTravelPlanningService(
   deps.destinationInfoProvider = createDestinationInfoProvider(environment);
   deps.placesProvider = createPlacesProvider(environment);
   deps.plannerRunner = createPlannerRunner(environment);
+  deps.weatherProvider = createWeatherProvider(environment);
 
   return new TravelPlanningService(deps);
 }

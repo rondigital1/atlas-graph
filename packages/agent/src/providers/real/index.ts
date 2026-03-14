@@ -21,3 +21,12 @@ export {
   GooglePlacesClient,
   type GooglePlacesClientOptions,
 } from "./google-places-client";
+export {
+  WeatherApiClient,
+  type WeatherApiClientOptions,
+} from "./weather-api-client";
+export {
+  WeatherApiProvider,
+  type WeatherApiProviderDependencies,
+  type WeatherApiProviderOptions,
+} from "./weather-api-provider";
