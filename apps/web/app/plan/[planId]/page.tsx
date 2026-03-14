@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { Header } from "../../components/header";
 import { getDestinationBackground } from "../../lib/mock/destination-backgrounds";
+import { getActivitiesForDestination } from "../../lib/mock/recommended-activities";
 import { getRestaurantsForDestination } from "../../lib/mock/recommended-restaurants";
 import { createPlanningRunQueryService } from "../../../src/server/create-planning-run-query-service";
 import { createPlanDetailViewModel } from "../../../src/server/plan-detail-view-models";
@@ -14,6 +15,7 @@ import { PlanDetailSidebar } from "./components/plan-detail-sidebar";
 import { PlanErrorState } from "./components/plan-error-state";
 import { PlanItineraryTimeline } from "./components/plan-itinerary-timeline";
 import { PlanPendingState } from "./components/plan-pending-state";
+import { PlanActivitiesSection } from "./components/plan-activities-section";
 import { PlanRestaurantsSection } from "./components/plan-restaurants-section";
 
 interface PlanPageContext {
@@ -71,6 +73,9 @@ export default async function PlanPage(context: PlanPageContext) {
   const restaurants = getRestaurantsForDestination(
     planDetail.overview.destination,
   );
+  const recommendedActivities = getActivitiesForDestination(
+    planDetail.overview.destination,
+  );
 
   return (
     <div className="relative min-h-screen bg-background">
@@ -91,7 +96,13 @@ export default async function PlanPage(context: PlanPageContext) {
             <PlanDetailOverview overview={planDetail.overview} />
             <PlanDayMap days={planDetail.days} />
             <PlanRestaurantsSection
+              planId={planId}
               restaurants={restaurants}
+              days={planDetail.days}
+            />
+            <PlanActivitiesSection
+              planId={planId}
+              activities={recommendedActivities}
               days={planDetail.days}
             />
             <PlanItineraryTimeline days={planDetail.days} />

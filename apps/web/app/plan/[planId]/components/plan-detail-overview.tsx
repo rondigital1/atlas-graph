@@ -4,34 +4,14 @@ interface Props {
   overview: PlanOverviewViewModel;
 }
 
-function StatusBadge({ label, tone }: { label: string; tone: string }) {
-  const toneClasses: Record<string, string> = {
-    success: "bg-green-500/10 text-green-400",
-    danger: "bg-red-500/10 text-red-400",
-    warning: "bg-amber-500/10 text-amber-400",
-    neutral: "bg-muted text-muted-foreground",
-  };
-
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${toneClasses[tone] ?? toneClasses["neutral"]}`}
-    >
-      {label}
-    </span>
-  );
-}
-
 export function PlanDetailOverview({ overview }: Props) {
   return (
     <section className="space-y-6">
       {/* Headline */}
       <div>
-        <div className="flex items-center gap-3">
-          <h1 className="font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-            {overview.destination}
-          </h1>
-          <StatusBadge label={overview.statusLabel} tone={overview.statusTone} />
-        </div>
+        <h1 className="font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+          {overview.destination}
+        </h1>
         <p className="mt-2 text-lg text-muted-foreground">
           {overview.tripStyleSummary}
         </p>

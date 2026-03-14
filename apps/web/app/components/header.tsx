@@ -1,6 +1,6 @@
 "use client";
 
-import { Map, Menu, Search, Settings, Sparkles, X } from "lucide-react";
+import { Map, Menu, MessageCircle, Search, Settings, Sparkles, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -28,6 +28,11 @@ export function Header() {
               href="/explore"
               label="Explore"
               icon={<Map size={16} />}
+            />
+            <NavLink
+              href="/chat"
+              label="Chat"
+              icon={<MessageCircle size={16} />}
             />
             <NavLink
               href="/plans"
@@ -75,6 +80,7 @@ export function Header() {
           <nav className="flex flex-col gap-1">
             <NavLink href="/" label="Planner" icon={<Sparkles size={16} />} />
             <NavLink href="/explore" label="Explore" icon={<Map size={16} />} />
+            <NavLink href="/chat" label="Chat" icon={<MessageCircle size={16} />} />
             <NavLink href="/plans" label="My Trips" />
           </nav>
         </div>

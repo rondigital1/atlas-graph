@@ -272,6 +272,17 @@ export interface RecommendedRestaurant {
   tags: string[];
 }
 
+export type TimeOfDay = "morning" | "afternoon" | "evening";
+
+export interface RecommendedActivity {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  suggestedTime: TimeOfDay;
+  duration: string;
+}
+
 // Plan detail view model types
 
 export interface PlanOverviewViewModel {
@@ -312,4 +323,24 @@ export interface PlanDetailViewModel {
   overview: PlanOverviewViewModel;
   days: PlanDayViewModel[];
   topRecommendations: PlanRecommendationViewModel[];
+}
+
+// Chat types
+
+export interface ChatMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+}
+
+export interface ChatTripCardViewModel {
+  id: string;
+  destination: string;
+  countryFlag: string | null;
+  tripDates: string;
+  backgroundUrl: string;
+  budget: string | null;
+  travelStyle: string | null;
+  statusLabel: string;
+  statusTone: StatusTone;
 }

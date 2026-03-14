@@ -68,6 +68,58 @@ export async function reviseDayPlan(
   }
 }
 
+export interface AiSuggestion {
+  id: string;
+  type: "add" | "remove" | "replace" | "reorder";
+  description: string;
+  detail: string;
+}
+
+export async function optimizeDayPlan(
+  planId: string,
+  dayNumber: number,
+): Promise<AiSuggestion[]> {
+  const response = await fetch(`/api/plans/${planId}/revise-day`, {
+    body: JSON.stringify({ dayNumber, prompt: "__optimize__" }),
+    headers: { "Content-Type": "application/json" },
+    method: "POST",
+  });
+
+  if (!response.ok) {
+    const payload = await readJsonSafely(response);
+    throw buildPlansApiError(
+      response.status,
+      payload,
+      "Failed to optimize day. Please try again.",
+    );
+  }
+
+  return generateMockSuggestions(dayNumber);
+}
+
+function generateMockSuggestions(dayNumber: number): AiSuggestion[] {
+  return [
+    {
+      id: `sug-${dayNumber}-1`,
+      type: "replace",
+      description: "Swap the afternoon activity for a more highly-rated alternative",
+      detail: "The current afternoon slot has a lower visitor rating. A nearby attraction scores 4.8/5 and fits the same time window.",
+    },
+    {
+      id: `sug-${dayNumber}-2`,
+      type: "add",
+      description: "Add a local food experience between morning and afternoon",
+      detail: "There's a 2-hour gap that's perfect for a quick street food tour or market visit in the area.",
+    },
+    {
+      id: `sug-${dayNumber}-3`,
+      type: "reorder",
+      description: "Move the evening activity earlier to catch golden hour",
+      detail: "Sunset is at 6:30 PM — shifting the viewpoint visit 30 minutes earlier gives a much better photo opportunity.",
+    },
+  ];
+}
+
 export async function generatePlan(planId: string): Promise<void> {
   if (legacyGeneratedPlanIds.delete(planId)) {
     return;

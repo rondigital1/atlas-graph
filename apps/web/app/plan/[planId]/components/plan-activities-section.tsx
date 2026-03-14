@@ -1,24 +1,24 @@
 "use client";
 
-import { Check, UtensilsCrossed } from "lucide-react";
+import { Check, Compass } from "lucide-react";
 import { useCallback, useState } from "react";
 
-import type { PlanDayViewModel, RecommendedRestaurant } from "../../../lib/types";
-import { PlanRestaurantCard } from "./plan-restaurant-card";
+import type { PlanDayViewModel, RecommendedActivity } from "../../../lib/types";
+import { PlanActivityCard } from "./plan-activity-card";
 
 interface Props {
   planId: string;
-  restaurants: RecommendedRestaurant[];
+  activities: RecommendedActivity[];
   days: PlanDayViewModel[];
 }
 
 interface DayAssignment {
-  restaurantId: string;
-  restaurantName: string;
+  activityId: string;
+  activityTitle: string;
   dayNumber: number;
 }
 
-export function PlanRestaurantsSection({ planId, restaurants, days }: Props) {
+export function PlanActivitiesSection({ planId, activities, days }: Props) {
   const [assignments, setAssignments] = useState<DayAssignment[]>([]);
   const [toast, setToast] = useState<string | null>(null);
 
@@ -28,14 +28,14 @@ export function PlanRestaurantsSection({ planId, restaurants, days }: Props) {
   }));
 
   const handleAddToDay = useCallback(
-    async (restaurantId: string, dayNumber: number) => {
-      const restaurant = restaurants.find((r) => r.id === restaurantId);
-      if (!restaurant) {
+    async (activityId: string, dayNumber: number) => {
+      const activity = activities.find((a) => a.id === activityId);
+      if (!activity) {
         return;
       }
 
       const alreadyAdded = assignments.some(
-        (a) => a.restaurantId === restaurantId && a.dayNumber === dayNumber,
+        (a) => a.activityId === activityId && a.dayNumber === dayNumber,
       );
       if (alreadyAdded) {
         return;
@@ -47,10 +47,10 @@ export function PlanRestaurantsSection({ planId, restaurants, days }: Props) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             dayNumber,
-            timeSlot: "evening",
+            timeSlot: activity.suggestedTime,
             activity: {
-              title: `Dining: ${restaurant.name}`,
-              description: `${restaurant.cuisine} · ${restaurant.priceRange} · ${restaurant.neighborhood}`,
+              title: activity.title,
+              description: activity.description,
             },
           }),
         });
@@ -69,57 +69,57 @@ export function PlanRestaurantsSection({ planId, restaurants, days }: Props) {
       setAssignments((prev) => [
         ...prev,
         {
-          restaurantId,
-          restaurantName: restaurant.name,
+          activityId,
+          activityTitle: activity.title,
           dayNumber,
         },
       ]);
 
-      setToast(`Added ${restaurant.name} to Day ${dayNumber}`);
+      setToast(`Added ${activity.title} to Day ${dayNumber}`);
       setTimeout(() => setToast(null), 2500);
     },
-    [assignments, restaurants, planId],
+    [assignments, activities, planId],
   );
 
-  function getAddedDays(restaurantId: string): number[] {
+  function getAddedDays(activityId: string): number[] {
     return assignments
-      .filter((a) => a.restaurantId === restaurantId)
+      .filter((a) => a.activityId === activityId)
       .map((a) => a.dayNumber);
   }
 
-  if (restaurants.length === 0) {
+  if (activities.length === 0) {
     return null;
   }
 
   const assignmentsByDay = days
     .map((d) => ({
       dayNumber: d.dayNumber,
-      restaurants: assignments
+      activities: assignments
         .filter((a) => a.dayNumber === d.dayNumber)
-        .map((a) => a.restaurantName),
+        .map((a) => a.activityTitle),
     }))
-    .filter((d) => d.restaurants.length > 0);
+    .filter((d) => d.activities.length > 0);
 
   return (
     <section>
       <div className="mb-4 flex items-center gap-2">
-        <UtensilsCrossed size={18} className="text-primary" />
+        <Compass size={18} className="text-primary" />
         <h2 className="text-lg font-semibold text-foreground">
-          Recommended Restaurants
+          Recommended Activities
         </h2>
       </div>
       <p className="mb-5 text-sm text-muted-foreground">
-        Choose restaurants to add to your daily itinerary.
+        Discover popular experiences and add them to any day.
       </p>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        {restaurants.map((restaurant) => (
-          <PlanRestaurantCard
-            key={restaurant.id}
-            restaurant={restaurant}
+        {activities.map((activity) => (
+          <PlanActivityCard
+            key={activity.id}
+            activity={activity}
             dayOptions={dayOptions}
             onAddToDay={handleAddToDay}
-            addedToDays={getAddedDays(restaurant.id)}
+            addedToDays={getAddedDays(activity.id)}
           />
         ))}
       </div>
@@ -129,7 +129,7 @@ export function PlanRestaurantsSection({ planId, restaurants, days }: Props) {
         <div className="mt-5 rounded-xl border border-primary/20 bg-primary/5 p-4">
           <h3 className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-foreground">
             <Check size={14} className="text-primary" />
-            Your Restaurant Picks
+            Your Activity Picks
           </h3>
           <ul className="space-y-1.5">
             {assignmentsByDay.map((d) => (
@@ -137,7 +137,7 @@ export function PlanRestaurantsSection({ planId, restaurants, days }: Props) {
                 <span className="font-medium text-foreground">
                   Day {d.dayNumber}:
                 </span>{" "}
-                {d.restaurants.join(", ")}
+                {d.activities.join(", ")}
               </li>
             ))}
           </ul>

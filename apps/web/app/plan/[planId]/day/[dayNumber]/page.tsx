@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
 
 import { Header } from "../../../../components/header";
+import { getActivitiesForDestination } from "../../../../lib/mock/recommended-activities";
+import { getRestaurantsForDestination } from "../../../../lib/mock/recommended-restaurants";
 import { createPlanningRunQueryService } from "../../../../../src/server/create-planning-run-query-service";
 import { createPlanDetailViewModel } from "../../../../../src/server/plan-detail-view-models";
 import { DayDetailHeader } from "./components/day-detail-header";
-import { DayTimeSection } from "./components/day-time-section";
+import { DayEditor } from "./components/day-editor";
 
 interface DayPageContext {
   params: Promise<{
@@ -41,12 +43,14 @@ export default async function DayDetailPage(context: DayPageContext) {
   }
 
   const destination = planDetail.overview.destination;
+  const restaurants = getRestaurantsForDestination(destination);
+  const activities = getActivitiesForDestination(destination);
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
-        <div className="space-y-8">
+      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+        <div className="mb-8">
           <DayDetailHeader
             planId={planId}
             destination={destination}
@@ -54,23 +58,13 @@ export default async function DayDetailPage(context: DayPageContext) {
             date={day.date}
             theme={day.theme}
           />
-
-          <DayTimeSection
-            timeOfDay="morning"
-            activities={day.morning}
-            destination={destination}
-          />
-          <DayTimeSection
-            timeOfDay="afternoon"
-            activities={day.afternoon}
-            destination={destination}
-          />
-          <DayTimeSection
-            timeOfDay="evening"
-            activities={day.evening}
-            destination={destination}
-          />
         </div>
+
+        <DayEditor
+          day={day}
+          restaurants={restaurants}
+          activities={activities}
+        />
       </main>
     </div>
   );
