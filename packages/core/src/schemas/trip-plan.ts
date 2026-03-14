@@ -6,6 +6,8 @@ export const ActivityItemSchema = z.object({
   title: z.string(),
   placeId: z.string().optional(),
   description: z.string(),
+  lat: z.number().optional(),
+  lng: z.number().optional(),
 });
 
 export const DayPlanSchema = z.object({

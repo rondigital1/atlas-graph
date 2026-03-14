@@ -4,6 +4,7 @@ import { Header } from "../../components/header";
 import { createPlanningRunQueryService } from "../../../src/server/create-planning-run-query-service";
 import { createPlanDetailViewModel } from "../../../src/server/plan-detail-view-models";
 import { getRunStatusPresentation } from "../../../src/server/view-model-utils";
+import { PlanDayMap } from "./components/plan-day-map";
 import { PlanDetailOverview } from "./components/plan-detail-overview";
 import { PlanDetailSidebar } from "./components/plan-detail-sidebar";
 import { PlanErrorState } from "./components/plan-error-state";
@@ -66,6 +67,7 @@ export default async function PlanPage(context: PlanPageContext) {
         <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
           <div className="space-y-8">
             <PlanDetailOverview overview={planDetail.overview} />
+            <PlanDayMap days={planDetail.days} />
             <PlanItineraryTimeline days={planDetail.days} />
           </div>
           <PlanDetailSidebar

@@ -15,11 +15,13 @@ import {
 } from "./view-model-utils";
 
 function mapActivities(
-  items: Array<{ title: string; description: string }>
+  items: Array<{ title: string; description: string; lat?: number; lng?: number }>
 ): PlanActivityViewModel[] {
   return items.map((item) => ({
     title: item.title,
     description: item.description,
+    ...(item.lat !== undefined && { lat: item.lat }),
+    ...(item.lng !== undefined && { lng: item.lng }),
   }));
 }
 
@@ -28,9 +30,9 @@ function mapDays(
     dayNumber: number;
     date: string;
     theme: string;
-    morning: Array<{ title: string; description: string }>;
-    afternoon: Array<{ title: string; description: string }>;
-    evening: Array<{ title: string; description: string }>;
+    morning: Array<{ title: string; description: string; lat?: number; lng?: number }>;
+    afternoon: Array<{ title: string; description: string; lat?: number; lng?: number }>;
+    evening: Array<{ title: string; description: string; lat?: number; lng?: number }>;
   }>
 ): PlanDayViewModel[] {
   return days.map((day) => ({

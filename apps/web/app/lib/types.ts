@@ -233,6 +233,8 @@ export interface PlanOverviewViewModel {
 export interface PlanActivityViewModel {
   title: string;
   description: string;
+  lat?: number;
+  lng?: number;
 }
 
 export interface PlanDayViewModel {
