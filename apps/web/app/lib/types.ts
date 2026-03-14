@@ -237,14 +237,38 @@ export interface RunInspectorViewModel {
 
 // Explore page types
 
+export type Continent =
+  | "all"
+  | "africa"
+  | "asia"
+  | "europe"
+  | "north-america"
+  | "oceania"
+  | "south-america";
+
 export interface ExploreItinerary {
   id: string;
   title: string;
   destination: string;
+  continent: Continent;
   imageUrl: string;
   duration: string;
   budget: string;
   description: string;
+  tags: string[];
+}
+
+// Restaurant recommendation types
+
+export interface RecommendedRestaurant {
+  id: string;
+  name: string;
+  cuisine: string;
+  priceRange: string;
+  rating: number;
+  description: string;
+  neighborhood: string;
+  imageUrl: string;
   tags: string[];
 }
 

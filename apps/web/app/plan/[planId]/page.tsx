@@ -1,16 +1,20 @@
 import { notFound } from "next/navigation";
 
 import { Header } from "../../components/header";
+import { getDestinationBackground } from "../../lib/mock/destination-backgrounds";
+import { getRestaurantsForDestination } from "../../lib/mock/recommended-restaurants";
 import { createPlanningRunQueryService } from "../../../src/server/create-planning-run-query-service";
 import { createPlanDetailViewModel } from "../../../src/server/plan-detail-view-models";
 import { getRunStatusPresentation } from "../../../src/server/view-model-utils";
 import { PlanDayMap } from "./components/plan-day-map";
+import { PlanDestinationHero } from "./components/plan-destination-hero";
 import { PlanDetailActions } from "./components/plan-detail-actions";
 import { PlanDetailOverview } from "./components/plan-detail-overview";
 import { PlanDetailSidebar } from "./components/plan-detail-sidebar";
 import { PlanErrorState } from "./components/plan-error-state";
 import { PlanItineraryTimeline } from "./components/plan-itinerary-timeline";
 import { PlanPendingState } from "./components/plan-pending-state";
+import { PlanRestaurantsSection } from "./components/plan-restaurants-section";
 
 interface PlanPageContext {
   params: Promise<{
@@ -61,10 +65,21 @@ export default async function PlanPage(context: PlanPageContext) {
     );
   }
 
+  const backgroundUrl = getDestinationBackground(
+    planDetail.overview.destination,
+  );
+  const restaurants = getRestaurantsForDestination(
+    planDetail.overview.destination,
+  );
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative min-h-screen bg-background">
+      <PlanDestinationHero
+        destination={planDetail.overview.destination}
+        backgroundUrl={backgroundUrl}
+      />
       <Header />
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+      <main className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6">
         <div className="space-y-6">
           <PlanDetailActions
             planId={planId}
@@ -75,6 +90,10 @@ export default async function PlanPage(context: PlanPageContext) {
           <div className="space-y-8">
             <PlanDetailOverview overview={planDetail.overview} />
             <PlanDayMap days={planDetail.days} />
+            <PlanRestaurantsSection
+              restaurants={restaurants}
+              days={planDetail.days}
+            />
             <PlanItineraryTimeline days={planDetail.days} />
           </div>
           <PlanDetailSidebar
