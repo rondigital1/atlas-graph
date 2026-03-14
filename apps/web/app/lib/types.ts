@@ -132,6 +132,7 @@ export interface PlansListItemViewModel {
   id: string;
   href: string;
   destination: string;
+  countryFlag: string | null;
   tripDates: string;
   statusLabel: string;
   statusTone: StatusTone;
@@ -232,6 +233,19 @@ export interface RunInspectorViewModel {
   input: RunInspectorInputViewModel;
   output: RunInspectorOutputViewModel | null;
   toolResults: RunInspectorToolResultViewModel[];
+}
+
+// Explore page types
+
+export interface ExploreItinerary {
+  id: string;
+  title: string;
+  destination: string;
+  imageUrl: string;
+  duration: string;
+  budget: string;
+  description: string;
+  tags: string[];
 }
 
 // Plan detail view model types

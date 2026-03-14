@@ -9,6 +9,7 @@ import {
   getDatabaseHealth,
   plannerRunRepository,
   prisma,
+  travelPlanRepository,
 } from "./index";
 
 describe("db package", () => {
@@ -29,5 +30,8 @@ describe("db package", () => {
     expect(plannerRunRepository.create).toBeTypeOf("function");
     expect(plannerRunRepository.listRecentRuns).toBeTypeOf("function");
     expect(plannerRunRepository.findDetailById).toBeTypeOf("function");
+    expect(travelPlanRepository.createPlan).toBeTypeOf("function");
+    expect(travelPlanRepository.getPlanById).toBeTypeOf("function");
+    expect(travelPlanRepository.listPlans).toBeTypeOf("function");
   });
 });

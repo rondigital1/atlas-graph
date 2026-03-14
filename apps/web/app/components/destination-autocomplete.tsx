@@ -124,7 +124,7 @@ export function DestinationAutocomplete({
 
   return (
     <div ref={containerRef} className="relative">
-      <label className="space-y-2">
+      <label className="space-y-3">
         <span className="text-sm font-medium text-foreground">
           Destination
         </span>
@@ -156,7 +156,7 @@ export function DestinationAutocomplete({
             aria-expanded={isOpen}
             aria-autocomplete="list"
             aria-controls="destination-suggestions"
-            className="w-full rounded-xl border-2 border-border bg-surface py-4 pl-12 pr-10 text-lg font-medium text-foreground placeholder:text-muted-foreground/50 focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-xl border border-border bg-surface py-3.5 pl-12 pr-10 text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
           />
           {isLoading && (
             <svg

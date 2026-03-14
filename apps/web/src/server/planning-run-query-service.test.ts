@@ -6,6 +6,7 @@ import { DefaultPlanningRunQueryService } from "./planning-run-query-service";
 function createRepository(): PlannerRunRepository {
   return {
     create: vi.fn(),
+    deleteById: vi.fn().mockResolvedValue(undefined),
     listRecentRuns: vi.fn().mockResolvedValue([
       {
         id: "run-1",

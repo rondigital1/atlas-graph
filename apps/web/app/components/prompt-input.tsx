@@ -40,7 +40,7 @@ export function PromptInput({
       onChange(e.target.value);
       const el = e.target;
       el.style.height = "auto";
-      el.style.height = `${Math.min(el.scrollHeight, 192)}px`;
+      el.style.height = `${Math.min(el.scrollHeight, 240)}px`;
     },
     [onChange],
   );
@@ -54,15 +54,15 @@ export function PromptInput({
 
   return (
     <div className="space-y-3">
-      <div className="overflow-hidden rounded-xl border border-border bg-surface transition-all focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20">
+      <div className="overflow-hidden rounded-xl border-2 border-border bg-surface transition-all focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/20">
         <textarea
           ref={textareaRef}
           disabled={disabled}
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          rows={3}
-          className="w-full resize-none bg-transparent px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+          rows={4}
+          className="w-full resize-none bg-transparent px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
           placeholder="e.g., A 10-day food and culture trip through Spain and southern France for two, mid-range budget..."
         />
         <div className="flex items-center justify-between border-t border-border-muted bg-surface-elevated px-3 py-2">

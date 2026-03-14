@@ -17,6 +17,14 @@ const nextConfig: NextConfig = {
     "@atlas-graph/core",
     "@atlas-graph/db",
   ],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

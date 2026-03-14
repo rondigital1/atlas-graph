@@ -20,6 +20,7 @@ export interface PlanningRunDetail {
 export interface PlanningRunQueryService {
   listRecentRuns(): Promise<PlanningRunSummary[]>;
   getRunDetailById(id: string): Promise<PlanningRunDetail | null>;
+  deleteRunById(id: string): Promise<void>;
 }
 
 export class DefaultPlanningRunQueryService implements PlanningRunQueryService {
@@ -31,6 +32,10 @@ export class DefaultPlanningRunQueryService implements PlanningRunQueryService {
 
   public async listRecentRuns(): Promise<PlanningRunSummary[]> {
     return await this.repository.listRecentRuns();
+  }
+
+  public async deleteRunById(id: string): Promise<void> {
+    await this.repository.deleteById(id);
   }
 
   public async getRunDetailById(id: string): Promise<PlanningRunDetail | null> {

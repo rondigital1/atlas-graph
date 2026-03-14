@@ -99,6 +99,7 @@ export interface PlannerRunRepository {
     requestId: string,
     args?: Omit<Prisma.PlannerRunFindUniqueArgs, "where">,
   ): ReturnType<PrismaClient["plannerRun"]["findUnique"]>;
+  deleteById(id: string): Promise<void>;
 }
 
 export function createPlannerRunRepository(
@@ -145,6 +146,9 @@ export function createPlannerRunRepository(
           requestId,
         },
       });
+    },
+    async deleteById(id) {
+      await client.plannerRun.delete({ where: { id } });
     },
   };
 }

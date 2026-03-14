@@ -158,18 +158,17 @@ export function PlannerForm() {
   const flashClass = flashKey > 0 ? "animate-flash" : "";
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
-      <div className="mb-10 text-center">
-        <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          Plan your trip
+    <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+      <div className="mb-12 text-center">
+        <h1 className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+          Your AI Travel Planner
         </h1>
-        <p className="mt-2 text-base text-muted-foreground">
-          Describe your trip, then fill in the details needed to generate a real
-          persisted plan.
+        <p className="mt-3 text-lg text-muted-foreground">
+          Describe your dream trip and let AI craft the perfect itinerary
         </p>
       </div>
 
-      <div className="flex gap-8">
+      <div className="flex gap-10">
         {/* Template sidebar (desktop) */}
         <TemplateSidebar
           variant="desktop"
@@ -218,7 +217,7 @@ export function PlannerForm() {
                 onChange={(value) => updateField("destination", value)}
                 disabled={isSubmitting}
               />
-              <label className="space-y-2">
+              <label className="space-y-3">
                 <span className="text-sm font-medium text-foreground">
                   Start date
                 </span>
@@ -234,11 +233,11 @@ export function PlannerForm() {
                       updateField("startDate", event.target.value)
                     }
                     disabled={isSubmitting}
-                    className="pointer-events-auto w-full cursor-pointer rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="pointer-events-auto w-full cursor-pointer rounded-xl border border-border bg-surface px-4 py-3.5 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
                   />
                 </div>
               </label>
-              <label className="space-y-2">
+              <label className="space-y-3">
                 <span className="text-sm font-medium text-foreground">
                   End date
                 </span>
@@ -255,7 +254,7 @@ export function PlannerForm() {
                       updateField("endDate", event.target.value)
                     }
                     disabled={isSubmitting}
-                    className="pointer-events-auto w-full cursor-pointer rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="pointer-events-auto w-full cursor-pointer rounded-xl border border-border bg-surface px-4 py-3.5 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
                   />
                 </div>
               </label>

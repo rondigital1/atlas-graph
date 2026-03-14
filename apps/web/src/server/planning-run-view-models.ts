@@ -1,3 +1,4 @@
+import { getCountryFlag } from "../../app/lib/country-flags";
 import type {
   PlansListItemViewModel,
   PlansListViewModel,
@@ -118,6 +119,7 @@ export function createPlansListViewModel(
       id: run.id,
       href: `/plan/${run.id}`,
       destination: run.destination ?? "Untitled",
+      countryFlag: getCountryFlag(run.destination),
       tripDates: formatTripDates(run.startDate, run.endDate),
       statusLabel: status.label,
       statusTone: status.tone,

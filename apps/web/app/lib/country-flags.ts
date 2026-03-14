@@ -1,0 +1,147 @@
+const COUNTRY_TO_CODE: Record<string, string> = {
+  "afghanistan": "AF",
+  "albania": "AL",
+  "algeria": "DZ",
+  "argentina": "AR",
+  "australia": "AU",
+  "austria": "AT",
+  "bahamas": "BS",
+  "bahrain": "BH",
+  "bali": "ID",
+  "bangladesh": "BD",
+  "barbados": "BB",
+  "belgium": "BE",
+  "belize": "BZ",
+  "bhutan": "BT",
+  "bolivia": "BO",
+  "brazil": "BR",
+  "cambodia": "KH",
+  "canada": "CA",
+  "chile": "CL",
+  "china": "CN",
+  "colombia": "CO",
+  "costa rica": "CR",
+  "croatia": "HR",
+  "cuba": "CU",
+  "czech republic": "CZ",
+  "czechia": "CZ",
+  "denmark": "DK",
+  "dominican republic": "DO",
+  "ecuador": "EC",
+  "egypt": "EG",
+  "el salvador": "SV",
+  "england": "GB",
+  "ethiopia": "ET",
+  "fiji": "FJ",
+  "finland": "FI",
+  "france": "FR",
+  "germany": "DE",
+  "ghana": "GH",
+  "greece": "GR",
+  "guatemala": "GT",
+  "honduras": "HN",
+  "hong kong": "HK",
+  "hungary": "HU",
+  "iceland": "IS",
+  "india": "IN",
+  "indonesia": "ID",
+  "ireland": "IE",
+  "israel": "IL",
+  "italy": "IT",
+  "jamaica": "JM",
+  "japan": "JP",
+  "jordan": "JO",
+  "kenya": "KE",
+  "laos": "LA",
+  "lebanon": "LB",
+  "madagascar": "MG",
+  "malaysia": "MY",
+  "maldives": "MV",
+  "malta": "MT",
+  "mauritius": "MU",
+  "mexico": "MX",
+  "mongolia": "MN",
+  "montenegro": "ME",
+  "morocco": "MA",
+  "mozambique": "MZ",
+  "myanmar": "MM",
+  "namibia": "NA",
+  "nepal": "NP",
+  "netherlands": "NL",
+  "new zealand": "NZ",
+  "nicaragua": "NI",
+  "nigeria": "NG",
+  "norway": "NO",
+  "oman": "OM",
+  "pakistan": "PK",
+  "panama": "PA",
+  "paraguay": "PY",
+  "peru": "PE",
+  "philippines": "PH",
+  "poland": "PL",
+  "portugal": "PT",
+  "puerto rico": "PR",
+  "qatar": "QA",
+  "romania": "RO",
+  "rwanda": "RW",
+  "saudi arabia": "SA",
+  "scotland": "GB",
+  "senegal": "SN",
+  "serbia": "RS",
+  "seychelles": "SC",
+  "singapore": "SG",
+  "slovenia": "SI",
+  "south africa": "ZA",
+  "south korea": "KR",
+  "spain": "ES",
+  "sri lanka": "LK",
+  "sweden": "SE",
+  "switzerland": "CH",
+  "taiwan": "TW",
+  "tanzania": "TZ",
+  "thailand": "TH",
+  "tunisia": "TN",
+  "turkey": "TR",
+  "türkiye": "TR",
+  "uganda": "UG",
+  "ukraine": "UA",
+  "united arab emirates": "AE",
+  "uae": "AE",
+  "united kingdom": "GB",
+  "uk": "GB",
+  "united states": "US",
+  "usa": "US",
+  "uruguay": "UY",
+  "uzbekistan": "UZ",
+  "venezuela": "VE",
+  "vietnam": "VN",
+  "wales": "GB",
+  "zambia": "ZM",
+  "zimbabwe": "ZW",
+};
+
+function countryCodeToFlag(code: string): string {
+  return [...code.toUpperCase()]
+    .map((ch) => String.fromCodePoint(0x1f1e6 + ch.charCodeAt(0) - 65))
+    .join("");
+}
+
+export function getCountryFlag(destination: string | null | undefined): string | null {
+  if (!destination) {
+    return null;
+  }
+
+  const parts = destination.split(",");
+  if (parts.length < 2) {
+    return null;
+  }
+
+  const country = parts[parts.length - 1]!.trim().toLowerCase();
+  const code = COUNTRY_TO_CODE[country];
+
+  if (!code) {
+    return null;
+  }
+
+  return countryCodeToFlag(code);
+}

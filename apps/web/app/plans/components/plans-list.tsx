@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Pencil, Trash2 } from "lucide-react";
+
+import { deletePlan } from "../../lib/plans-api";
 import type { PlansListItemViewModel, StatusTone } from "../../lib/types";
+import { ConfirmDeleteDialog } from "./confirm-delete-dialog";
 
 const STATUS_STYLES: Record<StatusTone, string> = {
   neutral: "bg-muted text-muted-foreground",
@@ -14,18 +20,52 @@ interface Props {
   items: PlansListItemViewModel[];
 }
 
-export function PlansList({ items }: Props) {
+export function PlansList({ items: initialItems }: Props) {
+  const router = useRouter();
+  const [items, setItems] = useState(initialItems);
+  const [deletingItem, setDeletingItem] =
+    useState<PlansListItemViewModel | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  async function handleConfirmDelete() {
+    if (!deletingItem) {
+      return;
+    }
+
+    setIsDeleting(true);
+
+    try {
+      await deletePlan(deletingItem.id);
+      setItems((prev) => prev.filter((item) => item.id !== deletingItem.id));
+      setDeletingItem(null);
+      router.refresh();
+    } catch {
+      setIsDeleting(false);
+    }
+  }
+
+  function handleCancelDelete() {
+    setDeletingItem(null);
+    setIsDeleting(false);
+  }
+
   return (
-    <div className="rounded-xl border border-border bg-surface">
-      <ul className="divide-y divide-border-muted">
-        {items.map((item) => (
-          <li key={item.id}>
-            <Link
-              href={item.href}
+    <>
+      <div className="rounded-xl border border-border bg-surface">
+        <ul className="divide-y divide-border-muted">
+          {items.map((item) => (
+            <li
+              key={item.id}
               className="flex items-start justify-between gap-4 px-5 py-4 transition-colors hover:bg-surface-elevated"
             >
-              <div className="min-w-0 flex-1">
+              <Link
+                href={item.href}
+                className="min-w-0 flex-1"
+              >
                 <p className="truncate text-sm font-medium text-foreground">
+                  {item.countryFlag && (
+                    <span className="mr-1.5">{item.countryFlag}</span>
+                  )}
                   {item.destination}
                 </p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
@@ -53,16 +93,42 @@ export function PlansList({ items }: Props) {
                 <p className="mt-2 text-[10px] text-subtle">
                   Created {item.createdAt}
                 </p>
+              </Link>
+
+              <div className="mt-0.5 flex shrink-0 items-center gap-2">
+                <span
+                  className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${STATUS_STYLES[item.statusTone]}`}
+                >
+                  {item.statusLabel}
+                </span>
+                <Link
+                  href={item.href}
+                  aria-label={`Edit trip to ${item.destination}`}
+                  className="rounded p-1 text-muted-foreground transition-colors hover:bg-surface-elevated hover:text-foreground"
+                >
+                  <Pencil size={15} />
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setDeletingItem(item)}
+                  aria-label={`Delete trip to ${item.destination}`}
+                  className="rounded p-1 text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive"
+                >
+                  <Trash2 size={15} />
+                </button>
               </div>
-              <span
-                className={`mt-0.5 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${STATUS_STYLES[item.statusTone]}`}
-              >
-                {item.statusLabel}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <ConfirmDeleteDialog
+        open={deletingItem !== null}
+        destination={deletingItem?.destination ?? ""}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        isDeleting={isDeleting}
+      />
+    </>
   );
 }

@@ -9,6 +9,25 @@ interface PlanRouteContext {
   }>;
 }
 
+export async function DELETE(
+  _request: Request,
+  context: PlanRouteContext
+): Promise<Response> {
+  const { planId } = await context.params;
+  const service = createPlanningRunQueryService();
+  const existing = await service.getRunDetailById(planId);
+
+  if (!existing) {
+    return NextResponse.json(
+      { error: { code: "NOT_FOUND", message: "Plan not found" } },
+      { status: 404 }
+    );
+  }
+
+  await service.deleteRunById(planId);
+  return new Response(null, { status: 204 });
+}
+
 export async function PATCH(
   request: Request,
   context: PlanRouteContext

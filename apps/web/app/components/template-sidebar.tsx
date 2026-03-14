@@ -31,7 +31,7 @@ export function TemplateSidebar({
   if (variant === "desktop") {
     return (
       <aside className="hidden lg:block">
-        <div className="sticky top-8 w-56">
+        <div className="sticky top-8 w-48 shrink-0">
           <h2 className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Quick Templates
           </h2>

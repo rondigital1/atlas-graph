@@ -34,6 +34,40 @@ export async function updatePlan(
   return savePlan(`/api/plans/${planId}`, "PATCH", request);
 }
 
+export async function deletePlan(planId: string): Promise<void> {
+  const response = await fetch(`/api/plans/${planId}`, { method: "DELETE" });
+
+  if (!response.ok) {
+    const payload = await readJsonSafely(response);
+    throw buildPlansApiError(
+      response.status,
+      payload,
+      "Failed to delete plan. Please try again."
+    );
+  }
+}
+
+export async function reviseDayPlan(
+  planId: string,
+  dayNumber: number,
+  prompt: string
+): Promise<void> {
+  const response = await fetch(`/api/plans/${planId}/revise-day`, {
+    body: JSON.stringify({ dayNumber, prompt }),
+    headers: { "Content-Type": "application/json" },
+    method: "POST",
+  });
+
+  if (!response.ok) {
+    const payload = await readJsonSafely(response);
+    throw buildPlansApiError(
+      response.status,
+      payload,
+      "Failed to submit revision. Please try again."
+    );
+  }
+}
+
 export async function generatePlan(planId: string): Promise<void> {
   if (legacyGeneratedPlanIds.delete(planId)) {
     return;
