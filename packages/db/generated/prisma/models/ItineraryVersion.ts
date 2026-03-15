@@ -454,10 +454,6 @@ export type ItineraryVersionUncheckedUpdateManyWithoutTravelPlanNestedInput = {
   deleteMany?: Prisma.ItineraryVersionScalarWhereInput | Prisma.ItineraryVersionScalarWhereInput[]
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type ItineraryVersionCreateNestedOneWithoutGenerationRunInput = {
   create?: Prisma.XOR<Prisma.ItineraryVersionCreateWithoutGenerationRunInput, Prisma.ItineraryVersionUncheckedCreateWithoutGenerationRunInput>
   connectOrCreate?: Prisma.ItineraryVersionCreateOrConnectWithoutGenerationRunInput

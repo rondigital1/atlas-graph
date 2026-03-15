@@ -50,6 +50,8 @@ model PlannerRun {
   modelName           String?
   promptVersion       String?
   orchestratorVersion String?
+  saved               Boolean          @default(false)
+  name                String?
   startedAt           DateTime?
   completedAt         DateTime?
   createdAt           DateTime         @default(now())

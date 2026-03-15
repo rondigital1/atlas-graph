@@ -90,6 +90,8 @@ export const PlannerRunScalarFieldEnum = {
   modelName: 'modelName',
   promptVersion: 'promptVersion',
   orchestratorVersion: 'orchestratorVersion',
+  saved: 'saved',
+  name: 'name',
   startedAt: 'startedAt',
   completedAt: 'completedAt',
   createdAt: 'createdAt',

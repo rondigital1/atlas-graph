@@ -37,6 +37,8 @@ export type PlannerRunMinAggregateOutputType = {
   modelName: string | null
   promptVersion: string | null
   orchestratorVersion: string | null
+  saved: boolean | null
+  name: string | null
   startedAt: Date | null
   completedAt: Date | null
   createdAt: Date | null
@@ -56,6 +58,8 @@ export type PlannerRunMaxAggregateOutputType = {
   modelName: string | null
   promptVersion: string | null
   orchestratorVersion: string | null
+  saved: boolean | null
+  name: string | null
   startedAt: Date | null
   completedAt: Date | null
   createdAt: Date | null
@@ -75,6 +79,8 @@ export type PlannerRunCountAggregateOutputType = {
   modelName: number
   promptVersion: number
   orchestratorVersion: number
+  saved: number
+  name: number
   startedAt: number
   completedAt: number
   createdAt: number
@@ -96,6 +102,8 @@ export type PlannerRunMinAggregateInputType = {
   modelName?: true
   promptVersion?: true
   orchestratorVersion?: true
+  saved?: true
+  name?: true
   startedAt?: true
   completedAt?: true
   createdAt?: true
@@ -115,6 +123,8 @@ export type PlannerRunMaxAggregateInputType = {
   modelName?: true
   promptVersion?: true
   orchestratorVersion?: true
+  saved?: true
+  name?: true
   startedAt?: true
   completedAt?: true
   createdAt?: true
@@ -134,6 +144,8 @@ export type PlannerRunCountAggregateInputType = {
   modelName?: true
   promptVersion?: true
   orchestratorVersion?: true
+  saved?: true
+  name?: true
   startedAt?: true
   completedAt?: true
   createdAt?: true
@@ -226,6 +238,8 @@ export type PlannerRunGroupByOutputType = {
   modelName: string | null
   promptVersion: string | null
   orchestratorVersion: string | null
+  saved: boolean
+  name: string | null
   startedAt: Date | null
   completedAt: Date | null
   createdAt: Date
@@ -266,6 +280,8 @@ export type PlannerRunWhereInput = {
   modelName?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
   promptVersion?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
   orchestratorVersion?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  saved?: Prisma.BoolFilter<"PlannerRun"> | boolean
+  name?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
   startedAt?: Prisma.DateTimeNullableFilter<"PlannerRun"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableFilter<"PlannerRun"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"PlannerRun"> | Date | string
@@ -289,6 +305,8 @@ export type PlannerRunOrderByWithRelationInput = {
   modelName?: Prisma.SortOrderInput | Prisma.SortOrder
   promptVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   orchestratorVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  saved?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -315,6 +333,8 @@ export type PlannerRunWhereUniqueInput = Prisma.AtLeast<{
   modelName?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
   promptVersion?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
   orchestratorVersion?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
+  saved?: Prisma.BoolFilter<"PlannerRun"> | boolean
+  name?: Prisma.StringNullableFilter<"PlannerRun"> | string | null
   startedAt?: Prisma.DateTimeNullableFilter<"PlannerRun"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableFilter<"PlannerRun"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"PlannerRun"> | Date | string
@@ -338,6 +358,8 @@ export type PlannerRunOrderByWithAggregationInput = {
   modelName?: Prisma.SortOrderInput | Prisma.SortOrder
   promptVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   orchestratorVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  saved?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -363,6 +385,8 @@ export type PlannerRunScalarWhereWithAggregatesInput = {
   modelName?: Prisma.StringNullableWithAggregatesFilter<"PlannerRun"> | string | null
   promptVersion?: Prisma.StringNullableWithAggregatesFilter<"PlannerRun"> | string | null
   orchestratorVersion?: Prisma.StringNullableWithAggregatesFilter<"PlannerRun"> | string | null
+  saved?: Prisma.BoolWithAggregatesFilter<"PlannerRun"> | boolean
+  name?: Prisma.StringNullableWithAggregatesFilter<"PlannerRun"> | string | null
   startedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PlannerRun"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PlannerRun"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PlannerRun"> | Date | string
@@ -382,6 +406,8 @@ export type PlannerRunCreateInput = {
   modelName?: string | null
   promptVersion?: string | null
   orchestratorVersion?: string | null
+  saved?: boolean
+  name?: string | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
@@ -405,6 +431,8 @@ export type PlannerRunUncheckedCreateInput = {
   modelName?: string | null
   promptVersion?: string | null
   orchestratorVersion?: string | null
+  saved?: boolean
+  name?: string | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
@@ -428,6 +456,8 @@ export type PlannerRunUpdateInput = {
   modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -451,6 +481,8 @@ export type PlannerRunUncheckedUpdateInput = {
   modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -474,6 +506,8 @@ export type PlannerRunCreateManyInput = {
   modelName?: string | null
   promptVersion?: string | null
   orchestratorVersion?: string | null
+  saved?: boolean
+  name?: string | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
@@ -493,6 +527,8 @@ export type PlannerRunUpdateManyMutationInput = {
   modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -512,6 +548,8 @@ export type PlannerRunUncheckedUpdateManyInput = {
   modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -531,6 +569,8 @@ export type PlannerRunCountOrderByAggregateInput = {
   modelName?: Prisma.SortOrder
   promptVersion?: Prisma.SortOrder
   orchestratorVersion?: Prisma.SortOrder
+  saved?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -550,6 +590,8 @@ export type PlannerRunMaxOrderByAggregateInput = {
   modelName?: Prisma.SortOrder
   promptVersion?: Prisma.SortOrder
   orchestratorVersion?: Prisma.SortOrder
+  saved?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -569,6 +611,8 @@ export type PlannerRunMinOrderByAggregateInput = {
   modelName?: Prisma.SortOrder
   promptVersion?: Prisma.SortOrder
   orchestratorVersion?: Prisma.SortOrder
+  saved?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -594,6 +638,10 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -669,6 +717,8 @@ export type PlannerRunCreateWithoutInputInput = {
   modelName?: string | null
   promptVersion?: string | null
   orchestratorVersion?: string | null
+  saved?: boolean
+  name?: string | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
@@ -691,6 +741,8 @@ export type PlannerRunUncheckedCreateWithoutInputInput = {
   modelName?: string | null
   promptVersion?: string | null
   orchestratorVersion?: string | null
+  saved?: boolean
+  name?: string | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
@@ -729,6 +781,8 @@ export type PlannerRunUpdateWithoutInputInput = {
   modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -751,6 +805,8 @@ export type PlannerRunUncheckedUpdateWithoutInputInput = {
   modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -773,6 +829,8 @@ export type PlannerRunCreateWithoutToolResultsInput = {
   modelName?: string | null
   promptVersion?: string | null
   orchestratorVersion?: string | null
+  saved?: boolean
+  name?: string | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
@@ -795,6 +853,8 @@ export type PlannerRunUncheckedCreateWithoutToolResultsInput = {
   modelName?: string | null
   promptVersion?: string | null
   orchestratorVersion?: string | null
+  saved?: boolean
+  name?: string | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
@@ -833,6 +893,8 @@ export type PlannerRunUpdateWithoutToolResultsInput = {
   modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -855,6 +917,8 @@ export type PlannerRunUncheckedUpdateWithoutToolResultsInput = {
   modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -877,6 +941,8 @@ export type PlannerRunCreateWithoutOutputInput = {
   modelName?: string | null
   promptVersion?: string | null
   orchestratorVersion?: string | null
+  saved?: boolean
+  name?: string | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
@@ -899,6 +965,8 @@ export type PlannerRunUncheckedCreateWithoutOutputInput = {
   modelName?: string | null
   promptVersion?: string | null
   orchestratorVersion?: string | null
+  saved?: boolean
+  name?: string | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
@@ -937,6 +1005,8 @@ export type PlannerRunUpdateWithoutOutputInput = {
   modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -959,6 +1029,8 @@ export type PlannerRunUncheckedUpdateWithoutOutputInput = {
   modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -981,6 +1053,8 @@ export type PlannerRunCreateWithoutErrorsInput = {
   modelName?: string | null
   promptVersion?: string | null
   orchestratorVersion?: string | null
+  saved?: boolean
+  name?: string | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
@@ -1003,6 +1077,8 @@ export type PlannerRunUncheckedCreateWithoutErrorsInput = {
   modelName?: string | null
   promptVersion?: string | null
   orchestratorVersion?: string | null
+  saved?: boolean
+  name?: string | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   createdAt?: Date | string
@@ -1041,6 +1117,8 @@ export type PlannerRunUpdateWithoutErrorsInput = {
   modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1063,6 +1141,8 @@ export type PlannerRunUncheckedUpdateWithoutErrorsInput = {
   modelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orchestratorVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  saved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1125,6 +1205,8 @@ export type PlannerRunSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   modelName?: boolean
   promptVersion?: boolean
   orchestratorVersion?: boolean
+  saved?: boolean
+  name?: boolean
   startedAt?: boolean
   completedAt?: boolean
   createdAt?: boolean
@@ -1149,6 +1231,8 @@ export type PlannerRunSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   modelName?: boolean
   promptVersion?: boolean
   orchestratorVersion?: boolean
+  saved?: boolean
+  name?: boolean
   startedAt?: boolean
   completedAt?: boolean
   createdAt?: boolean
@@ -1168,6 +1252,8 @@ export type PlannerRunSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   modelName?: boolean
   promptVersion?: boolean
   orchestratorVersion?: boolean
+  saved?: boolean
+  name?: boolean
   startedAt?: boolean
   completedAt?: boolean
   createdAt?: boolean
@@ -1187,13 +1273,15 @@ export type PlannerRunSelectScalar = {
   modelName?: boolean
   promptVersion?: boolean
   orchestratorVersion?: boolean
+  saved?: boolean
+  name?: boolean
   startedAt?: boolean
   completedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PlannerRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "requestId" | "destination" | "startDate" | "endDate" | "budget" | "travelStyle" | "groupType" | "modelName" | "promptVersion" | "orchestratorVersion" | "startedAt" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["plannerRun"]>
+export type PlannerRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "requestId" | "destination" | "startDate" | "endDate" | "budget" | "travelStyle" | "groupType" | "modelName" | "promptVersion" | "orchestratorVersion" | "saved" | "name" | "startedAt" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["plannerRun"]>
 export type PlannerRunInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   input?: boolean | Prisma.PlannerRun$inputArgs<ExtArgs>
   toolResults?: boolean | Prisma.PlannerRun$toolResultsArgs<ExtArgs>
@@ -1225,6 +1313,8 @@ export type $PlannerRunPayload<ExtArgs extends runtime.Types.Extensions.Internal
     modelName: string | null
     promptVersion: string | null
     orchestratorVersion: string | null
+    saved: boolean
+    name: string | null
     startedAt: Date | null
     completedAt: Date | null
     createdAt: Date
@@ -1668,6 +1758,8 @@ export interface PlannerRunFieldRefs {
   readonly modelName: Prisma.FieldRef<"PlannerRun", 'String'>
   readonly promptVersion: Prisma.FieldRef<"PlannerRun", 'String'>
   readonly orchestratorVersion: Prisma.FieldRef<"PlannerRun", 'String'>
+  readonly saved: Prisma.FieldRef<"PlannerRun", 'Boolean'>
+  readonly name: Prisma.FieldRef<"PlannerRun", 'String'>
   readonly startedAt: Prisma.FieldRef<"PlannerRun", 'DateTime'>
   readonly completedAt: Prisma.FieldRef<"PlannerRun", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"PlannerRun", 'DateTime'>

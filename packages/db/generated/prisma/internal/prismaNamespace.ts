@@ -1055,6 +1055,8 @@ export const PlannerRunScalarFieldEnum = {
   modelName: 'modelName',
   promptVersion: 'promptVersion',
   orchestratorVersion: 'orchestratorVersion',
+  saved: 'saved',
+  name: 'name',
   startedAt: 'startedAt',
   completedAt: 'completedAt',
   createdAt: 'createdAt',
@@ -1257,6 +1259,13 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'Json'
  */
 export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -1309,13 +1318,6 @@ export type EnumTravelPlanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
  * Reference to a field of type 'TravelPlanStatus[]'
  */
 export type ListEnumTravelPlanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TravelPlanStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
