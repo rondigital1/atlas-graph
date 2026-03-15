@@ -16,6 +16,7 @@ interface DayAssignment {
   activityId: string;
   activityTitle: string;
   dayNumber: number;
+  key: string;
 }
 
 export function PlanActivitiesSection({ planId, activities, days }: Props) {
@@ -28,14 +29,15 @@ export function PlanActivitiesSection({ planId, activities, days }: Props) {
   }));
 
   const handleAddToDay = useCallback(
-    async (activityId: string, dayNumber: number) => {
+    async (activityId: string, dayNumber: number, timeSlot: string) => {
       const activity = activities.find((a) => a.id === activityId);
       if (!activity) {
         return;
       }
 
+      const key = `${dayNumber}-${timeSlot}`;
       const alreadyAdded = assignments.some(
-        (a) => a.activityId === activityId && a.dayNumber === dayNumber,
+        (a) => a.activityId === activityId && a.key === key,
       );
       if (alreadyAdded) {
         return;
@@ -47,7 +49,7 @@ export function PlanActivitiesSection({ planId, activities, days }: Props) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             dayNumber,
-            timeSlot: activity.suggestedTime,
+            timeSlot,
             activity: {
               title: activity.title,
               description: activity.description,
@@ -72,19 +74,21 @@ export function PlanActivitiesSection({ planId, activities, days }: Props) {
           activityId,
           activityTitle: activity.title,
           dayNumber,
+          key,
         },
       ]);
 
-      setToast(`Added ${activity.title} to Day ${dayNumber}`);
+      const slotLabel = timeSlot.charAt(0).toUpperCase() + timeSlot.slice(1);
+      setToast(`Added ${activity.title} to Day ${dayNumber} (${slotLabel})`);
       setTimeout(() => setToast(null), 2500);
     },
     [assignments, activities, planId],
   );
 
-  function getAddedDays(activityId: string): number[] {
+  function getAddedDays(activityId: string): string[] {
     return assignments
       .filter((a) => a.activityId === activityId)
-      .map((a) => a.dayNumber);
+      .map((a) => a.key);
   }
 
   if (activities.length === 0) {

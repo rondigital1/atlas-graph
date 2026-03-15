@@ -10,7 +10,7 @@ export default async function PlansPage() {
   let model = createPlansListViewModel([]);
 
   try {
-    const runs = await planningRunQueryService.listRecentRuns();
+    const runs = await planningRunQueryService.listSavedRuns();
     model = createPlansListViewModel(runs);
   } catch {
     loadError = true;

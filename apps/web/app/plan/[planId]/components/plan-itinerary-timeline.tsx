@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useRef, useState } from "react";
-import { ArrowRight, Check, GripVertical, Send, Sparkles, Wand2, X } from "lucide-react";
+import { ArrowRight, Check, GripVertical, Menu, Send, Sparkles, Wand2, X } from "lucide-react";
 
 import { optimizeDayPlan, reviseDayPlan } from "../../../lib/plans-api";
 import type { AiSuggestion } from "../../../lib/plans-api";
@@ -13,39 +13,114 @@ interface Props {
   days: PlanDayViewModel[];
 }
 
+interface ActivityDragData {
+  dayId: string;
+  slotKey: "morning" | "afternoon" | "evening";
+  activityIndex: number;
+}
+
 function TimeSlot({
   label,
+  slotKey,
+  dayId,
   activities,
   icon,
+  onActivityDragStart,
+  onActivityDrop,
+  activityDragOver,
+  onActivityDragOver,
+  onActivityDragLeave,
 }: {
   label: string;
+  slotKey: "morning" | "afternoon" | "evening";
+  dayId: string;
   activities: PlanActivityViewModel[];
   icon: React.ReactNode;
+  onActivityDragStart: (data: ActivityDragData) => void;
+  onActivityDrop: (target: ActivityDragData) => void;
+  activityDragOver: ActivityDragData | null;
+  onActivityDragOver: (e: React.DragEvent, data: ActivityDragData) => void;
+  onActivityDragLeave: () => void;
 }) {
-  if (activities.length === 0) {
-    return null;
-  }
+  const isSlotDropTarget =
+    activityDragOver?.dayId === dayId &&
+    activityDragOver?.slotKey === slotKey &&
+    activityDragOver?.activityIndex === -1;
 
   return (
-    <div className="rounded-md bg-surface-elevated p-2.5">
+    <div
+      className={`rounded-md bg-surface-elevated p-2.5 transition-colors ${isSlotDropTarget ? "ring-1 ring-primary/40" : ""}`}
+      onDragOver={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (activities.length === 0) {
+          onActivityDragOver(e, { dayId, slotKey, activityIndex: -1 });
+        }
+      }}
+      onDragLeave={(e) => {
+        e.stopPropagation();
+        onActivityDragLeave();
+      }}
+      onDrop={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onActivityDrop({ dayId, slotKey, activityIndex: activities.length });
+      }}
+    >
       <div className="mb-1.5 flex items-center gap-1.5">
         {icon}
         <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
           {label}
         </span>
       </div>
-      <ul className="space-y-1.5">
-        {activities.map((activity, i) => (
-          <li key={i}>
-            <p className="text-xs font-medium text-foreground">
-              {activity.title}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {activity.description}
-            </p>
-          </li>
-        ))}
-      </ul>
+      {activities.length === 0 ? (
+        <p className="py-2 text-center text-[10px] text-subtle">Drop here</p>
+      ) : (
+        <ul className="space-y-1">
+          {activities.map((activity, i) => {
+            const isDragTarget =
+              activityDragOver?.dayId === dayId &&
+              activityDragOver?.slotKey === slotKey &&
+              activityDragOver?.activityIndex === i;
+
+            return (
+              <li
+                key={i}
+                draggable
+                onDragStart={(e) => {
+                  e.stopPropagation();
+                  onActivityDragStart({ dayId, slotKey, activityIndex: i });
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onActivityDragOver(e, { dayId, slotKey, activityIndex: i });
+                }}
+                onDragLeave={(e) => {
+                  e.stopPropagation();
+                  onActivityDragLeave();
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onActivityDrop({ dayId, slotKey, activityIndex: i });
+                }}
+                className={`group/item flex cursor-grab items-start gap-1.5 rounded-md p-1 transition-colors active:cursor-grabbing ${isDragTarget ? "bg-primary/10" : "hover:bg-background/50"}`}
+              >
+                <Menu size={10} className="mt-0.5 flex-shrink-0 text-subtle opacity-0 transition-opacity group-hover/item:opacity-100" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-medium text-foreground">
+                    {activity.title}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {activity.description}
+                  </p>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 }
@@ -345,6 +420,9 @@ export function PlanItineraryTimeline({ days: initialDays }: Props) {
   const dragIndexRef = useRef<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
+  const activityDragRef = useRef<ActivityDragData | null>(null);
+  const [activityDragOver, setActivityDragOver] = useState<ActivityDragData | null>(null);
+
   function handleDragStart(index: number) {
     dragIndexRef.current = index;
   }
@@ -389,6 +467,70 @@ export function PlanItineraryTimeline({ days: initialDays }: Props) {
   function handleDragEnd() {
     dragIndexRef.current = null;
     setDragOverIndex(null);
+    activityDragRef.current = null;
+    setActivityDragOver(null);
+  }
+
+  function handleActivityDragStart(data: ActivityDragData) {
+    activityDragRef.current = data;
+    dragIndexRef.current = null;
+  }
+
+  function handleActivityDragOver(e: React.DragEvent, target: ActivityDragData) {
+    e.preventDefault();
+    if (!activityDragRef.current) {
+      return;
+    }
+    const src = activityDragRef.current;
+    if (src.dayId === target.dayId && src.slotKey === target.slotKey && src.activityIndex === target.activityIndex) {
+      return;
+    }
+    setActivityDragOver(target);
+  }
+
+  function handleActivityDragLeave() {
+    setActivityDragOver(null);
+  }
+
+  function handleActivityDrop(target: ActivityDragData) {
+    const source = activityDragRef.current;
+    activityDragRef.current = null;
+    setActivityDragOver(null);
+
+    if (!source) {
+      return;
+    }
+    if (source.dayId === target.dayId && source.slotKey === target.slotKey && source.activityIndex === target.activityIndex) {
+      return;
+    }
+
+    setOrderedDays((prev) => {
+      const next = prev.map((d) => ({
+        ...d,
+        morning: [...d.morning],
+        afternoon: [...d.afternoon],
+        evening: [...d.evening],
+      }));
+
+      const srcDay = next.find((d) => d.id === source.dayId);
+      const tgtDay = next.find((d) => d.id === target.dayId);
+      if (!srcDay || !tgtDay) {
+        return prev;
+      }
+
+      const srcSlot = srcDay[source.slotKey];
+      const removed = srcSlot.splice(source.activityIndex, 1);
+      const movedActivity = removed[0];
+      if (!movedActivity) {
+        return prev;
+      }
+
+      const tgtSlot = tgtDay[target.slotKey];
+      const insertAt = target.activityIndex === -1 ? tgtSlot.length : target.activityIndex;
+      tgtSlot.splice(insertAt, 0, movedActivity);
+
+      return next;
+    });
   }
 
   const toggleDay = (id: string) => {
@@ -436,7 +578,7 @@ export function PlanItineraryTimeline({ days: initialDays }: Props) {
             <li
               key={day.id}
               draggable
-              onDragStart={() => handleDragStart(index)}
+              onDragStart={(e) => { if (activityDragRef.current) { e.preventDefault(); return; } handleDragStart(index); }}
               onDragOver={(e) => handleDragOver(e, index)}
               onDragLeave={handleDragLeave}
               onDrop={() => handleDrop(index)}
@@ -529,9 +671,42 @@ export function PlanItineraryTimeline({ days: initialDays }: Props) {
                 >
                   <div className="ml-11 space-y-3">
                     <div className="grid gap-2 sm:grid-cols-3">
-                      <TimeSlot label="Morning" activities={day.morning} icon={morningIcon} />
-                      <TimeSlot label="Afternoon" activities={day.afternoon} icon={afternoonIcon} />
-                      <TimeSlot label="Evening" activities={day.evening} icon={eveningIcon} />
+                      <TimeSlot
+                        label="Morning"
+                        slotKey="morning"
+                        dayId={day.id}
+                        activities={day.morning}
+                        icon={morningIcon}
+                        onActivityDragStart={handleActivityDragStart}
+                        onActivityDrop={handleActivityDrop}
+                        activityDragOver={activityDragOver}
+                        onActivityDragOver={handleActivityDragOver}
+                        onActivityDragLeave={handleActivityDragLeave}
+                      />
+                      <TimeSlot
+                        label="Afternoon"
+                        slotKey="afternoon"
+                        dayId={day.id}
+                        activities={day.afternoon}
+                        icon={afternoonIcon}
+                        onActivityDragStart={handleActivityDragStart}
+                        onActivityDrop={handleActivityDrop}
+                        activityDragOver={activityDragOver}
+                        onActivityDragOver={handleActivityDragOver}
+                        onActivityDragLeave={handleActivityDragLeave}
+                      />
+                      <TimeSlot
+                        label="Evening"
+                        slotKey="evening"
+                        dayId={day.id}
+                        activities={day.evening}
+                        icon={eveningIcon}
+                        onActivityDragStart={handleActivityDragStart}
+                        onActivityDrop={handleActivityDrop}
+                        activityDragOver={activityDragOver}
+                        onActivityDragOver={handleActivityDragOver}
+                        onActivityDragLeave={handleActivityDragLeave}
+                      />
                     </div>
 
                     <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border-muted pt-3">

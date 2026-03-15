@@ -62,7 +62,12 @@ export function PlansList({ items: initialItems }: Props) {
                 href={item.href}
                 className="min-w-0 flex-1"
               >
-                <p className="truncate text-sm font-medium text-foreground">
+                {item.name && (
+                  <p className="truncate text-sm font-semibold text-foreground">
+                    {item.name}
+                  </p>
+                )}
+                <p className={`truncate text-sm ${item.name ? "text-muted-foreground" : "font-medium text-foreground"}`}>
                   {item.countryFlag && (
                     <span className="mr-1.5">{item.countryFlag}</span>
                   )}

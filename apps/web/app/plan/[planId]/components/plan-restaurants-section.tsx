@@ -16,6 +16,7 @@ interface DayAssignment {
   restaurantId: string;
   restaurantName: string;
   dayNumber: number;
+  key: string;
 }
 
 export function PlanRestaurantsSection({ planId, restaurants, days }: Props) {
@@ -28,14 +29,15 @@ export function PlanRestaurantsSection({ planId, restaurants, days }: Props) {
   }));
 
   const handleAddToDay = useCallback(
-    async (restaurantId: string, dayNumber: number) => {
+    async (restaurantId: string, dayNumber: number, timeSlot: string) => {
       const restaurant = restaurants.find((r) => r.id === restaurantId);
       if (!restaurant) {
         return;
       }
 
+      const key = `${dayNumber}-${timeSlot}`;
       const alreadyAdded = assignments.some(
-        (a) => a.restaurantId === restaurantId && a.dayNumber === dayNumber,
+        (a) => a.restaurantId === restaurantId && a.key === key,
       );
       if (alreadyAdded) {
         return;
@@ -47,7 +49,7 @@ export function PlanRestaurantsSection({ planId, restaurants, days }: Props) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             dayNumber,
-            timeSlot: "evening",
+            timeSlot,
             activity: {
               title: `Dining: ${restaurant.name}`,
               description: `${restaurant.cuisine} · ${restaurant.priceRange} · ${restaurant.neighborhood}`,
@@ -72,19 +74,21 @@ export function PlanRestaurantsSection({ planId, restaurants, days }: Props) {
           restaurantId,
           restaurantName: restaurant.name,
           dayNumber,
+          key,
         },
       ]);
 
-      setToast(`Added ${restaurant.name} to Day ${dayNumber}`);
+      const slotLabel = timeSlot.charAt(0).toUpperCase() + timeSlot.slice(1);
+      setToast(`Added ${restaurant.name} to Day ${dayNumber} (${slotLabel})`);
       setTimeout(() => setToast(null), 2500);
     },
     [assignments, restaurants, planId],
   );
 
-  function getAddedDays(restaurantId: string): number[] {
+  function getAddedDays(restaurantId: string): string[] {
     return assignments
       .filter((a) => a.restaurantId === restaurantId)
-      .map((a) => a.dayNumber);
+      .map((a) => a.key);
   }
 
   if (restaurants.length === 0) {

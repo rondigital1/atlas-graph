@@ -89,6 +89,9 @@ export default async function PlanPage(context: PlanPageContext) {
           <PlanDetailActions
             planId={planId}
             destination={planDetail.overview.destination}
+            tripDates={planDetail.overview.dates}
+            isSaved={detail.run.saved}
+            savedName={detail.run.name ?? null}
           />
         </div>
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px]">
