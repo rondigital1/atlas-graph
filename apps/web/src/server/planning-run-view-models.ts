@@ -118,6 +118,7 @@ export function createPlansListViewModel(
     return {
       id: run.id,
       href: `/plan/${run.id}`,
+      name: run.name ?? null,
       destination: run.destination ?? "Untitled",
       countryFlag: getCountryFlag(run.destination),
       tripDates: formatTripDates(run.startDate, run.endDate),

@@ -7,6 +7,9 @@ function createRepository(): PlannerRunRepository {
   return {
     create: vi.fn(),
     deleteById: vi.fn().mockResolvedValue(undefined),
+    listSavedRuns: vi.fn().mockResolvedValue([]),
+    saveRun: vi.fn().mockResolvedValue(undefined),
+    unsaveRun: vi.fn().mockResolvedValue(undefined),
     listRecentRuns: vi.fn().mockResolvedValue([
       {
         id: "run-1",
@@ -20,6 +23,8 @@ function createRepository(): PlannerRunRepository {
         groupType: "friends",
         modelName: "gpt-4.1-mini",
         promptVersion: "v1",
+        saved: false,
+        name: null,
         startedAt: new Date("2026-03-12T12:00:00.000Z"),
         completedAt: new Date("2026-03-12T12:00:05.000Z"),
         createdAt: new Date("2026-03-12T12:00:00.000Z"),
@@ -39,6 +44,8 @@ function createRepository(): PlannerRunRepository {
       modelName: "gpt-4.1-mini",
       promptVersion: "v1",
       orchestratorVersion: null,
+      saved: false,
+      name: null,
       startedAt: new Date("2026-03-12T12:00:00.000Z"),
       completedAt: new Date("2026-03-12T12:00:05.000Z"),
       createdAt: new Date("2026-03-12T12:00:00.000Z"),
@@ -115,6 +122,8 @@ describe("DefaultPlanningRunQueryService", () => {
         modelName: "gpt-4.1-mini",
         promptVersion: "v1",
         orchestratorVersion: null,
+        saved: false,
+        name: null,
         startedAt: new Date("2026-03-12T12:00:00.000Z"),
         completedAt: new Date("2026-03-12T12:00:05.000Z"),
         createdAt: new Date("2026-03-12T12:00:00.000Z"),
