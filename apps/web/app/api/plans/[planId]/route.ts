@@ -1,7 +1,20 @@
-import { TripRequestSchema } from "@atlas-graph/core/schemas";
+import { TravelPlanDeleteConflictError } from "@atlas-graph/db";
 import { NextResponse } from "next/server";
 
-import { createPlanningRunQueryService } from "../../../../src/server/create-planning-run-query-service";
+import {
+  createInvalidTravelPlanRequestResponse,
+  createMalformedJsonBodyDetails,
+  createTravelPlanDeleteConflictResponse,
+  createTravelPlanDeleteInternalErrorResponse,
+  createTravelPlanDetailInternalErrorResponse,
+  createTravelPlanNotFoundResponse,
+  createTravelPlanSuccessResponse,
+  createTravelPlanUpdateInternalErrorResponse,
+  formatValidationDetails,
+  parsePlanRouteParams,
+  parseUpdateTravelPlanBody,
+} from "../../../../src/server/api/travel-plan-response";
+import { createTravelPlanRepository } from "../../../../src/server/create-travel-plan-repository";
 
 interface PlanRouteContext {
   params: Promise<{
@@ -9,42 +22,53 @@ interface PlanRouteContext {
   }>;
 }
 
-export async function DELETE(
+export async function GET(
   _request: Request,
   context: PlanRouteContext
 ): Promise<Response> {
-  const { planId } = await context.params;
-  const service = createPlanningRunQueryService();
-  const existing = await service.getRunDetailById(planId);
+  const parsedParams = parsePlanRouteParams(await context.params);
 
-  if (!existing) {
+  if (!parsedParams.success) {
     return NextResponse.json(
-      { error: { code: "NOT_FOUND", message: "Plan not found" } },
-      { status: 404 }
+      createInvalidTravelPlanRequestResponse(
+        formatValidationDetails(parsedParams.error)
+      ),
+      { status: 400 }
     );
   }
 
-  await service.deleteRunById(planId);
-  return new Response(null, { status: 204 });
+  try {
+    const repository = createTravelPlanRepository();
+    const plan = await repository.getPlanById(parsedParams.data.planId);
+
+    if (!plan) {
+      return NextResponse.json(createTravelPlanNotFoundResponse(), {
+        status: 404,
+      });
+    }
+
+    return NextResponse.json(createTravelPlanSuccessResponse(plan), {
+      status: 200,
+    });
+  } catch {
+    return NextResponse.json(createTravelPlanDetailInternalErrorResponse(), {
+      status: 500,
+    });
+  }
 }
 
 export async function PATCH(
   request: Request,
   context: PlanRouteContext
 ): Promise<Response> {
-  const { planId } = await context.params;
-  const planningRunQueryService = createPlanningRunQueryService();
-  const existingRun = await planningRunQueryService.getRunDetailById(planId);
+  const parsedParams = parsePlanRouteParams(await context.params);
 
-  if (!existingRun) {
+  if (!parsedParams.success) {
     return NextResponse.json(
-      {
-        error: {
-          code: "NOT_FOUND",
-          message: "Plan not found",
-        },
-      },
-      { status: 404 }
+      createInvalidTravelPlanRequestResponse(
+        formatValidationDetails(parsedParams.error)
+      ),
+      { status: 400 }
     );
   }
 
@@ -54,35 +78,80 @@ export async function PATCH(
     requestBody = await request.json();
   } catch {
     return NextResponse.json(
-      {
-        error: {
-          code: "INVALID_REQUEST",
-          message: "Request validation failed",
-          details: {
-            body: ["Malformed JSON body."],
-          },
-        },
-      },
+      createInvalidTravelPlanRequestResponse(createMalformedJsonBodyDetails()),
       { status: 400 }
     );
   }
 
-  const parsedRequest = TripRequestSchema.safeParse(requestBody);
+  const parsedBody = parseUpdateTravelPlanBody(requestBody);
 
-  if (!parsedRequest.success) {
+  if (!parsedBody.success) {
     return NextResponse.json(
-      {
-        error: {
-          code: "INVALID_REQUEST",
-          message: "Request validation failed",
-          details: parsedRequest.error.flatten(),
-        },
-      },
+      createInvalidTravelPlanRequestResponse(
+        formatValidationDetails(parsedBody.error)
+      ),
       { status: 400 }
     );
   }
 
-  return NextResponse.json({
-    id: planId,
-  });
+  try {
+    const repository = createTravelPlanRepository();
+    const plan = await repository.updatePlan(
+      parsedParams.data.planId,
+      parsedBody.data
+    );
+
+    if (!plan) {
+      return NextResponse.json(createTravelPlanNotFoundResponse(), {
+        status: 404,
+      });
+    }
+
+    return NextResponse.json(createTravelPlanSuccessResponse(plan), {
+      status: 200,
+    });
+  } catch {
+    return NextResponse.json(createTravelPlanUpdateInternalErrorResponse(), {
+      status: 500,
+    });
+  }
+}
+
+export async function DELETE(
+  _request: Request,
+  context: PlanRouteContext
+): Promise<Response> {
+  const parsedParams = parsePlanRouteParams(await context.params);
+
+  if (!parsedParams.success) {
+    return NextResponse.json(
+      createInvalidTravelPlanRequestResponse(
+        formatValidationDetails(parsedParams.error)
+      ),
+      { status: 400 }
+    );
+  }
+
+  try {
+    const repository = createTravelPlanRepository();
+    const deletedPlan = await repository.deletePlan(parsedParams.data.planId);
+
+    if (!deletedPlan) {
+      return NextResponse.json(createTravelPlanNotFoundResponse(), {
+        status: 404,
+      });
+    }
+
+    return new Response(null, { status: 204 });
+  } catch (error) {
+    if (error instanceof TravelPlanDeleteConflictError) {
+      return NextResponse.json(createTravelPlanDeleteConflictResponse(), {
+        status: 409,
+      });
+    }
+
+    return NextResponse.json(createTravelPlanDeleteInternalErrorResponse(), {
+      status: 500,
+    });
+  }
 }
