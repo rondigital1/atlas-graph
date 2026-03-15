@@ -7,6 +7,7 @@ import {
   ToolExecutionStatus,
   createPrismaClient,
   getDatabaseHealth,
+  itineraryVersionRepository,
   plannerRunRepository,
   prisma,
   travelPlanRepository,
@@ -30,6 +31,7 @@ describe("db package", () => {
     expect(plannerRunRepository.create).toBeTypeOf("function");
     expect(plannerRunRepository.listRecentRuns).toBeTypeOf("function");
     expect(plannerRunRepository.findDetailById).toBeTypeOf("function");
+    expect(itineraryVersionRepository.listVersionsForPlan).toBeTypeOf("function");
     expect(travelPlanRepository.createPlan).toBeTypeOf("function");
     expect(travelPlanRepository.getPlanById).toBeTypeOf("function");
     expect(travelPlanRepository.listPlans).toBeTypeOf("function");

@@ -14,6 +14,8 @@ export const plannerRunSummarySelect = {
   groupType: true,
   modelName: true,
   promptVersion: true,
+  saved: true,
+  name: true,
   startedAt: true,
   completedAt: true,
   createdAt: true,
@@ -90,6 +92,16 @@ export interface PlannerRunRepository {
       take?: number;
     },
   ): Promise<PlannerRunSummaryRecord[]>;
+  listSavedRuns(
+    args?: {
+      take?: number;
+    },
+  ): Promise<PlannerRunSummaryRecord[]>;
+  saveRun(
+    id: string,
+    name: string,
+  ): Promise<void>;
+  unsaveRun(id: string): Promise<void>;
   findById(
     id: string,
     args?: Omit<Prisma.PlannerRunFindUniqueArgs, "where">,
@@ -121,6 +133,33 @@ export function createPlannerRunRepository(
           },
         ],
         select: plannerRunSummarySelect,
+      });
+    },
+    listSavedRuns(args = {}) {
+      return client.plannerRun.findMany({
+        where: { saved: true },
+        take: args.take ?? 50,
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+          {
+            id: "desc",
+          },
+        ],
+        select: plannerRunSummarySelect,
+      });
+    },
+    async saveRun(id, name) {
+      await client.plannerRun.update({
+        where: { id },
+        data: { saved: true, name },
+      });
+    },
+    async unsaveRun(id) {
+      await client.plannerRun.update({
+        where: { id },
+        data: { saved: false, name: null },
       });
     },
     findById(id, args = {}) {

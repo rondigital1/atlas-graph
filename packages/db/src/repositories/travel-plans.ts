@@ -21,8 +21,22 @@ export const travelPlanSelect = {
   updatedAt: true,
 } satisfies Prisma.TravelPlanSelect;
 
+const travelPlanDeleteGuardSelect = {
+  id: true,
+  _count: {
+    select: {
+      generationRuns: true,
+      itineraryVersions: true,
+    },
+  },
+} satisfies Prisma.TravelPlanSelect;
+
 type TravelPlanRecord = Prisma.TravelPlanGetPayload<{
   select: typeof travelPlanSelect;
+}>;
+
+type TravelPlanDeleteGuardRecord = Prisma.TravelPlanGetPayload<{
+  select: typeof travelPlanDeleteGuardSelect;
 }>;
 
 export interface PersistedTravelPlan {
@@ -49,6 +63,16 @@ export interface UpdateTravelPlanInput {
 export interface ListTravelPlansOptions {
   userId?: string;
   take?: number;
+}
+
+export class TravelPlanDeleteConflictError extends Error {
+  public readonly planId: string;
+
+  public constructor(planId: string) {
+    super("Plan cannot be deleted once generation or itinerary records exist");
+    this.name = "TravelPlanDeleteConflictError";
+    this.planId = planId;
+  }
 }
 
 export interface TravelPlanRepository {
@@ -133,6 +157,12 @@ function mapRecordToPersistedTravelPlan(
     createdAt: record.createdAt,
     updatedAt: record.updatedAt,
   };
+}
+
+function hasProtectedRelations(record: TravelPlanDeleteGuardRecord): boolean {
+  return (
+    record._count.generationRuns > 0 || record._count.itineraryVersions > 0
+  );
 }
 
 function buildCreateData(
@@ -242,6 +272,21 @@ export function createTravelPlanRepository(
       }
     },
     async deletePlan(id) {
+      const existingRecord = await client.travelPlan.findUnique({
+        where: {
+          id,
+        },
+        select: travelPlanDeleteGuardSelect,
+      });
+
+      if (!existingRecord) {
+        return null;
+      }
+
+      if (hasProtectedRelations(existingRecord)) {
+        throw new TravelPlanDeleteConflictError(id);
+      }
+
       try {
         const record = await client.travelPlan.delete({
           where: {

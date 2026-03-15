@@ -37,11 +37,38 @@ function createRecord(overrides: {
   };
 }
 
+function createDeleteGuardRecord(
+  id = "plan-123",
+  counts: {
+    generationRuns?: number;
+    itineraryVersions?: number;
+  } = {}
+) {
+  return {
+    id,
+    _count: {
+      generationRuns: counts.generationRuns ?? 0,
+      itineraryVersions: counts.itineraryVersions ?? 0,
+    },
+  };
+}
+
 function createClient(record = createRecord()) {
   const client = {
     travelPlan: {
       create: vi.fn().mockResolvedValue(record),
-      findUnique: vi.fn().mockResolvedValue(record),
+      findUnique: vi.fn().mockImplementation((args?: { select?: unknown }) => {
+        if (
+          args?.select &&
+          typeof args.select === "object" &&
+          args.select !== null &&
+          "_count" in args.select
+        ) {
+          return Promise.resolve(createDeleteGuardRecord(record.id));
+        }
+
+        return Promise.resolve(record);
+      }),
       findMany: vi.fn().mockResolvedValue([record]),
       update: vi.fn().mockResolvedValue(record),
       delete: vi.fn().mockResolvedValue(record),
@@ -223,16 +250,34 @@ describe("TravelPlanRepository", () => {
     expect(result?.status).toBe("error");
   });
 
-  it("returns null when delete hits Prisma not-found behavior", async () => {
+  it("returns null when delete targets a missing plan", async () => {
     const { client } = createClient();
-    vi.mocked(client.travelPlan.delete).mockRejectedValueOnce({
-      code: "P2025",
-    });
+    vi.mocked(client.travelPlan.findUnique).mockResolvedValueOnce(null);
     const repository = createTravelPlanRepository(client);
 
     const result = await repository.deletePlan("missing");
 
     expect(result).toBeNull();
+  });
+
+  it("throws a conflict error when delete would remove generated data", async () => {
+    const { client, mocks } = createClient();
+    vi.mocked(client.travelPlan.findUnique).mockResolvedValueOnce(
+      createDeleteGuardRecord("plan-123", {
+        generationRuns: 1,
+      }) as never
+    );
+    const repository = createTravelPlanRepository(client);
+
+    await expect(repository.deletePlan("plan-123")).rejects.toEqual(
+      expect.objectContaining({
+        name: "TravelPlanDeleteConflictError",
+        message:
+          "Plan cannot be deleted once generation or itinerary records exist",
+        planId: "plan-123",
+      })
+    );
+    expect(mocks.travelPlan.delete).not.toHaveBeenCalled();
   });
 
   it("rejects invalid persisted input at the repository boundary", async () => {
