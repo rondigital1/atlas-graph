@@ -71,8 +71,28 @@ describe("plans-api compatibility", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     const result = await createPlan(createRequest());
-    await generatePlan(result.id);
+    const generated = await generatePlan(result.id);
 
+    expect(generated).toEqual({ id: "run-123" });
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("returns the generated run id for persisted plans", async () => {
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(
+        Response.json({
+          id: "run-456",
+        })
+      );
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await generatePlan("plan-123");
+
+    expect(result).toEqual({ id: "run-456" });
+    expect(fetchMock).toHaveBeenCalledWith("/api/plans/plan-123/generate", {
+      method: "POST",
+    });
   });
 });

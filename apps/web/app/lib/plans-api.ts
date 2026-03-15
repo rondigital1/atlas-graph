@@ -120,25 +120,42 @@ function generateMockSuggestions(dayNumber: number): AiSuggestion[] {
   ];
 }
 
-export async function generatePlan(planId: string): Promise<void> {
+export async function generatePlan(planId: string): Promise<PlanIdResponse> {
   if (legacyGeneratedPlanIds.delete(planId)) {
-    return;
+    return {
+      id: planId,
+    };
   }
 
   const response = await fetch(`/api/plans/${planId}/generate`, {
     method: "POST",
   });
 
-  if (response.ok) {
-    return;
+  const payload = await readJsonSafely(response);
+
+  if (!response.ok) {
+    throw buildPlansApiError(
+      response.status,
+      payload,
+      "Generation request failed. Please try again."
+    );
   }
 
-  const payload = await readJsonSafely(response);
-  throw buildPlansApiError(
-    response.status,
-    payload,
-    "Generation request failed. Please try again."
-  );
+  const generatedPlanId = extractPlanId(payload);
+
+  if (!generatedPlanId) {
+    throw new PlansApiError(
+      "Generation API response did not include a plan id.",
+      {
+        code: null,
+        status: response.status,
+      }
+    );
+  }
+
+  return {
+    id: generatedPlanId,
+  };
 }
 
 async function savePlan(

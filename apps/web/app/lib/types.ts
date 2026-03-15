@@ -131,6 +131,7 @@ export interface RecentRunsPanelViewModel {
 export interface PlansListItemViewModel {
   id: string;
   href: string;
+  name: string | null;
   destination: string;
   countryFlag: string | null;
   tripDates: string;
@@ -256,6 +257,30 @@ export interface ExploreItinerary {
   budget: string;
   description: string;
   tags: string[];
+}
+
+// Explore detail types
+
+export interface ExploreActivity {
+  time: string;
+  title: string;
+  description: string;
+}
+
+export interface ExploreDaySlot {
+  label: string;
+  activities: ExploreActivity[];
+}
+
+export interface ExploreDay {
+  day: number;
+  title: string;
+  slots: ExploreDaySlot[];
+}
+
+export interface ExploreItineraryDetail extends ExploreItinerary {
+  days: ExploreDay[];
+  highlights: string[];
 }
 
 // Restaurant recommendation types

@@ -13,7 +13,8 @@ export interface SubmitPlanFlowInput {
 }
 
 export interface SubmitPlanFlowResult {
-  planId: string;
+  generatedPlanId: string;
+  persistedPlanId: string;
 }
 
 export interface SubmitPlanFlowDeps {
@@ -68,7 +69,12 @@ export async function submitPlanFlow(
   input.onStageChange?.("generating");
 
   try {
-    await deps.generatePlan(savedPlanId);
+    const generatedPlan = await deps.generatePlan(savedPlanId);
+
+    return {
+      generatedPlanId: generatedPlan.id,
+      persistedPlanId: savedPlanId,
+    };
   } catch (error) {
     throw new SubmitPlanFlowError(
       "generating",
@@ -79,10 +85,6 @@ export async function submitPlanFlow(
       )
     );
   }
-
-  return {
-    planId: savedPlanId,
-  };
 }
 
 async function savePlan(

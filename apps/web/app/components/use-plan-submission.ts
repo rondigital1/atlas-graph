@@ -48,13 +48,13 @@ export function usePlanSubmission(): UsePlanSubmissionResult {
           }
         );
 
-        persistedPlanIdRef.current = result.planId;
+        persistedPlanIdRef.current = result.persistedPlanId;
 
         startTransition(() => {
-          router.push(`/plan/${result.planId}`);
+          router.push(`/plan/${result.generatedPlanId}`);
         });
 
-        return result.planId;
+        return result.generatedPlanId;
       } catch (error) {
         if (error instanceof SubmitPlanFlowError) {
           persistedPlanIdRef.current = error.persistedPlanId;

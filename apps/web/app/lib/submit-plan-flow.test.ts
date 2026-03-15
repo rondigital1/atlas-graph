@@ -25,7 +25,7 @@ describe("submitPlanFlow", () => {
     const stageChanges: string[] = [];
     const createPlan = vi.fn().mockResolvedValue({ id: "plan-1" });
     const updatePlan = vi.fn();
-    const generatePlan = vi.fn().mockResolvedValue(undefined);
+    const generatePlan = vi.fn().mockResolvedValue({ id: "run-1" });
 
     const result = await submitPlanFlow(
       {
@@ -42,7 +42,10 @@ describe("submitPlanFlow", () => {
       }
     );
 
-    expect(result).toEqual({ planId: "plan-1" });
+    expect(result).toEqual({
+      generatedPlanId: "run-1",
+      persistedPlanId: "plan-1",
+    });
     expect(createPlan).toHaveBeenCalledWith(createRequest());
     expect(generatePlan).toHaveBeenCalledWith("plan-1");
     expect(updatePlan).not.toHaveBeenCalled();
@@ -88,7 +91,7 @@ describe("submitPlanFlow", () => {
     const generatePlan = vi
       .fn()
       .mockRejectedValueOnce(new Error("Timed out"))
-      .mockResolvedValueOnce(undefined);
+      .mockResolvedValueOnce({ id: "run-8" });
 
     let persistedPlanId: string | null = null;
 
@@ -125,7 +128,10 @@ describe("submitPlanFlow", () => {
       }
     );
 
-    expect(retryResult).toEqual({ planId: "plan-7" });
+    expect(retryResult).toEqual({
+      generatedPlanId: "run-8",
+      persistedPlanId: "plan-7",
+    });
     expect(createPlan).toHaveBeenCalledTimes(1);
     expect(updatePlan).toHaveBeenCalledTimes(1);
     expect(updatePlan).toHaveBeenCalledWith("plan-7", {
@@ -140,8 +146,12 @@ describe("submitPlanFlow", () => {
     const updatePlan = vi.fn();
     const generatePlan = vi.fn().mockImplementation(
       () =>
-        new Promise<void>((resolve) => {
-          releaseGenerate = resolve;
+        new Promise<{ id: string }>((resolve) => {
+          releaseGenerate = () => {
+            resolve({
+              id: "run-1",
+            });
+          };
         })
     );
 
@@ -175,6 +185,9 @@ describe("submitPlanFlow", () => {
 
     releaseGenerate();
 
-    await expect(first).resolves.toEqual({ planId: "plan-1" });
+    await expect(first).resolves.toEqual({
+      generatedPlanId: "run-1",
+      persistedPlanId: "plan-1",
+    });
   });
 });
